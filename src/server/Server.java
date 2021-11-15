@@ -1,5 +1,9 @@
 package server;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.*;
 import java.util.*;
 
@@ -11,15 +15,32 @@ public class Server{
         System.out.println("Servidor iniciado no endereço " + serverSocket.getInetAddress());
         System.out.println("Agurdando conexão na porta: " + serverSocket.getLocalPort());
         System.out.println();
+        Map <String, Socket> connectedSockets = new HashMap <> ();
         
         //Laço infinito para aceitar as conexões ao servidor e inicia uma thread com o cliente
         while(true){
             final Socket activeSocket = serverSocket.accept();
-
             System.out.println("Conexão recebida de " + activeSocket);
-            ServerHandler newConnection = new ServerHandler(activeSocket);
+
+            BufferedReader socketReader = new BufferedReader(new InputStreamReader(activeSocket.getInputStream()));
+            BufferedWriter socketWriter = new BufferedWriter(new OutputStreamWriter(activeSocket.getOutputStream()));
+            socketWriter.write("Conexão aceita");
+
+            String destinationID = socketReader.readLine();
+
+            connectedSockets.put(serverSocket.getInetAddress().toString(), activeSocket);
+            ServerHandler newConnection = new ServerHandler(activeSocket, getDestinationSocket(connectedSockets, destinationID));
             newConnection.run(); // start a new thread
         }
+    }
+
+    private static Socket getDestinationSocket(Map<String, Socket> connected, String destination) {
+        for(Map.Entry <String, Socket> it : connected.entrySet()){
+            if(it.getKey().equalsIgnoreCase(destination)){
+                return it.getValue();
+            }
+        }
+        return null;
     }
 
     //Função para conseguir o endereço IP principal da rede
