@@ -15,7 +15,6 @@ public class Server{
         System.out.println("Servidor iniciado no endereço " + serverSocket.getInetAddress());
         System.out.println("Agurdando conexão na porta: " + serverSocket.getLocalPort());
         System.out.println();
-        Map <String, Socket> connectedSockets = new HashMap <> ();
         
         //Laço infinito para aceitar as conexões ao servidor e inicia uma thread com o cliente
         while(true){
@@ -28,19 +27,9 @@ public class Server{
 
             String destinationID = socketReader.readLine();
 
-            connectedSockets.put(serverSocket.getInetAddress().toString(), activeSocket);
-            ServerHandler newConnection = new ServerHandler(activeSocket, getDestinationSocket(connectedSockets, destinationID));
+            ServerHandler newConnection = new ServerHandler(activeSocket, destinationID);
             newConnection.run(); // start a new thread
         }
-    }
-
-    private static Socket getDestinationSocket(Map<String, Socket> connected, String destination) {
-        for(Map.Entry <String, Socket> it : connected.entrySet()){
-            if(it.getKey().equalsIgnoreCase(destination)){
-                return it.getValue();
-            }
-        }
-        return null;
     }
 
     //Função para conseguir o endereço IP principal da rede

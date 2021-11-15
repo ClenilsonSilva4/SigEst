@@ -9,11 +9,10 @@ import message.Message;
 
 public class ServerHandler implements Runnable{
     private final Socket clientSocket;
-    private final Socket destination;
-    private Date tempoLocal;
+    private final String destination;
     private final SimpleDateFormat ft = new SimpleDateFormat("HH:mm:ss");
 
-    public ServerHandler(Socket clientSocket, Socket destination) {
+    public ServerHandler(Socket clientSocket, String destination) {
         this.clientSocket = clientSocket;
         this.destination = destination;
     }
@@ -40,9 +39,8 @@ public class ServerHandler implements Runnable{
         try{
             //Inicialização dos buffers de leitura e escrita para se comunicar com o cliente
             socketReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-            socketWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
-            tempoLocal = new Date();
+            Date tempoLocal;
 
             //Laço para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
             while(true){
@@ -68,7 +66,7 @@ public class ServerHandler implements Runnable{
                     System.out.println(identifier + ": " + inMsg);
 
                     //Salvar a mensagem no BD para os usuários receberem
-                    Message forwardMessage = new Message(messageID, destination.getInetAddress().toString(), inMsg, ft.format(tempoLocal));
+                    Message forwardMessage = new Message(messageID, destination, inMsg, ft.format(tempoLocal));
                 }
             }
             clientSocket.close();
