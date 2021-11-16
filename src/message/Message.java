@@ -1,22 +1,37 @@
 package message;
 
 public class Message {
-    private String idMensagem;
+    private final String idDestinatario;
     private final String idRemetente;
     private final String texto;
-    private final String dateMessage;
+    private final String dataMessage;
+    private final String emailRemetente;
+    private String idMensagem;
+    private String emailDestinatario;
+    private boolean pertenceGrupo;
 
-    private final String email;
-
-    public Message(String idRemetente, String texto, String dateMessage, String email) {
+    public Message(String idRemetente, String texto, String dateMessage, String email, String idDestinatario) {
         this.idRemetente = idRemetente;
         this.texto = texto;
-        this.dateMessage = dateMessage;
-        this.email = email;
+        this.dataMessage = dateMessage;
+        this.emailRemetente = email;
+        this.idDestinatario = idDestinatario;
     }
 
-    public String getEmail() {
-        return email;
+    public String getIdDestinatario() {
+        return idDestinatario;
+    }
+
+    public boolean isPertenceGrupo() {
+        return pertenceGrupo;
+    }
+
+    public void setPertenceGrupo(boolean pertenceGrupo) {
+        this.pertenceGrupo = pertenceGrupo;
+    }
+
+    public String getEmailRemetente() {
+        return emailRemetente;
     }
 
     public String getIdMensagem() {
@@ -31,7 +46,19 @@ public class Message {
         return texto;
     }
 
-    public String getDateMessage() {
-        return dateMessage;
+    public String getDataMessage() {
+        return dataMessage;
+    }
+
+    public void setIdMensagem(String idMensagem) {
+        this.idMensagem = idMensagem;
+    }
+
+    public String getEmailDestinatario() {
+        return emailDestinatario;
+    }
+
+    public void setEmailDestinatario(String emailDestinatario) {
+        this.emailDestinatario = emailDestinatario;
     }
 }

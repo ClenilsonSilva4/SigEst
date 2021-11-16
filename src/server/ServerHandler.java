@@ -2,20 +2,23 @@ package server;
 
 import java.io.*;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashMap;
 import message.Message;
+import message.MessageJDBC;
 
 public class ServerHandler implements Runnable{
     private final Socket clientSocket;
     private String idRemetente;
+    private final String idDestinario;
     private final String emailRemetente;
     private final SimpleDateFormat ft = new SimpleDateFormat("HH:mm:ss");
 
-    public ServerHandler(Socket clientSocket, String emailRemetente) {
+    public ServerHandler(Socket clientSocket, String emailRemetente, String idDestinatario) {
         this.clientSocket = clientSocket;
         this.emailRemetente = emailRemetente;
+        this.idDestinario = idDestinatario;
     }
 
     @Override
@@ -23,19 +26,16 @@ public class ServerHandler implements Runnable{
         handleClientRequest();
     }
 
-    //TODO
-    //Criar função para checar no BD os IDs dos receptores, caso seja um grupo,
+    //TODO Criar função para checar no BD os IDs dos receptores, caso seja um grupo,
     // para enviar isso para a função que mandará as mensagens para eles.
 
-    //TODO
-    //Criar função para checar mensagens recebidas pelo cliente quando estava offline
+    //TODO Criar função para checar mensagens recebidas pelo cliente quando estava offline
 
     //Função para lidar com a conexão do cliente
     public void handleClientRequest(){
         String inMsg, outMsg, identifier = clientSocket.getInetAddress().toString();
         BufferedReader socketReader;
         BufferedWriter socketWriter;
-        HashMap<String, Message> messagesList = new HashMap<>();
 
         try{
             //Inicialização dos buffers de leitura e escrita para se comunicar com o cliente
@@ -66,12 +66,19 @@ public class ServerHandler implements Runnable{
                     System.out.println(identifier + ": " + inMsg);
 
                     //Salvar a mensagem no BD para os usuários receberem
-                    Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente);
+                    Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente, idDestinario);
                 }
             }
             clientSocket.close();
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    private void forwardMessage (Message message) throws SQLException {
+        MessageJDBC newMessage = new MessageJDBC();
+        String idMensagem = newMessage.saveMessage(message);
+        message.setIdMensagem(idMensagem);
+
     }
 }
