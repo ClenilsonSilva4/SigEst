@@ -9,12 +9,13 @@ import message.Message;
 
 public class ServerHandler implements Runnable{
     private final Socket clientSocket;
-    private final String destination;
+    private String idRemetente;
+    private final String emailRemetente;
     private final SimpleDateFormat ft = new SimpleDateFormat("HH:mm:ss");
 
-    public ServerHandler(Socket clientSocket, String destination) {
+    public ServerHandler(Socket clientSocket, String emailRemetente) {
         this.clientSocket = clientSocket;
-        this.destination = destination;
+        this.emailRemetente = emailRemetente;
     }
 
     @Override
@@ -45,7 +46,6 @@ public class ServerHandler implements Runnable{
             //Laço para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
             while(true){
                 inMsg = socketReader.readLine();
-                String messageID = "teste";
                 tempoLocal = new Date();
 
                 if(!(clientSocket.isConnected())){
@@ -66,7 +66,7 @@ public class ServerHandler implements Runnable{
                     System.out.println(identifier + ": " + inMsg);
 
                     //Salvar a mensagem no BD para os usuários receberem
-                    Message forwardMessage = new Message(messageID, destination, inMsg, ft.format(tempoLocal));
+                    Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente);
                 }
             }
             clientSocket.close();

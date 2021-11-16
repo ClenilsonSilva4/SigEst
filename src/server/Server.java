@@ -26,8 +26,9 @@ public class Server{
             socketWriter.write("Conexão aceita");
 
             String destinationID = socketReader.readLine();
+            Socket destinationSocket = null;
 
-            ServerHandler newConnection = new ServerHandler(activeSocket, destinationID);
+            ServerHandler newConnection = new ServerHandler(activeSocket, "teste@gmail.com");
             newConnection.run(); // start a new thread
         }
     }
