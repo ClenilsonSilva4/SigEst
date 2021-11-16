@@ -1,29 +1,40 @@
 package server;
 
 import java.io.*;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 import message.Message;
 import message.MessageJDBC;
 
-public class ServerHandler implements Runnable{
-    private final Socket clientSocket;
+public class ServerHandler{
     private String idRemetente;
-    private final String idDestinario;
-    private final String emailRemetente;
+    private String idDestinario;
+    private String emailRemetente;
     private final SimpleDateFormat ft = new SimpleDateFormat("HH:mm:ss");
+    private BufferedReader socketReader;
+    private BufferedWriter socketWriter;
+    private Map<Socket, String> connectedSockets = new HashMap <> ();
 
-    public ServerHandler(Socket clientSocket, String emailRemetente, String idDestinatario) {
-        this.clientSocket = clientSocket;
-        this.emailRemetente = emailRemetente;
-        this.idDestinario = idDestinatario;
-    }
+    public void AcceptConnection(ServerSocket serverSocket) throws IOException {
+        //Laço infinito para aceitar as conexões ao servidor e inicia uma thread com o cliente
+        while(true){
+            final Socket activeSocket = serverSocket.accept();
+            System.out.println("Conexão recebida de " + activeSocket);
 
-    @Override
-    public void run() {
-        handleClientRequest();
+            socketReader = new BufferedReader(new InputStreamReader(activeSocket.getInputStream()));
+            socketWriter = new BufferedWriter(new OutputStreamWriter(activeSocket.getOutputStream()));
+            socketWriter.write("Conexão aceita");
+
+            Runnable runnable = () -> handleClientRequest(activeSocket);
+            new Thread(runnable).start();
+            connectedSockets.remove(activeSocket);
+        }
     }
 
     //TODO Criar função para checar no BD os IDs dos receptores, caso seja um grupo,
@@ -32,16 +43,28 @@ public class ServerHandler implements Runnable{
     //TODO Criar função para checar mensagens recebidas pelo cliente quando estava offline
 
     //Função para lidar com a conexão do cliente
-    public void handleClientRequest(){
+    private void handleClientRequest(Socket clientSocket){
         String inMsg, outMsg, identifier = clientSocket.getInetAddress().toString();
-        BufferedReader socketReader;
-        BufferedWriter socketWriter;
 
         try{
             //Inicialização dos buffers de leitura e escrita para se comunicar com o cliente
             socketReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+            socketWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
+            //Pergunta ao cliente como ele gostaria de ser identificado no servidor e recebe a mensagem
+            socketWriter.write("Como gostaria de ser identificado?\n");
+            socketWriter.flush();
+            outMsg = socketReader.readLine();
+
+            if(!outMsg.equalsIgnoreCase("null")){
+                identifier = outMsg;
+            }
 
             Date tempoLocal;
+
+            //Adicionando o cliente na lista de clientes
+            connectedSockets.put(clientSocket, identifier);
+            System.out.println(identifier + " se conectou.");
 
             //Laço para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
             while(true){
@@ -65,8 +88,18 @@ public class ServerHandler implements Runnable{
 
                     System.out.println(identifier + ": " + inMsg);
 
+                    //Transmite a mensagem recebida do cliente para os demais
+                    for(Map.Entry <Socket, String> it : connectedSockets.entrySet()){
+                        if(it.getKey() != clientSocket){
+                            socketWriter = new BufferedWriter(new OutputStreamWriter(it.getKey().getOutputStream()));
+                            socketWriter.write(identifier + ": " + inMsg);
+                            socketWriter.write("\n");
+                            socketWriter.flush();
+                        }
+                    }
+
                     //Salvar a mensagem no BD para os usuários receberem
-                    Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente, idDestinario);
+                    //Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente, idDestinario);
                 }
             }
             clientSocket.close();
