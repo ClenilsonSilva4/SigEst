@@ -1,4 +1,4 @@
-package message;
+package chat.message;
 
 import connectionBD.ConnectionChatBD;
 import java.sql.*;

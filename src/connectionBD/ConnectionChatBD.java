@@ -12,7 +12,7 @@ public class ConnectionChatBD {
     public ConnectionChatBD() {
         url = "jdbc:mysql://localhost/chatbd?useTimezone=true&serverTimezone=America/Fortaleza";
         nome = "root";
-        senha = "N1mu3@36";
+        senha = "root";
     }
 
     public static Connection connect() throws SQLException {

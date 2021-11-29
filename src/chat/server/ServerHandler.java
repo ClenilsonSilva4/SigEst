@@ -1,4 +1,4 @@
-package server;
+package chat.server;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -9,8 +9,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import message.Message;
-import message.MessageJDBC;
+import chat.message.Message;
+import chat.message.MessageJDBC;
 
 public class ServerHandler{
     private String idRemetente;
@@ -113,5 +113,6 @@ public class ServerHandler{
         String idMensagem = newMessage.saveMessage(message);
         message.setIdMensagem(idMensagem);
 
+        newMessage.forwardMessage(message);
     }
 }

@@ -1,4 +1,4 @@
-package server;
+package chat.server;
 
 import java.net.*;
 import java.util.*;
