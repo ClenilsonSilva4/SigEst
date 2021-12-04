@@ -1,6 +1,6 @@
 package dao.chat;
 
-import service.chat.message.Mensagem;
+import service.chat.mensagem.Mensagem;
 
 import java.sql.*;
 import java.util.HashMap;

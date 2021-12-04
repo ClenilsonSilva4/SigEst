@@ -1,10 +1,10 @@
-package service.chat.client;
+package service.chat.cliente;
 
 import java.io.*;
 import java.net.Socket;
 import java.util.Scanner;
 
-public class tcpClient{
+public class Cliente {
     public static void main(String[] args) throws Exception{
         //Criação do socket e chamada de função para realizar a conexão com o servidor
         Socket serverSocket = connectServer();

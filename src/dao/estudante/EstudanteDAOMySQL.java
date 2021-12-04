@@ -1,6 +1,6 @@
 package dao.estudante;
 
-import service.Estudante;
+import service.estudante.Estudante;
 
 public class EstudanteDAOMySQL implements EstudanteDAO{
     @Override

@@ -1,4 +1,4 @@
-package service.chat.message;
+package service.chat.mensagem;
 
 public class Mensagem {
     private final int idDestinatario;

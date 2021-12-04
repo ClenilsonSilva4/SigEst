@@ -1,9 +1,9 @@
-package service.chat.server;
+package service.chat.servidor;
 
 import java.net.*;
 import java.util.*;
 
-public class Server{
+public class Servidor {
     public static void main(String[] args) throws Exception{
         //Criação e associação do socket ao endereço do servidor
         ServerSocket serverSocket = new ServerSocket(8080, 100, InetAddress.getByName(getRedeIP()));
@@ -12,7 +12,7 @@ public class Server{
         System.out.println("Agurdando conexão na porta: " + serverSocket.getLocalPort());
         System.out.println();
 
-        ServerHandler serverHandler = new ServerHandler();
+        Manipulador serverHandler = new Manipulador();
         serverHandler.AcceptConnection(serverSocket);
     }
 

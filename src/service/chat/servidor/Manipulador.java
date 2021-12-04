@@ -1,4 +1,4 @@
-package service.chat.server;
+package service.chat.servidor;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -9,10 +9,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import service.chat.message.Mensagem;
+import service.chat.mensagem.Mensagem;
 import dao.chat.MensagemDAOMySQL;
 
-public class ServerHandler{
+public class Manipulador {
     private int idRemetente;
     private int idDestinario;
     private String emailRemetente;

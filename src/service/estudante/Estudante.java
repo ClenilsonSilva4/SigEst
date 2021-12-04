@@ -1,4 +1,4 @@
-package service;
+package service.estudante;
 
 public class Estudante {
     private final int id;

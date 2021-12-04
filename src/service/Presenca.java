@@ -1,6 +1,6 @@
 package service;
 
-public class Presença {
+public class Presenca {
     private int id;
     private String data;
     private int idTurma;
@@ -8,7 +8,7 @@ public class Presença {
     private int idProfessor;
     private boolean presente;
 
-    public Presença(int id, String data, int idTurma, int idAluno, int idProfessor, boolean presente) {
+    public Presenca(int id, String data, int idTurma, int idAluno, int idProfessor, boolean presente) {
         this.id = id;
         this.data = data;
         this.idTurma = idTurma;
