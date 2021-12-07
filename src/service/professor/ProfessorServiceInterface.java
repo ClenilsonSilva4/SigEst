@@ -7,8 +7,8 @@ import java.util.Map;
 public interface ProfessorServiceInterface {
     Professor consultarProfessor(int idProfessor);
     Turma consultarTurma(int idTurma);
-    String inserirPresenca(Presenca novaPresenca);
+    void inserirPresenca(Presenca novaPresenca);
     Map<String, Presenca> consultarPresenca(int idPresenca, int idTurma);
-    String removerPresenca(int idPresenca, int idProfessor);
-    String alterarPresenca(Presenca presencaAlterada);
+    void removerPresenca(int idPresenca, int idProfessor);
+    void alterarPresenca(Presenca presencaAlterada);
 }

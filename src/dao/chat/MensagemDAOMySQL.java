@@ -1,26 +1,26 @@
 package dao.chat;
 
+import dao.conexao.ConexaoChatDAO;
 import service.chat.mensagem.Mensagem;
 
 import java.sql.*;
 import java.util.HashMap;
 
 public class MensagemDAOMySQL {
-    private Connection connection;
-    private Statement command;
+    private Connection conexaoBD;
+    private Statement comandos;
 
     //Abre a conexão com o BD
-    public void connect() throws SQLException {
-        connection = ConnectionChatDAO.connect();
-        command = connection.createStatement();
-        System.out.println("Conectado");
+    public void conectar() throws SQLException {
+        conexaoBD = ConexaoChatDAO.conectar();
+        comandos = conexaoBD.createStatement();
     }
 
     //Fecha a conexão com o BD
-    private void close() {
+    private void encerrarConexao() {
         try {
-            command.close();
-            connection.close();
+            comandos.close();
+            conexaoBD.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -28,24 +28,24 @@ public class MensagemDAOMySQL {
 
     //Salva a mensagem recebida no BD e retorna o ID da Mensagem
     public int saveMessage(Mensagem saveMessage) throws SQLException {
-        connect();
+        conectar();
 
         String sqlCommand = "INSERT INTO MENSAGEM (dataMensagem, conteudoMensagem, idRemetente, emailRemetente) VALUES ("
                 + saveMessage.getDataMessage() + saveMessage.getTexto() + saveMessage.getIdRemetente() + saveMessage.getEmailRemetente() + ")";
 
         System.out.println("SQL inserido: " + sqlCommand);
 
-        command.executeUpdate(sqlCommand);
+        comandos.executeUpdate(sqlCommand);
 
         sqlCommand = "SELECT idMensagem from MENSAGEM WHERE dataMensagem = " + saveMessage.getDataMessage() +
                 " AND idRemetente = " + saveMessage.getIdRemetente();
-        ResultSet queryResult = command.executeQuery(sqlCommand);
+        ResultSet queryResult = comandos.executeQuery(sqlCommand);
         int idMensagem = 0;
 
         if(queryResult.next()) {
             idMensagem = Integer.parseInt(queryResult.getString("idMensagem"));
         }
-        close();
+        encerrarConexao();
 
         return idMensagem;
     }
@@ -61,7 +61,7 @@ public class MensagemDAOMySQL {
 
     //Função para atribuir a mensagem ao usuário de destino
     public void forwardMessage (Mensagem sendMessage) throws SQLException {
-        connect();
+        conectar();
 
         StringBuilder sqlCommand = new StringBuilder();
         sqlCommand.append("INSERT INTO ENVIA (idMensagem, idRemetente, emailRemetente, ");
@@ -80,8 +80,8 @@ public class MensagemDAOMySQL {
             sqlCommand.append(sendMessage.getEmailDestinatario());
         }
 
-        command.executeUpdate(sqlCommand.toString());
+        comandos.executeUpdate(sqlCommand.toString());
 
-        close();
+        encerrarConexao();
     }
 }

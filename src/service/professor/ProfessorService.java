@@ -11,72 +11,59 @@ import service.Turma;
 import java.util.Map;
 
 public class ProfessorService implements ProfessorServiceInterface{
+    private final TurmaDAO turmaBD;
+    private final ProfessorDAO professorBD;
+    private final PresencaDAO presencaBD;
+
+    public ProfessorService() {
+        this.turmaBD = new TurmaDAOMySQL();
+        this.professorBD = new ProfessorDAOMySQL();
+        this.presencaBD = new PresencaDAOMySQL();
+    }
+
     @Override
     public Professor consultarProfessor(int idProfessor) {
-        ProfessorDAO consultaProfessor = new ProfessorDAOMySQL();
-        return consultaProfessor.consultarProfessor(idProfessor);
+        return professorBD.consultarProfessor(idProfessor);
     }
 
     @Override
     public Turma consultarTurma(int idTurma) {
-        TurmaDAO consultaTurma = new TurmaDAOMySQL();
-        return consultaTurma.consultarTurma(idTurma);
+        return turmaBD.consultarTurma(idTurma);
     }
 
     @Override
-    public String inserirPresenca(Presenca novaPresenca) {
+    public void inserirPresenca(Presenca novaPresenca) {
         //Checar se o professor realmente dá aula nessa turma.
         Turma checarTurma = consultarTurma(novaPresenca.getIdTurma());
 
         if(checarTurma.containsProfessor(novaPresenca.getIdProfessor())) {
-            PresencaDAO adicionarPresenca = new PresencaDAOMySQL();
-            adicionarPresenca.inserirPresenca(novaPresenca);
-
-            return "Presença inserida com sucesso";
-        } /*else if(//TODO Checar para o admin) {
-
-        }*/ else {
-            return "Este usuário não possui permissão para inserir essa presença.";
+            presencaBD.inserirPresenca(novaPresenca);
         }
     }
 
     @Override
     public Map<String, Presenca> consultarPresenca(int idTurma, int idProfessor) {
-        PresencaDAO consultarPresenca = new PresencaDAOMySQL();
-        return consultarPresenca.consultarPresenca(idTurma, idProfessor);
+        return presencaBD.consultarPresenca(idTurma, idProfessor);
     }
 
     @Override
-    public String removerPresenca(int idPresenca, int idProfessor) {
+    public void removerPresenca(int idPresenca, int idProfessor) {
         //Checar se o professor realmente dá aula nessa turma.
         Turma checarTurma = consultarTurma(idPresenca);
 
         if(checarTurma.containsProfessor(idProfessor)) {
-            PresencaDAO removerPresenca = new PresencaDAOMySQL();
-            removerPresenca.removerPresenca(idPresenca, idProfessor);
-
-            return "Presença removida com sucesso";
-        } /*else if(//TODO Checar para o admin) {
-
-        }*/ else {
-            return "Este usuário não possui permissão para remover essa presença.";
+            presencaBD.removerPresenca(idPresenca, idProfessor);
         }
     }
 
     @Override
-    public String alterarPresenca(Presenca presencaAlterada) {
+    public void alterarPresenca(Presenca presencaAlterada) {
         //Checar se o professor realmente dá aula nessa turma.
         Turma checarTurma = consultarTurma(presencaAlterada.getIdTurma());
 
         if(checarTurma.containsProfessor(presencaAlterada.getIdProfessor())) {
-            PresencaDAO alterarPresenca = new PresencaDAOMySQL();
-            alterarPresenca.alterarPresenca(presencaAlterada);
+            presencaBD.alterarPresenca(presencaAlterada);
+        } //TODO Checar para o admin) {
 
-            return "Presença alterada com sucesso";
-        } /*else if(//TODO Checar para o admin) {
-
-        }*/ else {
-            return "Este usuário não possui permissão para alterar essa presença.";
-        }
     }
 }
