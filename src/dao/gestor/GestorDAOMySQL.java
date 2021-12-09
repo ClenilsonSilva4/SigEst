@@ -1,22 +1,21 @@
-package dao.professor;
+package dao.gestor;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.UserNotFoundException;
-import entities.Professor;
+import entities.Gestor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO{
-
+public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
     @Override
-    public void inserirProfessor(String nome, String email, String senha) throws ChangeNotMade {
+    public void inserirGestor(String nome, String email, String senha) throws ChangeNotMade {
         try {
             conectar();
 
             String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario, tipoUsuario) VALUES (" +
-                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ", 2);";
+                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ", 3);";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
@@ -31,15 +30,15 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException {
+    public Gestor consultarGestor(int idGestor) throws UserNotFoundException {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idProfessor + " AND tipoUsuario = 2);";
+            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idGestor + " AND tipoUsuario = 3);";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
             if(resultadoConsulta.next()) {
-                return new Professor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             }
@@ -51,10 +50,10 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public void removerProfessor(int idProfessor) throws ChangeNotMade {
+    public void removerGestor(int idGestor) throws ChangeNotMade {
         try {
             conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idProfessor + ");";
+            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idGestor + ");";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
@@ -67,15 +66,15 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public void alterarProfessor(Professor professorAlterado) throws UserNotFoundException, ChangeNotMade {
-        Professor professorBD = consultarProfessor(professorAlterado.getIdUsuario());
+    public void alterarGestor(Gestor gestorAlterado) throws UserNotFoundException, ChangeNotMade {
+        Gestor gestorBD = consultarGestor(gestorAlterado.getIdUsuario());
 
-        if(professorBD != null) {
+        if(gestorBD != null) {
             try {
                 conectar();
-                String sqlComando = "UPDATE usuario SET nomeUsuario = " + professorAlterado.getNomeUsuario() +
-                        ", usuario.emailUsuario = " + professorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                        professorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + professorAlterado.getIdUsuario() + ";";
+                String sqlComando = "UPDATE usuario SET nomeUsuario = " + gestorAlterado.getNomeUsuario() +
+                        ", usuario.emailUsuario = " + gestorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
+                        gestorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + gestorAlterado.getIdUsuario() + ";";
 
                 int resultado = comandos.executeUpdate(sqlComando);
 

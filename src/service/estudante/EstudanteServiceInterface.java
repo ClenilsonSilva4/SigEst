@@ -1,11 +1,12 @@
 package service.estudante;
 
-import service.Presenca;
-import service.Turma;
+import entities.Estudante;
+import entities.Presenca;
+import entities.Turma;
 import java.util.Map;
 
 public interface EstudanteServiceInterface {
     Estudante consultarEstudante(int idEstudante);
     Turma consultarTurma(int idTurma);
-    Map<String, Presenca> consultarPresenca(int idTurma, int idEstudante);
+    Presenca consultarPresenca(int idPresenca);
 }

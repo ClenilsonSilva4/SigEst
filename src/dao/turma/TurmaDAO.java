@@ -1,6 +1,6 @@
 package dao.turma;
 
-import service.Turma;
+import entities.Turma;
 
 public interface TurmaDAO {
     void inserirTurma(Turma novaTurma);

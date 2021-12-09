@@ -1,8 +1,9 @@
 package dao.turma;
 
-import service.Turma;
+import dao.conexao.ConexaoSistemaDAO;
+import entities.Turma;
 
-public class TurmaDAOMySQL implements TurmaDAO{
+public class TurmaDAOMySQL extends ConexaoSistemaDAO implements TurmaDAO{
     public void inserirTurma(Turma novaTurma) {
         //TODO Acesso ao BD
     }

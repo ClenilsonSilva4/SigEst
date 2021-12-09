@@ -7,10 +7,9 @@ import dao.turma.TurmaDAOMySQL;
 import dao.estudante.EstudanteDAO;
 import dao.estudante.EstudanteDAOMySQL;
 import exception.UserNotFoundException;
-import service.Presenca;
-import service.Turma;
-
-import java.util.Map;
+import entities.Estudante;
+import entities.Presenca;
+import entities.Turma;
 
 public class EstudanteService implements EstudanteServiceInterface{
     public Estudante consultarEstudante(int idEstudante) {
@@ -28,8 +27,8 @@ public class EstudanteService implements EstudanteServiceInterface{
         return consultaTurma.consultarTurma(idTurma);
     }
 
-    public Map<String, Presenca> consultarPresenca(int idTurma, int idEstudante) {
+    public Presenca consultarPresenca(int idPresenca) {
         PresencaDAO consultarPresenca = new PresencaDAOMySQL();
-        return consultarPresenca.consultarPresenca(idTurma, idEstudante);
+        return consultarPresenca.consultarPresenca(idPresenca);
     }
 }

@@ -1,7 +1,4 @@
-package service;
-
-import service.estudante.Estudante;
-import service.professor.Professor;
+package entities;
 
 import java.util.ArrayList;
 import java.util.List;

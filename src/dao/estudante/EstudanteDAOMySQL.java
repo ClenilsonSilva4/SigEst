@@ -1,45 +1,40 @@
 package dao.estudante;
 
 import dao.conexao.ConexaoSistemaDAO;
+import exception.ChangeNotMade;
 import exception.UserNotFoundException;
-import service.estudante.Estudante;
+import entities.Estudante;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
-public class EstudanteDAOMySQL implements EstudanteDAO{
-    private Connection conexaoBD;
-    private Statement comandos;
-
-    private void conectar() throws SQLException {
-        this.conexaoBD = ConexaoSistemaDAO.conectar();
-        this.comandos = conexaoBD.createStatement();
-    }
-
-    private void encerrarConexao() throws SQLException {
-        conexaoBD.close();
-        comandos.close();
-    }
+public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO{
 
     @Override
-    public void inserirEstudante(String nome, String email, String senha) throws SQLException {
-        conectar();
+    public void inserirEstudante(String nome, String email, String senha) throws ChangeNotMade {
+        try {
+            conectar();
 
-        String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario) VALUES (" +
-                stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ");";
+            String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario, tipoUsuario) VALUES (" +
+                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ", 1);";
 
-        comandos.executeUpdate(sqlComando);
+            int resultado = comandos.executeUpdate(sqlComando);
 
-        encerrarConexao();
+            if(resultado != 1) {
+                throw new ChangeNotMade("Não foi possível concluir a inserção no banco de dados");
+            }
+
+            encerrarConexao();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public Estudante consultarEstudante(int idEstudante) throws UserNotFoundException {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idEstudante + ");";
+            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idEstudante + " AND tipoUsuario = 1);";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
@@ -47,9 +42,8 @@ public class EstudanteDAOMySQL implements EstudanteDAO{
                 return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
-            } else {
-                throw new UserNotFoundException("O ID não pertence a um usuário válido");
             }
+            throw new UserNotFoundException("O ID não pertence a um usuário válido");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -57,28 +51,36 @@ public class EstudanteDAOMySQL implements EstudanteDAO{
     }
 
     @Override
-    public void removerEstudante(int idEstudante) {
+    public void removerEstudante(int idEstudante) throws ChangeNotMade {
         try {
             conectar();
-            String sqlComando = "DELETE * FROM usuario WHERE (idUsuario = " + idEstudante + ");";
+            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idEstudante + ");";
 
-            comandos.executeQuery(sqlComando);
+            int resultado = comandos.executeUpdate(sqlComando);
+
+            if(resultado != 1) {
+                throw new ChangeNotMade("Não foi possível concluir a remoção no banco de dados");
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void alterarEstudante(Estudante estudanteAlterado) {
-        //TODO Acesso ao BD
-    }
+    public void alterarEstudante(Estudante estudanteAlterado) throws ChangeNotMade {
+        try {
+            conectar();
+            String sqlComando = "UPDATE usuario SET nomeUsuario = " + estudanteAlterado.getNomeUsuario() +
+                    ", usuario.emailUsuario = " + estudanteAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
+                    estudanteAlterado.getSenhaUsuario() + " WHERE idUsuario = " + estudanteAlterado.getIdUsuario() + ";";
 
-    private String stringBD(String valor) {
-        if (valor != null && !"".equals(valor)) {
-            valor = "'" + valor + "'";
-        } else {
-            valor = "'"+"'";
+            int resultado = comandos.executeUpdate(sqlComando);
+
+            if(resultado != 1) {
+                throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        return valor;
     }
 }

@@ -1,13 +1,12 @@
 package dao.estudante;
 
+import exception.ChangeNotMade;
 import exception.UserNotFoundException;
-import service.estudante.Estudante;
-
-import java.sql.SQLException;
+import entities.Estudante;
 
 public interface EstudanteDAO {
-    void inserirEstudante(String nome, String email, String senha) throws SQLException;
+    void inserirEstudante(String nome, String email, String senha) throws ChangeNotMade;
     Estudante consultarEstudante(int idEstudante) throws UserNotFoundException;
-    void removerEstudante(int idEstudante);
-    void alterarEstudante(Estudante estudanteAlterado);
+    void removerEstudante(int idEstudante) throws ChangeNotMade;
+    void alterarEstudante(Estudante estudanteAlterado) throws ChangeNotMade;
 }

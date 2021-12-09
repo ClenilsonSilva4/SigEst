@@ -6,23 +6,26 @@ import dao.professor.ProfessorDAO;
 import dao.professor.ProfessorDAOMySQL;
 import dao.turma.TurmaDAO;
 import dao.turma.TurmaDAOMySQL;
-import service.Presenca;
-import service.Turma;
-import java.util.Map;
+import exception.ChangeNotMade;
+import exception.UserNotFoundException;
+import entities.Presenca;
+import entities.Professor;
+import entities.Turma;
+import exception.UserWithoutPermission;
 
 public class ProfessorService implements ProfessorServiceInterface{
-    private final TurmaDAO turmaBD;
     private final ProfessorDAO professorBD;
+    private final TurmaDAO turmaBD;
     private final PresencaDAO presencaBD;
 
     public ProfessorService() {
-        this.turmaBD = new TurmaDAOMySQL();
-        this.professorBD = new ProfessorDAOMySQL();
-        this.presencaBD = new PresencaDAOMySQL();
+        turmaBD = new TurmaDAOMySQL();
+        professorBD = new ProfessorDAOMySQL();
+        presencaBD = new PresencaDAOMySQL();
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) {
+    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException {
         return professorBD.consultarProfessor(idProfessor);
     }
 
@@ -32,38 +35,49 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public void inserirPresenca(Presenca novaPresenca) {
+    public void inserirPresenca(Presenca novaPresenca) throws ChangeNotMade, UserWithoutPermission {
         //Checar se o professor realmente dá aula nessa turma.
-        Turma checarTurma = consultarTurma(novaPresenca.getIdTurma());
-
-        if(checarTurma.containsProfessor(novaPresenca.getIdProfessor())) {
-            presencaBD.inserirPresenca(novaPresenca);
+        if(checarPermissao(novaPresenca.getIdProfessor(), novaPresenca.getIdTurma())) {
+            presencaBD.inserirPresenca(novaPresenca.getIdTurma(), novaPresenca.getIdProfessor(),
+                    novaPresenca.getIdAluno(), novaPresenca.getData(), novaPresenca.isPresente());
+        } else {
+            throw new UserWithoutPermission("Este professor não possui permissão para inserir essa presença.");
         }
     }
 
     @Override
-    public Map<String, Presenca> consultarPresenca(int idTurma, int idProfessor) {
-        return presencaBD.consultarPresenca(idTurma, idProfessor);
+    public Presenca consultarPresenca(int idPresenca) {
+        return presencaBD.consultarPresenca(idPresenca);
     }
 
     @Override
-    public void removerPresenca(int idPresenca, int idProfessor) {
+    public void removerPresenca(int idPresenca, int idProfessor) throws ChangeNotMade, UserWithoutPermission {
         //Checar se o professor realmente dá aula nessa turma.
-        Turma checarTurma = consultarTurma(idPresenca);
-
-        if(checarTurma.containsProfessor(idProfessor)) {
-            presencaBD.removerPresenca(idPresenca, idProfessor);
+        if(checarPermissao(idProfessor, presencaBD.consultarPresenca(idPresenca).getIdTurma())) {
+            presencaBD.removerPresenca(idPresenca);
+        } else {
+            throw new UserWithoutPermission("Este professor não possui permissão para excluir essa presença.");
         }
     }
 
     @Override
-    public void alterarPresenca(Presenca presencaAlterada) {
+    public void alterarPresenca(Presenca presencaAlterada) throws UserWithoutPermission, ChangeNotMade {
         //Checar se o professor realmente dá aula nessa turma.
-        Turma checarTurma = consultarTurma(presencaAlterada.getIdTurma());
-
-        if(checarTurma.containsProfessor(presencaAlterada.getIdProfessor())) {
+        if(checarPermissao(presencaAlterada.getIdProfessor(), presencaAlterada.getIdTurma())) {
             presencaBD.alterarPresenca(presencaAlterada);
-        } //TODO Checar para o admin) {
+        } else {
+            throw new UserWithoutPermission("Este professor não possui permissão para alterar essa presença.");
+        }
+    }
 
+    private boolean checarPermissao (int idFuncionario, int idTurma) {
+        try {
+            consultarProfessor(idFuncionario);
+
+            Turma checarTurma = consultarTurma(idTurma);
+            return checarTurma.containsProfessor(idFuncionario);
+        } catch (UserNotFoundException e) {
+            return false;
+        }
     }
 }
