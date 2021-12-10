@@ -7,6 +7,7 @@ import dao.professor.ProfessorDAOMySQL;
 import dao.turma.TurmaDAO;
 import dao.turma.TurmaDAOMySQL;
 import exception.ChangeNotMade;
+import exception.DBUnavailable;
 import exception.UserNotFoundException;
 import entities.Presenca;
 import entities.Professor;
@@ -25,17 +26,17 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException {
+    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
         return professorBD.consultarProfessor(idProfessor);
     }
 
     @Override
-    public Turma consultarTurma(int idTurma) {
+    public Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
         return turmaBD.consultarTurma(idTurma);
     }
 
     @Override
-    public void inserirPresenca(Presenca novaPresenca) throws ChangeNotMade, UserWithoutPermission {
+    public void inserirPresenca(Presenca novaPresenca) throws ChangeNotMade, UserWithoutPermission, DBUnavailable {
         //Checar se o professor realmente dá aula nessa turma.
         if(checarPermissao(novaPresenca.getIdProfessor(), novaPresenca.getIdTurma())) {
             presencaBD.inserirPresenca(novaPresenca.getIdTurma(), novaPresenca.getIdProfessor(),
@@ -51,7 +52,7 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public void removerPresenca(int idPresenca, int idProfessor) throws ChangeNotMade, UserWithoutPermission {
+    public void removerPresenca(int idPresenca, int idProfessor) throws ChangeNotMade, UserWithoutPermission, DBUnavailable {
         //Checar se o professor realmente dá aula nessa turma.
         if(checarPermissao(idProfessor, presencaBD.consultarPresenca(idPresenca).getIdTurma())) {
             presencaBD.removerPresenca(idPresenca);
@@ -61,7 +62,7 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public void alterarPresenca(Presenca presencaAlterada) throws UserWithoutPermission, ChangeNotMade {
+    public void alterarPresenca(Presenca presencaAlterada) throws UserWithoutPermission, ChangeNotMade, DBUnavailable {
         //Checar se o professor realmente dá aula nessa turma.
         if(checarPermissao(presencaAlterada.getIdProfessor(), presencaAlterada.getIdTurma())) {
             presencaBD.alterarPresenca(presencaAlterada);
@@ -70,7 +71,7 @@ public class ProfessorService implements ProfessorServiceInterface{
         }
     }
 
-    private boolean checarPermissao (int idFuncionario, int idTurma) {
+    private boolean checarPermissao (int idFuncionario, int idTurma) throws DBUnavailable {
         try {
             consultarProfessor(idFuncionario);
 

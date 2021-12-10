@@ -2,6 +2,7 @@ package dao.gestor;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
+import exception.DBUnavailable;
 import exception.UserNotFoundException;
 import entities.Gestor;
 
@@ -10,7 +11,7 @@ import java.sql.SQLException;
 
 public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
     @Override
-    public void inserirGestor(String nome, String email, String senha) throws ChangeNotMade {
+    public void inserirGestor(String nome, String email, String senha) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
 
@@ -25,12 +26,12 @@ public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
 
             encerrarConexao();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
     @Override
-    public Gestor consultarGestor(int idGestor) throws UserNotFoundException {
+    public Gestor consultarGestor(int idGestor) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
             String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idGestor + " AND tipoUsuario = 3);";
@@ -44,9 +45,8 @@ public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
             }
             throw new UserNotFoundException("O ID não pertence a um usuário válido");
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
-        return null;
     }
 
     @Override
@@ -66,24 +66,20 @@ public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
     }
 
     @Override
-    public void alterarGestor(Gestor gestorAlterado) throws UserNotFoundException, ChangeNotMade {
-        Gestor gestorBD = consultarGestor(gestorAlterado.getIdUsuario());
+    public void alterarGestor(Gestor gestorAlterado) throws ChangeNotMade, DBUnavailable {
+        try {
+            conectar();
+            String sqlComando = "UPDATE usuario SET nomeUsuario = " + gestorAlterado.getNomeUsuario() +
+                    ", usuario.emailUsuario = " + gestorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
+                    gestorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + gestorAlterado.getIdUsuario() + ";";
 
-        if(gestorBD != null) {
-            try {
-                conectar();
-                String sqlComando = "UPDATE usuario SET nomeUsuario = " + gestorAlterado.getNomeUsuario() +
-                        ", usuario.emailUsuario = " + gestorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                        gestorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + gestorAlterado.getIdUsuario() + ";";
+            int resultado = comandos.executeUpdate(sqlComando);
 
-                int resultado = comandos.executeUpdate(sqlComando);
-
-                if(resultado != 1) {
-                    throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if(resultado != 1) {
+                throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
             }
+        } catch (SQLException e) {
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 }

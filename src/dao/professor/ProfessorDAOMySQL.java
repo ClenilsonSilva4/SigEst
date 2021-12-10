@@ -2,6 +2,7 @@ package dao.professor;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
+import exception.DBUnavailable;
 import exception.UserNotFoundException;
 import entities.Professor;
 
@@ -11,7 +12,7 @@ import java.sql.SQLException;
 public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO{
 
     @Override
-    public void inserirProfessor(String nome, String email, String senha) throws ChangeNotMade {
+    public void inserirProfessor(String nome, String email, String senha) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
 
@@ -26,12 +27,12 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
 
             encerrarConexao();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException {
+    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
             String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idProfessor + " AND tipoUsuario = 2);";
@@ -45,9 +46,8 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
             }
             throw new UserNotFoundException("O ID não pertence a um usuário válido");
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
-        return null;
     }
 
     @Override
@@ -67,24 +67,20 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public void alterarProfessor(Professor professorAlterado) throws UserNotFoundException, ChangeNotMade {
-        Professor professorBD = consultarProfessor(professorAlterado.getIdUsuario());
+    public void alterarProfessor(Professor professorAlterado) throws ChangeNotMade, DBUnavailable {
+        try {
+            conectar();
+            String sqlComando = "UPDATE usuario SET nomeUsuario = " + professorAlterado.getNomeUsuario() +
+                    ", usuario.emailUsuario = " + professorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
+                    professorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + professorAlterado.getIdUsuario() + ";";
 
-        if(professorBD != null) {
-            try {
-                conectar();
-                String sqlComando = "UPDATE usuario SET nomeUsuario = " + professorAlterado.getNomeUsuario() +
-                        ", usuario.emailUsuario = " + professorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                        professorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + professorAlterado.getIdUsuario() + ";";
+            int resultado = comandos.executeUpdate(sqlComando);
 
-                int resultado = comandos.executeUpdate(sqlComando);
-
-                if(resultado != 1) {
-                    throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
-                }
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if(resultado != 1) {
+                throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
             }
+        } catch (SQLException e) {
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 }

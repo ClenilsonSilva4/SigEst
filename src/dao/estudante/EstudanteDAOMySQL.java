@@ -2,6 +2,7 @@ package dao.estudante;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
+import exception.DBUnavailable;
 import exception.UserNotFoundException;
 import entities.Estudante;
 
@@ -31,7 +32,7 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
     }
 
     @Override
-    public Estudante consultarEstudante(int idEstudante) throws UserNotFoundException {
+    public Estudante consultarEstudante(int idEstudante) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
             String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idEstudante + " AND tipoUsuario = 1);";
@@ -45,13 +46,12 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
             }
             throw new UserNotFoundException("O ID não pertence a um usuário válido");
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
-        return null;
     }
 
     @Override
-    public void removerEstudante(int idEstudante) throws ChangeNotMade {
+    public void removerEstudante(int idEstudante) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
             String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idEstudante + ");";
@@ -62,12 +62,12 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
                 throw new ChangeNotMade("Não foi possível concluir a remoção no banco de dados");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
     @Override
-    public void alterarEstudante(Estudante estudanteAlterado) throws ChangeNotMade {
+    public void alterarEstudante(Estudante estudanteAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
             String sqlComando = "UPDATE usuario SET nomeUsuario = " + estudanteAlterado.getNomeUsuario() +
@@ -80,7 +80,7 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
                 throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 }
