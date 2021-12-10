@@ -50,6 +50,25 @@ public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
     }
 
     @Override
+    public Gestor consultarGestor(String emailGestor) throws UserNotFoundException, DBUnavailable {
+        try {
+            conectar();
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailGestor + " AND tipoUsuario = 3);";
+
+            ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
+
+            if(resultadoConsulta.next()) {
+                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
+                        resultadoConsulta.getString("senhaUsuario"));
+            }
+            throw new UserNotFoundException("O ID não pertence a um usuário válido");
+        } catch (SQLException e) {
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+        }
+    }
+
+    @Override
     public void removerGestor(int idGestor) throws ChangeNotMade {
         try {
             conectar();
