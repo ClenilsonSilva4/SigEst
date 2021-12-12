@@ -2,8 +2,8 @@ package service.professor;
 
 import dao.presenca.PresencaDAO;
 import dao.presenca.PresencaDAOMySQL;
-import dao.usuario.professor.ProfessorDAO;
-import dao.usuario.professor.ProfessorDAOMySQL;
+import dao.usuario.UsuarioDAO;
+import dao.usuario.ProfessorDAOMySQL;
 import dao.turma.TurmaDAO;
 import dao.turma.TurmaDAOMySQL;
 import exception.ChangeNotMade;
@@ -15,7 +15,7 @@ import entities.Turma;
 import exception.UserWithoutPermission;
 
 public class ProfessorService implements ProfessorServiceInterface{
-    private final ProfessorDAO professorBD;
+    private final UsuarioDAO professorBD;
     private final TurmaDAO turmaBD;
     private final PresencaDAO presencaBD;
 
@@ -27,7 +27,7 @@ public class ProfessorService implements ProfessorServiceInterface{
 
     @Override
     public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
-        return professorBD.consultarProfessor(idProfessor);
+        return new Professor(professorBD.consultarUsuario(idProfessor));
     }
 
     @Override

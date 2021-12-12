@@ -4,8 +4,8 @@ import dao.presenca.PresencaDAO;
 import dao.presenca.PresencaDAOMySQL;
 import dao.turma.TurmaDAO;
 import dao.turma.TurmaDAOMySQL;
-import dao.usuario.estudante.EstudanteDAO;
-import dao.usuario.estudante.EstudanteDAOMySQL;
+import dao.usuario.UsuarioDAO;
+import dao.usuario.EstudanteDAOMySQL;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
 import entities.Estudante;
@@ -14,9 +14,9 @@ import entities.Turma;
 
 public class EstudanteService implements EstudanteServiceInterface{
     public Estudante consultarEstudante(int idEstudante) throws DBUnavailable {
-        EstudanteDAO consultaBD = new EstudanteDAOMySQL();
+        UsuarioDAO consultaBD = new EstudanteDAOMySQL();
         try {
-            return consultaBD.consultarEstudante(idEstudante);
+            return new Estudante(consultaBD.consultarUsuario(idEstudante));
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return null;

@@ -1,6 +1,5 @@
-package dao.usuario.estudante;
+package dao.usuario;
 
-import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
@@ -9,10 +8,9 @@ import entities.Estudante;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO{
-
+public class EstudanteDAOMySQL extends UsuarioDAOMySQL {
     @Override
-    public void inserirEstudante(String nome, String email, String senha) throws ChangeNotMade {
+    public void inserirUsuario(String nome, String email, String senha) throws ChangeNotMade {
         try {
             conectar();
 
@@ -32,7 +30,7 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
     }
 
     @Override
-    public Estudante consultarEstudante(int idEstudante) throws UserNotFoundException, DBUnavailable {
+    public Estudante consultarUsuario(int idEstudante) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
             String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idEstudante + " AND tipoUsuario = 1);";
@@ -51,7 +49,7 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
     }
 
     @Override
-    public Estudante consultarEstudante(String emailEstudante) throws UserNotFoundException, DBUnavailable {
+    public Estudante consultarUsuario(String emailEstudante) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
             String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailEstudante + " AND tipoUsuario = 1);";
@@ -64,40 +62,6 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
                         resultadoConsulta.getString("senhaUsuario"));
             }
             throw new UserNotFoundException("O ID não pertence a um usuário válido");
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
-
-    @Override
-    public void removerEstudante(int idEstudante) throws ChangeNotMade, DBUnavailable {
-        try {
-            conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idEstudante + ");";
-
-            int resultado = comandos.executeUpdate(sqlComando);
-
-            if(resultado != 1) {
-                throw new ChangeNotMade("Não foi possível concluir a remoção no banco de dados");
-            }
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
-
-    @Override
-    public void alterarEstudante(Estudante estudanteAlterado) throws ChangeNotMade, DBUnavailable {
-        try {
-            conectar();
-            String sqlComando = "UPDATE usuario SET nomeUsuario = " + estudanteAlterado.getNomeUsuario() +
-                    ", usuario.emailUsuario = " + estudanteAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                    estudanteAlterado.getSenhaUsuario() + " WHERE idUsuario = " + estudanteAlterado.getIdUsuario() + ";";
-
-            int resultado = comandos.executeUpdate(sqlComando);
-
-            if(resultado != 1) {
-                throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
-            }
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }

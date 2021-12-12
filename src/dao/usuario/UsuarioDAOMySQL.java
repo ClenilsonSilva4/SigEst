@@ -1,23 +1,22 @@
-package dao.usuario.professor;
+package dao.usuario;
 
 import dao.conexao.ConexaoSistemaDAO;
+import entities.Usuario;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import entities.Professor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO{
-
+public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
     @Override
-    public void inserirProfessor(String nome, String email, String senha) throws ChangeNotMade, DBUnavailable {
+    public void inserirUsuario(String nome, String email, String senha) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
 
-            String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario, tipoUsuario) VALUES (" +
-                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ", 2);";
+            String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario) VALUES (" +
+                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ");";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
@@ -32,15 +31,15 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
+    public Usuario consultarUsuario(int idUsuario) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idProfessor + " AND tipoUsuario = 2);";
+            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idUsuario + " AND tipoUsuario = 1);";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
             if(resultadoConsulta.next()) {
-                return new Professor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Usuario(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             }
@@ -51,15 +50,15 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public Professor consultarProfessor(String emailProfessor) throws UserNotFoundException, DBUnavailable {
+    public Usuario consultarUsuario(String emailUsuario) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailProfessor + " AND tipoUsuario = 2);";
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailUsuario + " AND tipoUsuario = 1);";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
             if(resultadoConsulta.next()) {
-                return new Professor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Usuario(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             }
@@ -70,10 +69,10 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
     }
 
     @Override
-    public void removerProfessor(int idProfessor) throws ChangeNotMade {
+    public void removerUsuario(int idUsuario) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idProfessor + ");";
+            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idUsuario + ");";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
@@ -81,17 +80,17 @@ public class ProfessorDAOMySQL extends ConexaoSistemaDAO implements ProfessorDAO
                 throw new ChangeNotMade("Não foi possível concluir a remoção no banco de dados");
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
     @Override
-    public void alterarProfessor(Professor professorAlterado) throws ChangeNotMade, DBUnavailable {
+    public void alterarUsuario(Usuario usuarioAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "UPDATE usuario SET nomeUsuario = " + professorAlterado.getNomeUsuario() +
-                    ", usuario.emailUsuario = " + professorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                    professorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + professorAlterado.getIdUsuario() + ";";
+            String sqlComando = "UPDATE usuario SET nomeUsuario = " + usuarioAlterado.getNomeUsuario() +
+                    ", usuario.emailUsuario = " + usuarioAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
+                    usuarioAlterado.getSenhaUsuario() + " WHERE idUsuario = " + usuarioAlterado.getIdUsuario() + ";";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
