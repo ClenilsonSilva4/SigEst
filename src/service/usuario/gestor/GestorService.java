@@ -29,7 +29,7 @@ public class GestorService implements GestorServiceInterface{
     @Override
     public void inserirEstudante(String nome, String email, String senha) throws DBUnavailable, EmailAlreadyInUse, ChangeNotMade {
         try {
-            estudanteBD.consultarUsuario(email);
+            estudanteBD.consultarUsuario(email, "");
             throw new EmailAlreadyInUse("Esse email já pertence a um usuário cadastrado");
         } catch (UserNotFoundException e) {
             estudanteBD.inserirUsuario(nome, email, senha);
@@ -62,7 +62,7 @@ public class GestorService implements GestorServiceInterface{
     @Override
     public void inserirProfessor(String nome, String email, String senha) throws DBUnavailable, EmailAlreadyInUse, ChangeNotMade {
         try {
-            professorBD.consultarUsuario(email);
+            professorBD.consultarUsuario(email, "");
             throw new EmailAlreadyInUse("Esse email já pertence a um usuário cadastrado");
         } catch (UserNotFoundException e) {
             professorBD.inserirUsuario(nome, email, senha);
@@ -100,7 +100,7 @@ public class GestorService implements GestorServiceInterface{
     @Override
     public void inserirGestor(String nome, String email, String senha) throws EmailAlreadyInUse, ChangeNotMade, DBUnavailable {
         try {
-            gestorBD.consultarUsuario(email);
+            gestorBD.consultarUsuario(email, "");
             throw new EmailAlreadyInUse("Esse email já pertence a um usuário cadastrado");
         } catch (UserNotFoundException e) {
             gestorBD.inserirUsuario(nome, email, senha);

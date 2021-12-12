@@ -28,42 +28,4 @@ public class GestorDAOMySQL extends UsuarioDAOMySQL {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
-
-    @Override
-    public Gestor consultarUsuario(int idGestor) throws UserNotFoundException, DBUnavailable {
-        try {
-            conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idGestor + " AND tipoUsuario = 3);";
-
-            ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
-
-            if(resultadoConsulta.next()) {
-                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
-                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
-                        resultadoConsulta.getString("senhaUsuario"));
-            }
-            throw new UserNotFoundException("O ID não pertence a um usuário válido");
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
-
-    @Override
-    public Gestor consultarUsuario(String emailGestor) throws UserNotFoundException, DBUnavailable {
-        try {
-            conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailGestor + " AND tipoUsuario = 3);";
-
-            ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
-
-            if(resultadoConsulta.next()) {
-                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
-                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
-                        resultadoConsulta.getString("senhaUsuario"));
-            }
-            throw new UserNotFoundException("O ID não pertence a um usuário válido");
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
 }

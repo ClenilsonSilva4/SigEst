@@ -28,42 +28,4 @@ public class EstudanteDAOMySQL extends UsuarioDAOMySQL {
             e.printStackTrace();
         }
     }
-
-    @Override
-    public Estudante consultarUsuario(int idEstudante) throws UserNotFoundException, DBUnavailable {
-        try {
-            conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idEstudante + " AND tipoUsuario = 1);";
-
-            ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
-
-            if(resultadoConsulta.next()) {
-                return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
-                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
-                        resultadoConsulta.getString("senhaUsuario"));
-            }
-            throw new UserNotFoundException("O ID não pertence a um usuário válido");
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
-
-    @Override
-    public Estudante consultarUsuario(String emailEstudante) throws UserNotFoundException, DBUnavailable {
-        try {
-            conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailEstudante + " AND tipoUsuario = 1);";
-
-            ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
-
-            if(resultadoConsulta.next()) {
-                return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
-                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
-                        resultadoConsulta.getString("senhaUsuario"));
-            }
-            throw new UserNotFoundException("O ID não pertence a um usuário válido");
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
 }

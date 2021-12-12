@@ -1,6 +1,9 @@
 package dao.usuario;
 
 import dao.conexao.ConexaoSistemaDAO;
+import entities.Estudante;
+import entities.Gestor;
+import entities.Professor;
 import entities.Usuario;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
@@ -34,37 +37,51 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
     public Usuario consultarUsuario(int idUsuario) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idUsuario + " AND tipoUsuario = 1);";
+            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idUsuario + ");";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
-            if(resultadoConsulta.next()) {
-                return new Usuario(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
-                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
-                        resultadoConsulta.getString("senhaUsuario"));
-            }
-            throw new UserNotFoundException("O ID não pertence a um usuário válido");
+            return retornarUsuarioConsulta(resultadoConsulta);
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
     @Override
-    public Usuario consultarUsuario(String emailUsuario) throws UserNotFoundException, DBUnavailable {
+    public Usuario consultarUsuario(String emailUsuario, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailUsuario + " AND tipoUsuario = 1);";
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailUsuario;
 
+            if (!senha.isEmpty()) {
+                sqlComando += " AND senhaUsuario = " + senha;
+            }
+
+            sqlComando += ");";
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
-            if(resultadoConsulta.next()) {
-                return new Usuario(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
-                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
-                        resultadoConsulta.getString("senhaUsuario"));
-            }
-            throw new UserNotFoundException("O ID não pertence a um usuário válido");
+            return retornarUsuarioConsulta(resultadoConsulta);
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+        }
+    }
+
+    private Usuario retornarUsuarioConsulta(ResultSet resultadoConsulta) throws SQLException, UserNotFoundException {
+        switch (resultadoConsulta.getString("tipoUsuario")) {
+            case "1":
+                return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
+                        resultadoConsulta.getString("senhaUsuario"));
+            case "2":
+                return new Professor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
+                        resultadoConsulta.getString("senhaUsuario"));
+            case "3":
+                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                        resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
+                        resultadoConsulta.getString("senhaUsuario"));
+            default:
+                throw new UserNotFoundException("O ID não pertence a um usuario válido");
         }
     }
 
