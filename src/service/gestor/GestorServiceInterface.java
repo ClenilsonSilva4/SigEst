@@ -19,13 +19,12 @@ public interface GestorServiceInterface {
     void removerGestor(int idGestor) throws DBUnavailable, ChangeNotMade, UserWithoutPermission;
     void alterarGestor(Gestor gestorAlterado, int idGestor) throws DBUnavailable, UserWithoutPermission, UserNotFoundException, ChangeNotMade;
 
-    void inserirTurma(String nomeDisciplina, int capacidadeAlunos);
-    Turma consultarTurma(int idTurma);
-    void removerTurma(int idTurma);
-    void alterarTurma(Turma turmaAlterada);
+    void inserirTurma(int idGestor, String nomeDisciplina, int capacidadeAlunos) throws DBUnavailable, UserWithoutPermission, ChangeNotMade;
+    Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable;
+    void removerTurma(int idTurma, int idGestor) throws DBUnavailable, UserWithoutPermission, ChangeNotMade;
+    void alterarTurma(Turma turmaAlterada, int idGestor) throws DBUnavailable, UserWithoutPermission, UserNotFoundException, ChangeNotMade;
 
-    void inserirPresenca(String nome, String email, String senha);
-    Presenca consultarPresenca(int idGestor);
-    void removerPresenca(int idGestor);
-    void alterarPresenca(Presenca presencaAlterada);
+    void inserirPresenca(int idGestor, int idTurma, int idProfessor, int idAluno, String dataPresenca, boolean estavaPresente) throws DBUnavailable, UserWithoutPermission, ChangeNotMade;
+    Presenca consultarPresenca(int idGestor, int idPresenca);
+    void alterarPresenca(int idGestor, Presenca presencaAlterada) throws ChangeNotMade, DBUnavailable, UserWithoutPermission;
 }

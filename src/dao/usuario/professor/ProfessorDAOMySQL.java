@@ -1,4 +1,4 @@
-package dao.professor;
+package dao.usuario.professor;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;

@@ -1,4 +1,4 @@
-package dao.estudante;
+package dao.usuario.estudante;
 
 import exception.ChangeNotMade;
 import exception.DBUnavailable;

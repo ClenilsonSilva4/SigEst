@@ -1,13 +1,13 @@
 package service.gestor;
 
-import dao.estudante.EstudanteDAO;
-import dao.estudante.EstudanteDAOMySQL;
-import dao.gestor.GestorDAO;
-import dao.gestor.GestorDAOMySQL;
+import dao.usuario.estudante.EstudanteDAO;
+import dao.usuario.estudante.EstudanteDAOMySQL;
+import dao.usuario.gestor.GestorDAO;
+import dao.usuario.gestor.GestorDAOMySQL;
 import dao.presenca.PresencaDAO;
 import dao.presenca.PresencaDAOMySQL;
-import dao.professor.ProfessorDAO;
-import dao.professor.ProfessorDAOMySQL;
+import dao.usuario.professor.ProfessorDAO;
+import dao.usuario.professor.ProfessorDAOMySQL;
 import dao.turma.TurmaDAO;
 import dao.turma.TurmaDAOMySQL;
 import entities.*;
@@ -18,14 +18,14 @@ public class GestorService implements GestorServiceInterface{
     private final ProfessorDAO professorBD;
     private final GestorDAO gestorBD;
     private final TurmaDAO turmaBD;
-    private final PresencaDAO presencaDAO;
+    private final PresencaDAO presencaBD;
 
     public GestorService() {
         this.estudanteBD = new EstudanteDAOMySQL();
         this.professorBD = new ProfessorDAOMySQL();
         this.gestorBD = new GestorDAOMySQL();
         this.turmaBD = new TurmaDAOMySQL();
-        this.presencaDAO = new PresencaDAOMySQL();
+        this.presencaBD = new PresencaDAOMySQL();
     }
 
     @Override
@@ -138,42 +138,67 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public void inserirTurma(String nomeDisciplina, int capacidadeAlunos) {
-
+    public void inserirTurma(int idGestor, String nomeDisciplina, int capacidadeAlunos) throws DBUnavailable, UserWithoutPermission, ChangeNotMade {
+        try {
+            gestorBD.consultarGestor(idGestor);
+        } catch (UserNotFoundException e) {
+            throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
+        }
+        turmaBD.inserirTurma(nomeDisciplina, capacidadeAlunos);
     }
 
     @Override
-    public Turma consultarTurma(int idTurma) {
+    public Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
+        return turmaBD.consultarTurma(idTurma);
+    }
+
+    @Override
+    public void removerTurma(int idTurma, int idGestor) throws DBUnavailable, UserWithoutPermission, ChangeNotMade {
+        try {
+            gestorBD.consultarGestor(idGestor);
+        } catch (UserNotFoundException e) {
+            throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
+        }
+        turmaBD.removerTurma(idTurma);
+    }
+
+    @Override
+    public void alterarTurma(Turma turmaAlterada, int idGestor) throws DBUnavailable, UserWithoutPermission, UserNotFoundException, ChangeNotMade {
+        try {
+            gestorBD.consultarGestor(idGestor);
+        } catch (UserNotFoundException e) {
+            throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
+        }
+
+        turmaBD.consultarTurma(turmaAlterada.getIdTurma());
+        turmaBD.alterarTurma(turmaAlterada);
+    }
+
+    @Override
+    public void inserirPresenca(int idGestor, int idTurma, int idProfessor, int idAluno, String dataPresenca,
+                                boolean estavaPresente) throws DBUnavailable, UserWithoutPermission, ChangeNotMade {
+        try {
+            gestorBD.consultarGestor(idGestor);
+        } catch (UserNotFoundException e) {
+            throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
+        }
+        presencaBD.inserirPresenca(idTurma, idProfessor, idAluno, dataPresenca, estavaPresente);
+    }
+
+    @Override
+    public Presenca consultarPresenca(int idGestor, int idPresenca) {
         return null;
     }
 
     @Override
-    public void removerTurma(int idTurma) {
+    public void alterarPresenca(int idGestor, Presenca presencaAlterada) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
+        try {
+            gestorBD.consultarGestor(idGestor);
+        } catch (UserNotFoundException e) {
+            throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
+        }
 
-    }
-
-    @Override
-    public void alterarTurma(Turma turmaAlterada) {
-
-    }
-
-    @Override
-    public void inserirPresenca(String nome, String email, String senha) {
-
-    }
-
-    @Override
-    public Presenca consultarPresenca(int idGestor) {
-        return null;
-    }
-
-    @Override
-    public void removerPresenca(int idGestor) {
-
-    }
-
-    @Override
-    public void alterarPresenca(Presenca presencaAlterada) {
-
+        presencaBD.consultarPresenca(presencaAlterada.getIdTurma());
+        presencaBD.alterarPresenca(presencaAlterada);
     }
 }

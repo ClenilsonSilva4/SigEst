@@ -1,23 +1,22 @@
-package dao.estudante;
+package dao.usuario.gestor;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import entities.Estudante;
+import entities.Gestor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO{
-
+public class GestorDAOMySQL extends ConexaoSistemaDAO implements GestorDAO {
     @Override
-    public void inserirEstudante(String nome, String email, String senha) throws ChangeNotMade {
+    public void inserirGestor(String nome, String email, String senha) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
 
             String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario, tipoUsuario) VALUES (" +
-                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ", 1);";
+                    stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ", 3);";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
@@ -27,20 +26,20 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
 
             encerrarConexao();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
     @Override
-    public Estudante consultarEstudante(int idEstudante) throws UserNotFoundException, DBUnavailable {
+    public Gestor consultarGestor(int idGestor) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idEstudante + " AND tipoUsuario = 1);";
+            String sqlComando = "SELECT * FROM usuario WHERE (idUsuario = " + idGestor + " AND tipoUsuario = 3);";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
             if(resultadoConsulta.next()) {
-                return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             }
@@ -51,15 +50,15 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
     }
 
     @Override
-    public Estudante consultarEstudante(String emailEstudante) throws UserNotFoundException, DBUnavailable {
+    public Gestor consultarGestor(String emailGestor) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailEstudante + " AND tipoUsuario = 1);";
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailGestor + " AND tipoUsuario = 3);";
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
             if(resultadoConsulta.next()) {
-                return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Gestor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             }
@@ -70,10 +69,10 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
     }
 
     @Override
-    public void removerEstudante(int idEstudante) throws ChangeNotMade, DBUnavailable {
+    public void removerGestor(int idGestor) throws ChangeNotMade {
         try {
             conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idEstudante + ");";
+            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + idGestor + ");";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
@@ -81,17 +80,17 @@ public class EstudanteDAOMySQL extends ConexaoSistemaDAO implements EstudanteDAO
                 throw new ChangeNotMade("Não foi possível concluir a remoção no banco de dados");
             }
         } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+            e.printStackTrace();
         }
     }
 
     @Override
-    public void alterarEstudante(Estudante estudanteAlterado) throws ChangeNotMade, DBUnavailable {
+    public void alterarGestor(Gestor gestorAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "UPDATE usuario SET nomeUsuario = " + estudanteAlterado.getNomeUsuario() +
-                    ", usuario.emailUsuario = " + estudanteAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                    estudanteAlterado.getSenhaUsuario() + " WHERE idUsuario = " + estudanteAlterado.getIdUsuario() + ";";
+            String sqlComando = "UPDATE usuario SET nomeUsuario = " + gestorAlterado.getNomeUsuario() +
+                    ", usuario.emailUsuario = " + gestorAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
+                    gestorAlterado.getSenhaUsuario() + " WHERE idUsuario = " + gestorAlterado.getIdUsuario() + ";";
 
             int resultado = comandos.executeUpdate(sqlComando);
 

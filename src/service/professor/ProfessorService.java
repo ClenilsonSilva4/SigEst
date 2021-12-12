@@ -2,8 +2,8 @@ package service.professor;
 
 import dao.presenca.PresencaDAO;
 import dao.presenca.PresencaDAOMySQL;
-import dao.professor.ProfessorDAO;
-import dao.professor.ProfessorDAOMySQL;
+import dao.usuario.professor.ProfessorDAO;
+import dao.usuario.professor.ProfessorDAOMySQL;
 import dao.turma.TurmaDAO;
 import dao.turma.TurmaDAOMySQL;
 import exception.ChangeNotMade;

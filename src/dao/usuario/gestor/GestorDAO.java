@@ -1,4 +1,4 @@
-package dao.gestor;
+package dao.usuario.gestor;
 
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
