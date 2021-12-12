@@ -1,4 +1,4 @@
-package service.estudante;
+package service.usuario.estudante;
 
 import entities.Estudante;
 import entities.Presenca;

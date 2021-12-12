@@ -1,4 +1,4 @@
-package service.gestor;
+package service.usuario.gestor;
 
 import dao.usuario.UsuarioDAO;
 import dao.usuario.EstudanteDAOMySQL;

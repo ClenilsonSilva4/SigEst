@@ -1,4 +1,4 @@
-package service.professor;
+package service.usuario.professor;
 
 import dao.presenca.PresencaDAO;
 import dao.presenca.PresencaDAOMySQL;

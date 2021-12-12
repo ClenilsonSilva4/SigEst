@@ -1,4 +1,4 @@
-package service.estudante;
+package service.usuario.estudante;
 
 import dao.presenca.PresencaDAO;
 import dao.presenca.PresencaDAOMySQL;

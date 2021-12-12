@@ -1,4 +1,4 @@
-package service.professor;
+package service.usuario.professor;
 
 import exception.ChangeNotMade;
 import exception.DBUnavailable;

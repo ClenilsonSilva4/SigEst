@@ -1,4 +1,4 @@
-package service.gestor;
+package service.usuario.gestor;
 
 import entities.*;
 import exception.*;
