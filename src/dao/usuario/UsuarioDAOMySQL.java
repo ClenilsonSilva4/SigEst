@@ -18,7 +18,7 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
         try {
             conectar();
 
-            String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario) VALUES (" +
+            String sqlComando = "INSERT INTO usuario (nomeUsuario, emailUsuario, senhaUsuario) VALUES (" +
                     stringBD(nome) + ", " + stringBD(email) + ", " + stringBD(senha) + ");";
 
             int resultado = comandos.executeUpdate(sqlComando);
@@ -41,7 +41,10 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
 
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
-            return retornarUsuarioConsulta(resultadoConsulta);
+            if(resultadoConsulta.next()) {
+                return retornarUsuarioConsulta(resultadoConsulta);
+            }
+            throw new UserNotFoundException("Os dados inseridos não pertencem a um usuário válido");
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
@@ -51,22 +54,24 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
     public Usuario consultarUsuario(String emailUsuario, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + emailUsuario;
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + stringBD(emailUsuario);
 
             if (!senha.isEmpty()) {
-                sqlComando += " AND senhaUsuario = " + senha;
+                sqlComando += " AND senhaUsuario = " + stringBD(senha);
             }
 
             sqlComando += ");";
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
-
-            return retornarUsuarioConsulta(resultadoConsulta);
+            if(resultadoConsulta.next()) {
+                return retornarUsuarioConsulta(resultadoConsulta);
+            }
+            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
-    private Usuario retornarUsuarioConsulta(ResultSet resultadoConsulta) throws SQLException, UserNotFoundException {
+    private Usuario retornarUsuarioConsulta(ResultSet resultadoConsulta) throws SQLException{
         switch (resultadoConsulta.getString("tipoUsuario")) {
             case "1":
                 return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
@@ -81,7 +86,7 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             default:
-                throw new UserNotFoundException("O ID não pertence a um usuario válido");
+                return null;
         }
     }
 
@@ -105,9 +110,9 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
     public void alterarUsuario(Usuario usuarioAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "UPDATE usuario SET nomeUsuario = " + usuarioAlterado.getNomeUsuario() +
-                    ", usuario.emailUsuario = " + usuarioAlterado.getEmailUsuario() + ", usuario.senhaUsuario = " +
-                    usuarioAlterado.getSenhaUsuario() + " WHERE idUsuario = " + usuarioAlterado.getIdUsuario() + ";";
+            String sqlComando = "UPDATE usuario SET nomeUsuario = " + stringBD(usuarioAlterado.getNomeUsuario()) +
+                    ", emailUsuario = " + stringBD(usuarioAlterado.getEmailUsuario()) + ", senhaUsuario = " +
+                    stringBD(usuarioAlterado.getSenhaUsuario()) + " WHERE idUsuario = " + usuarioAlterado.getIdUsuario() + ";";
 
             int resultado = comandos.executeUpdate(sqlComando);
 
