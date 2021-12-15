@@ -53,20 +53,26 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public void alterarEstudante(int id, String nome, String email, String senha) throws UserNotFoundException, DBUnavailable, ChangeNotMade {
-        Estudante alteracaoEstudante = (Estudante) estudanteBD.consultarUsuario(id);
+    public void alterarEstudante(int id, String nome, String email, String senha, int idGestor) throws DBUnavailable, ChangeNotMade, UserWithoutPermission {
+        try {
+            gestorBD.consultarUsuario(idGestor);
 
-        if(!nome.equals(alteracaoEstudante.getNomeUsuario())){
-            alteracaoEstudante.setNomeUsuario(nome);
-        }
-        if(!email.equals(alteracaoEstudante.getEmailUsuario())) {
-            alteracaoEstudante.setEmailUsuario(email);
-        }
-        if(!senha.equals(alteracaoEstudante.getSenhaUsuario())) {
-            alteracaoEstudante.setSenhaUsuario(senha);
-        }
+            Estudante alteracaoEstudante = (Estudante) estudanteBD.consultarUsuario(id);
 
-        estudanteBD.alterarUsuario(alteracaoEstudante);
+            if(!nome.equals(alteracaoEstudante.getNomeUsuario())){
+                alteracaoEstudante.setNomeUsuario(nome);
+            }
+            if(!email.equals(alteracaoEstudante.getEmailUsuario())) {
+                alteracaoEstudante.setEmailUsuario(email);
+            }
+            if(!senha.equals(alteracaoEstudante.getSenhaUsuario())) {
+                alteracaoEstudante.setSenhaUsuario(senha);
+            }
+
+            estudanteBD.alterarUsuario(alteracaoEstudante);
+        } catch (UserNotFoundException e) {
+            throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
+        }
     }
 
     @Override
@@ -96,15 +102,26 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public void alterarProfessor(Professor professorAlterado, int idGestor) throws ChangeNotMade, DBUnavailable, UserNotFoundException, UserWithoutPermission {
+    public void alterarProfessor(int id, String nome, String email, String senha, int idGestor) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
         try {
             gestorBD.consultarUsuario(idGestor);
+
+            Professor alteracaoProfessor = (Professor) professorBD.consultarUsuario(id);
+
+            if(!nome.equals(alteracaoProfessor.getNomeUsuario())){
+                alteracaoProfessor.setNomeUsuario(nome);
+            }
+            if(!email.equals(alteracaoProfessor.getEmailUsuario())) {
+                alteracaoProfessor.setEmailUsuario(email);
+            }
+            if(!senha.equals(alteracaoProfessor.getSenhaUsuario())) {
+                alteracaoProfessor.setSenhaUsuario(senha);
+            }
+
+            professorBD.alterarUsuario(alteracaoProfessor);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
-
-        professorBD.consultarUsuario(professorAlterado.getIdUsuario());
-        professorBD.alterarUsuario(professorAlterado);
     }
 
     @Override
@@ -134,15 +151,26 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public void alterarGestor(Gestor gestorAlterado, int idGestor) throws DBUnavailable, UserWithoutPermission, UserNotFoundException, ChangeNotMade {
+    public void alterarGestor(int id, String nome, String email, String senha, int idGestor) throws DBUnavailable, UserWithoutPermission, ChangeNotMade {
         try {
             gestorBD.consultarUsuario(idGestor);
+
+            Gestor alteracaoGestor = (Gestor) gestorBD.consultarUsuario(id);
+
+            if(!nome.equals(alteracaoGestor.getNomeUsuario())){
+                alteracaoGestor.setNomeUsuario(nome);
+            }
+            if(!email.equals(alteracaoGestor.getEmailUsuario())) {
+                alteracaoGestor.setEmailUsuario(email);
+            }
+            if(!senha.equals(alteracaoGestor.getSenhaUsuario())) {
+                alteracaoGestor.setSenhaUsuario(senha);
+            }
+
+            gestorBD.alterarUsuario(alteracaoGestor);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
-
-        gestorBD.consultarUsuario(gestorAlterado.getIdUsuario());
-        gestorBD.alterarUsuario(gestorAlterado);
     }
 
     @Override
@@ -171,15 +199,23 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public void alterarTurma(Turma turmaAlterada, int idGestor) throws DBUnavailable, UserWithoutPermission, UserNotFoundException, ChangeNotMade {
+    public void alterarTurma(int id, String nomeDisciplina, int capacidade, int idGestor) throws DBUnavailable, UserWithoutPermission, ChangeNotMade {
         try {
             gestorBD.consultarUsuario(idGestor);
+
+            Turma alteracaoTurma = turmaBD.consultarTurma(id);
+
+            if(!nomeDisciplina.equals(alteracaoTurma.getNomeDisciplina())){
+                alteracaoTurma.setNomeDisciplina(nomeDisciplina);
+            }
+            if(capacidade != alteracaoTurma.getCapacidadeAlunos()) {
+                alteracaoTurma.setCapacidadeAlunos(capacidade);
+            }
+
+            turmaBD.alterarTurma(alteracaoTurma);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
-
-        turmaBD.consultarTurma(turmaAlterada.getIdTurma());
-        turmaBD.alterarTurma(turmaAlterada);
     }
 
     @Override

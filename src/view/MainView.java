@@ -33,7 +33,7 @@ public class MainView {
 	
 	public int inputOpcao() {
 		int input;
-		String opcao = "Sua opção: ";
+		String opcao = "Sua opï¿½ï¿½o: ";
 		System.out.print(opcao);
 		input = scanner.nextInt();
 		return input;
@@ -103,6 +103,6 @@ public class MainView {
 				System.out.print("-");
 			}	
 		}
-		System.out.println("");
+		System.out.println();
 	}
 }

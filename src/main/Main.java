@@ -81,7 +81,7 @@ public class Main {
                 	opcaoPrincipal = mv.inputOpcao();
                 	mv.borderln();
                 	
-                    int opcao = 1;
+                    int opcao;
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
@@ -194,7 +194,7 @@ public class Main {
                 	opcaoPrincipal = mv.inputOpcao();
                 	mv.borderln();
                 	
-                    int opcao = 1;                 
+                    int opcao;
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
@@ -318,12 +318,9 @@ public class Main {
                             menuSecundario = true;
                             break;
                         case 5:
-                        	mv.text("Funcionalidade não implementada");
-                        	mv.borderln();                          
-                            break;
                         case 6:
-                        	mv.text("Funcionalidade não implementada");
-                        	mv.borderln();
+                            mv.text("Funcionalidade não implementada");
+                        	mv.borderln();                          
                             break;
                         case 0:
                             menuPrincipal = false;
@@ -446,14 +443,14 @@ public class Main {
                                             senha = mv.inputString("Digite a nova senha do estudante: ");
 
                                             try {
-                                                gestor.alterarEstudante(idEstudante, nome, email, senha);
+                                                gestor.alterarEstudante(idEstudante, nome, email, senha, usuario.getIdUsuario());
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
                                                 mv.text("Estudante alterado com sucesso");
                                                 mv.borderln();
-                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
                                                     mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -505,7 +502,6 @@ public class Main {
                                         break;
                                     default:
                                         mv.text("Opção Inválida");
-                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
@@ -601,14 +597,14 @@ public class Main {
                                             senha = mv.inputString("Digite a nova senha do funcionario: ");
 
                                             try {
-                                                gestor.alterarProfessor(idProfessor, nome, email, senha);
+                                                gestor.alterarProfessor(idProfessor, nome, email, senha, usuario.getIdUsuario());
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
                                                 mv.text("Professor alterado com sucesso");
                                                 mv.borderln();
-                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
                                                     mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -660,7 +656,6 @@ public class Main {
                                         break;
                                     default:
                                         mv.text("Opção Inválida");
-                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
@@ -756,14 +751,14 @@ public class Main {
                                             senha = mv.inputString("Digite a nova senha do gestor: ");
 
                                             try {
-                                                gestor.alterarGestor(idGestor, nome, email, senha);
+                                                gestor.alterarGestor(idGestor, nome, email, senha, usuario.getIdUsuario());
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
                                                 mv.text("Gestor alterado com sucesso");
                                                 mv.borderln();
-                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
                                                     mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -815,7 +810,6 @@ public class Main {
                                         break;
                                     default:
                                         mv.text("Opção Inválida");
-                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
@@ -851,7 +845,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Turma cadastrado com sucesso");
                                                 mv.borderln();
-                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
                                                     mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -909,14 +903,14 @@ public class Main {
                                             capacidade = Integer.parseInt(mv.inputString("Digite a nova capacidade da turma: "));
 
                                             try {
-                                                gestor.alterarTurma(idTurma, nome, capacidade);
+                                                gestor.alterarTurma(idTurma, nome, capacidade, usuario.getIdUsuario());
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
                                                 mv.text("Turma alterada com sucesso");
                                                 mv.borderln();
-                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
                                                     mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -968,7 +962,6 @@ public class Main {
                                         break;
                                     default:
                                         mv.text("Opção Inválida");
-                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
@@ -1007,9 +1000,7 @@ public class Main {
                                         menuSecundario = false;
                                         break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Opção Inválida");
                                 }
                             }
                             menuSecundario = true;
@@ -1048,9 +1039,7 @@ public class Main {
                                         menuSecundario = false;
                                         break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Opção Inválida");
                                 }
                             }
                             menuSecundario = true;
@@ -1085,9 +1074,7 @@ public class Main {
                                         menuSecundario = false;
                                         break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Opção Inválida");
                                 }
                             }
                             menuSecundario = true;
@@ -1096,9 +1083,7 @@ public class Main {
                             menuPrincipal = false;
                             break;
                         default:
-                            System.out.println("| Valor inválido                                              |");
-                            System.out.print("| Sua opção: ");
-                            opcaoPrincipal = scanner.nextInt();
+                            mv.text("Opção Inválida");
                     }
                 }
                 break;

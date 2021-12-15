@@ -13,10 +13,19 @@ import entities.Presenca;
 import entities.Turma;
 
 public class EstudanteService implements EstudanteServiceInterface{
+    private final UsuarioDAO estudanteBD;
+    private final TurmaDAO turmaBD;
+    private final PresencaDAO presencaBD;
+
+    public EstudanteService() {
+        this.estudanteBD = new EstudanteDAOMySQL();
+        this.turmaBD = new TurmaDAOMySQL();
+        this.presencaBD = new PresencaDAOMySQL();
+    }
+
     public Estudante consultarEstudante(int idEstudante) throws DBUnavailable {
-        UsuarioDAO consultaBD = new EstudanteDAOMySQL();
         try {
-            return new Estudante(consultaBD.consultarUsuario(idEstudante));
+            return new Estudante(estudanteBD.consultarUsuario(idEstudante));
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return null;
@@ -24,12 +33,10 @@ public class EstudanteService implements EstudanteServiceInterface{
     }
 
     public Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
-        TurmaDAO consultaTurma = new TurmaDAOMySQL();
-        return consultaTurma.consultarTurma(idTurma);
+        return turmaBD.consultarTurma(idTurma);
     }
 
     public Presenca consultarPresenca(int idPresenca) {
-        PresencaDAO consultarPresenca = new PresencaDAOMySQL();
-        return consultarPresenca.consultarPresenca(idPresenca);
+        return presencaBD.consultarPresenca(idPresenca);
     }
 }

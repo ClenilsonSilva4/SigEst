@@ -2,10 +2,7 @@ package dao.usuario;
 
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
-import exception.UserNotFoundException;
-import entities.Professor;
 
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class ProfessorDAOMySQL extends UsuarioDAOMySQL {
