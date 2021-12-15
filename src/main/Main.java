@@ -1,7 +1,6 @@
 package main;
 
 import java.util.Scanner;
-
 import entities.Estudante;
 import entities.Gestor;
 import entities.Presenca;
@@ -22,15 +21,12 @@ import view.MainView;
 public class Main {
     public static void main(String[] args) {
         LoginServiceInterface login = new LoginService();
-        
         MainView mv = new MainView();
-
-        boolean menuPrincipal = true, menuSecundario = true;
-        String nome, email, senha;
-        int tipoUsuario, opcaoPrincipal, opcaoSecundaria, capacidade;
-
-        Usuario usuario;
         Scanner scanner = new Scanner(System.in);
+        Usuario usuario;
+        String nome, email, senha;
+        boolean menuPrincipal = true, menuSecundario = true;
+        int tipoUsuario, opcaoPrincipal, opcaoSecundaria, capacidade;
 
         // Login do usuário
         while(true) {
@@ -59,7 +55,6 @@ public class Main {
         } else {
             tipoUsuario = 3;
         }
-
         
         switch(tipoUsuario) {
         	// Visao do usuario estudante
@@ -171,9 +166,7 @@ public class Main {
                         default:
                             mv.text("Valor inválido");
                     }
-
                 }
-
                 break;
             // Visao do usuario Professor
             case 2:
@@ -207,7 +200,6 @@ public class Main {
                                 mv.text("Nome do Professor: " + consultaProfessor.getNomeUsuario());
                                 mv.text("E-mail do Professor: " + consultaProfessor.getEmailUsuario());
                                 mv.borderln();
-
                             } catch (DBUnavailable e) {
                             	do {
                                     mv.header();
@@ -384,6 +376,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Estudante cadastrado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -403,7 +396,7 @@ public class Main {
                                             mv.header();
                                             mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                             mv.border();
-                                            int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer consultar"));
+                                            int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer consultar: "));
 
                                             try {
                                                 Estudante consultaEstudante = gestor.consultarEstudante(idEstudante);
@@ -415,6 +408,7 @@ public class Main {
                                                 mv.text("Nome do Estudante: " + consultaEstudante.getNomeUsuario());
                                                 mv.text("E-mail do Estudante: " + consultaEstudante.getEmailUsuario());
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
@@ -450,6 +444,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Estudante alterado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
@@ -479,6 +474,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Estudante removido com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -538,6 +534,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Professor cadastrado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -569,6 +566,7 @@ public class Main {
                                                 mv.text("Nome do Professor: " + consultaProfessor.getNomeUsuario());
                                                 mv.text("E-mail do Professor: " + consultaProfessor.getEmailUsuario());
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
@@ -604,6 +602,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Professor alterado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
@@ -633,6 +632,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Professor removido com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -692,6 +692,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Gestor cadastrado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -723,6 +724,7 @@ public class Main {
                                                 mv.text("Nome do Gestor: " + consultaGestor.getNomeUsuario());
                                                 mv.text("E-mail do Gestor: " + consultaGestor.getEmailUsuario());
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
@@ -758,6 +760,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Gestor alterado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
@@ -787,6 +790,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Gestor removido com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -845,6 +849,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Turma cadastrado com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
@@ -876,6 +881,7 @@ public class Main {
                                                 mv.text("Nome da Turma: " + consultaTurma.getNomeDisciplina());
                                                 mv.text("Capacidade de alunos da Turma: " + consultaTurma.getCapacidadeAlunos());
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
@@ -910,6 +916,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Turma alterada com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
@@ -939,6 +946,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Turma removido com sucesso");
                                                 mv.borderln();
+                                                opcao = 2;
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
@@ -1091,5 +1099,4 @@ public class Main {
 
         scanner.close();
     }
-
 }

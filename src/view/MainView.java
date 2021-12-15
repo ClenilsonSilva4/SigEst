@@ -5,7 +5,7 @@ import java.util.Scanner;
 public class MainView {
 	final int size = 70; // Digite um numero par
 	final int mid = size/2;
-	Scanner scanner = new Scanner(System.in);
+	Scanner scanner;
 	
 	public void header() {
 		String logo = "SiGest - Sistema de Gerenciamento Estudantil";
@@ -26,6 +26,7 @@ public class MainView {
 	
 	public String inputString(String output) {
 		String input;
+		scanner = new Scanner(System.in);
 		System.out.print(output);
 		input = scanner.nextLine();
 		return input;
@@ -33,7 +34,8 @@ public class MainView {
 	
 	public int inputOpcao() {
 		int input;
-		String opcao = "Sua op��o: ";
+		scanner = new Scanner(System.in);
+		String opcao = "Sua opção: ";
 		System.out.print(opcao);
 		input = scanner.nextInt();
 		return input;
