@@ -5,18 +5,18 @@ import java.util.*;
 
 public class Servidor {
     public static void main(String[] args) throws Exception{
-        //Cria√ß√£o e associa√ß√£o do socket ao endere√ßo do servidor
+        //CriaÁ„o e associaÁ„o do socket ao endereÁo do servidor
         ServerSocket serverSocket = new ServerSocket(8080, 100, InetAddress.getByName(getRedeIP()));
-        //Mostra as informa√ß√µes do socket do servidor
-        System.out.println("Servidor iniciado no endere√ßo " + serverSocket.getInetAddress());
-        System.out.println("Agurdando conex√£o na porta: " + serverSocket.getLocalPort());
+        //Mostra as informaÁ√µes do socket do servidor
+        System.out.println("Servidor iniciado no endereÁo " + serverSocket.getInetAddress());
+        System.out.println("Agurdando conex„o na porta: " + serverSocket.getLocalPort());
         System.out.println();
 
         Manipulador serverHandler = new Manipulador();
         serverHandler.AcceptConnection(serverSocket);
     }
 
-    //Fun√ß√£o para conseguir o endere√ßo IP principal da rede
+    //FunÁ„o para conseguir o endereÁo IP principal da rede
     public static String getRedeIP() {
         String atualIP = null;
 
@@ -36,13 +36,13 @@ public class Servidor {
                         }
                     }
                 }
-                //Caso o la√ßo n√£o resulte em nenhum resultado, define o IP como o localhost
+                //Caso o laÁo n„o resulte em nenhum resultado, define o IP como o localhost
                 if (atualIP  == null) {
                     atualIP  = "127.0.0.1";
                 }
 
             } catch (SocketException e) {
-                //Caso haja alguma exce√ß√£o, o IP √© definido como localhost
+                //Caso haja alguma exceÁ„o, o IP √© definido como localhost
                 atualIP  = "127.0.0.1";
             }
 

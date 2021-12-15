@@ -3,6 +3,7 @@ package main;
 import java.util.Scanner;
 
 import entities.Estudante;
+import entities.Gestor;
 import entities.Presenca;
 import entities.Professor;
 import entities.Turma;
@@ -26,12 +27,12 @@ public class Main {
 
         boolean menuPrincipal = true, menuSecundario = true;
         String nome, email, senha;
-        int tipoUsuario, opcaoPrincipal, opcaoSecundaria;
+        int tipoUsuario, opcaoPrincipal, opcaoSecundaria, capacidade;
 
         Usuario usuario;
         Scanner scanner = new Scanner(System.in);
 
-        // Login do usuário
+        // Login do usu�rio
         while(true) {
         	mv.header();
         	mv.textCenter("LOGIN");
@@ -59,16 +60,19 @@ public class Main {
             tipoUsuario = 3;
         }
 
-        // Sabendo o tipo de usuário
+        
         switch(tipoUsuario) {
+        	// Visao do usuario estudante
             case 1:
+            	EstudanteServiceInterface estudante = new EstudanteService();
+            	
                 while(menuPrincipal) {
                 	mv.header();
                 	mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
                 	mv.border();
                 	mv.text("1 - Consultar Estudante");
                 	mv.text("2 - Consultar Turma");
-                	mv.text("3 - Consultar Presença");
+                	mv.text("3 - Consultar Presen�a");
                 	mv.text("4 - Consultar Chat");
                 	mv.text("5 - Enviar Mensagem");
                 	mv.text("6 - Consultar Mensagem");
@@ -76,8 +80,7 @@ public class Main {
                 	mv.textBox("0 - Encerrar Programa");
                 	opcaoPrincipal = mv.inputOpcao();
                 	mv.borderln();
-
-                    EstudanteServiceInterface estudante = new EstudanteService();
+                	
                     int opcao = 1;
                     switch(opcaoPrincipal) {
                         case 1:
@@ -166,20 +169,23 @@ public class Main {
                             menuPrincipal = false;
                             break;
                         default:
-                            mv.text("Valor inválido");
+                            mv.text("Valor inv�lido");
                     }
 
                 }
 
                 break;
+            // Visao do usuario Professor
             case 2:
+            	ProfessorServiceInterface professor = new ProfessorService();
+            	
                 while(menuPrincipal) {
                 	mv.header();
-                	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                	mv.textCenter("Bem-vindo(a) Professor | " + usuario.getNomeUsuario());
                 	mv.border();
                 	mv.text("1 - Consultar Funcionario");
                 	mv.text("2 - Consultar Turma");
-                	mv.text("3 - Presença");
+                	mv.text("3 - Presen�a");
                 	mv.text("4 - Chat");
                 	mv.text("5 - Enviar Mensagem");
                 	mv.text("6 - Consultar Mensagem");
@@ -187,22 +193,32 @@ public class Main {
                 	mv.textBox("0 - Encerrar Programa");
                 	opcaoPrincipal = mv.inputOpcao();
                 	mv.borderln();
-
-                    ProfessorServiceInterface professor = new ProfessorService();
-                	                 
+                	
+                    int opcao = 1;                 
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                Professor consultaEstudante = professor.consultarProfessor(usuario.getIdUsuario());
+                                Professor consultaProfessor = professor.consultarProfessor(usuario.getIdUsuario());
 
                                 mv.header();
-                                mv.textCenter("Bem-Vindo(a) Professor | Estudante");
+                                mv.textCenter("Bem-Vindo(a) Professor | " + usuario.getNomeUsuario());
                                 mv.border();
-                                mv.text("Nome do Estudante: " + consultaEstudante.getNomeUsuario());
-                                mv.text("E-mail do Estudante: " + consultaEstudante.getEmailUsuario());
+                                mv.text("ID do Professor: " + consultaProfessor.getIdUsuario());
+                                mv.text("Nome do Professor: " + consultaProfessor.getNomeUsuario());
+                                mv.text("E-mail do Professor: " + consultaProfessor.getEmailUsuario());
                                 mv.borderln();
 
                             } catch (DBUnavailable e) {
+                            	do {
+                                    mv.header();
+                                    mv.textCenter("Bem-vindo(a) Professor(a) | " + usuario.getNomeUsuario());
+                                    mv.border();
+                                    mv.text(e.getMessage());
+                                    mv.text("1 - Tentar Novamente");
+                                    mv.text("2 - Cancelar");
+                                    opcao = mv.inputOpcao();
+                                    mv.borderln();
+                                } while (opcao != 2 && opcao != 1);
                                 mv.textBox(e.getMessage());
                             } catch (UserNotFoundException e) {
                                 System.out.println(e.getMessage());
@@ -213,7 +229,7 @@ public class Main {
                                 Turma consultaTurma = professor.consultarTurma(1);
 
                                 mv.header();
-                                mv.textCenter("Bem-Vindo | Estudante");
+                                mv.textCenter("Bem-Vindo(a) | Estudante");
                                 mv.border();
                                 mv.text("ID: " + consultaTurma.getIdTurma());
                                 mv.text("Nome da Turma:" + consultaTurma.getNomeDisciplina());
@@ -226,11 +242,11 @@ public class Main {
                         case 3:
                             while(menuSecundario) {
                             	mv.header();
-                            	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                            	mv.textCenter("Bem-vindo(a) | " + usuario.getNomeUsuario());
                             	mv.border();
-                            	mv.text("1 - Inserir Presença");
-                            	mv.text("2 - Consultar Presença");
-                            	mv.text("3 - Alterar Presença");
+                            	mv.text("1 - Inserir Presen�a");
+                            	mv.text("2 - Consultar Presen�a");
+                            	mv.text("3 - Alterar Presen�a");
                             	mv.text("9 - Voltar");
                             	mv.textBox("0 - Encerrar Programa");
                             	opcaoSecundaria = mv.inputOpcao();
@@ -238,13 +254,13 @@ public class Main {
                             	
                                 switch(opcaoSecundaria) {
                                     case 1:
-                                        System.out.println("Inseriu Presença");
+                                        System.out.println("Inseriu Presen�a");
                                         break;
                                     case 2:
-                                        System.out.println("Consultou Presença");
+                                        System.out.println("Consultou Presen�a");
                                         break;
                                     case 3:
-                                        System.out.println("Alterou Presença");
+                                        System.out.println("Alterou Presen�a");
                                         break;
                                     case 9:
                                         menuSecundario = false;
@@ -254,7 +270,7 @@ public class Main {
                                     	menuSecundario = false;
                                     	break;
                                     default:
-                                        mv.text("Valor inválido");
+                                        mv.text("Valor inv�lido");
                                         mv.borderln();
                                 }
                             }
@@ -263,7 +279,7 @@ public class Main {
                         case 4:
                             while(menuSecundario) {
                             	mv.header();
-                            	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                            	mv.textCenter("Bem-vindo(a) | " + usuario.getNomeUsuario());
                             	mv.border();
                             	mv.text("1 - Criar Chat");
                             	mv.text("2 - Consultar Chat");
@@ -295,29 +311,30 @@ public class Main {
                                     	menuSecundario = false;
                                     	break;
                                     default:
-                                        mv.text("Valor inválido");
+                                        mv.text("Valor inv�lido");
                                         mv.borderln();
                                 }
                             }
                             menuSecundario = true;
                             break;
                         case 5:
-                        	mv.text("Funcionalidade não implementada");
+                        	mv.text("Funcionalidade n�o implementada");
                         	mv.borderln();                          
                             break;
                         case 6:
-                        	mv.text("Funcionalidade não implementada");
+                        	mv.text("Funcionalidade n�o implementada");
                         	mv.borderln();
                             break;
                         case 0:
                             menuPrincipal = false;
                             break;
                         default:
-                        	mv.text("Valor inválido");
+                        	mv.text("Valor inv�lido");
                             mv.borderln();
                     }
                 }
                 break;
+            // Visao do usuario Gestor
             case 3:
                 GestorServiceInterface gestor = new GestorService();
 
@@ -329,15 +346,16 @@ public class Main {
                     mv.text("2 - Professor");
                     mv.text("3 - Gestor");
                     mv.text("4 - Turma");
-                    mv.text("5 - Presença");
+                    mv.text("5 - Presen�a");
                     mv.text("6 - Chat");
                     mv.text("9 - Voltar");
                     mv.textBox("0 - Encerrar Programa");
                     opcaoPrincipal = mv.inputOpcao();
                     mv.borderln();
 
+                    int opcao = 1;
                     switch(opcaoPrincipal) {
-                        case 1:
+                        case 1: // Menu Secundario de estudante
                             while(menuSecundario) {
                                 mv.header();
                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -351,7 +369,6 @@ public class Main {
                                 opcaoSecundaria = mv.inputOpcao();
                                 mv.borderln();
 
-                                int opcao = 1;
                                 switch(opcaoSecundaria) {
                                     case 1:
                                         while (opcao == 1) {
@@ -422,7 +439,7 @@ public class Main {
                                             mv.border();
                                             int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer alterar"));
                                             mv.border();
-                                            mv.text("Dica: você pode preencher apenas o campo que você quer alterar e deixar os outros vazios");
+                                            mv.text("Dica: Preencha apenas os campos que deseja alterar deixando os outros vazios");
 
                                             nome = mv.inputString("Digite o novo nome do estudante: ");
                                             email = mv.inputString("Digite o novo email do estudante: ");
@@ -465,7 +482,7 @@ public class Main {
                                                 mv.border();
                                                 mv.text("Estudante removido com sucesso");
                                                 mv.borderln();
-                                            } catch (DBUnavailable | UserNotFoundException e) {
+                                            } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
                                                     mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
@@ -482,137 +499,481 @@ public class Main {
                                     case 9:
                                         menuSecundario = false;
                                         break;
+                                    case 0:
+                                        menuPrincipal = false;
+                                        menuSecundario = false;
+                                        break;
                                     default:
-                                        mv.text("Opção Inválida");
-                                        opcaoSecundaria = mv.inputString("Sua Opção: ");
+                                        mv.text("Op��o Inv�lida");
+                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
                             break;
-                        case 2:
-                            while(menuSecundario) {
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                       Funcionario                           |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 1 - Inserir Funcionario                                     |");
-                                System.out.println("| 2 - Consultar Funcionario                                   |");
-                                System.out.println("| 3 - Alterar Funcionario                                     |");
-                                System.out.println("| 4 - Remover Funcionario                                     |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 9 - Voltar                                                  |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
-                                opcaoSecundaria = scanner.nextInt();
-                                System.out.println("+-------------------------------------------------------------+\n");
+                        case 2: // Menu Secundario de funcionario
+                        	while(menuSecundario) {
+                                mv.header();
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.border();
+                                mv.text("1 - Inserir Funcionario");
+                                mv.text("2 - Consultar Funcionario");
+                                mv.text("3 - Alterar Funcionario");
+                                mv.text("4 - Remover Funcionario");
+                                mv.text("9 - Voltar");
+                                mv.textBox("0 - Encerrar Programa");
+                                opcaoSecundaria = mv.inputOpcao();
+                                mv.borderln();
+
                                 switch(opcaoSecundaria) {
                                     case 1:
-                                        System.out.println("Inseriu Funcionario");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            nome = mv.inputString("Digite o nome do funcionario: ");
+                                            email = mv.inputString("Digite o email do funcionario: ");
+                                            senha = mv.inputString("Digite a senha do funcionario: ");
+
+                                            try {
+                                                gestor.inserirProfessor(nome, email, senha);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Professor cadastrado com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 2:
-                                        System.out.println("Consultou Funcionario");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer consultar"));
+
+                                            try {
+                                                Professor consultaProfessor= gestor.consultarProfessor(idProfessor);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("ID do Professor: " + consultaProfessor.getIdUsuario());
+                                                mv.text("Nome do Professor: " + consultaProfessor.getNomeUsuario());
+                                                mv.text("E-mail do Professor: " + consultaProfessor.getEmailUsuario());
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserNotFoundException e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 3:
-                                        System.out.println("Alterou Funcionario");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer alterar"));
+                                            mv.border();
+                                            mv.text("Dica: Preencha apenas os campos que deseja alterar deixando os outros vazios");
+
+                                            nome = mv.inputString("Digite o novo nome do funcionario: ");
+                                            email = mv.inputString("Digite o novo email do funcionario: ");
+                                            senha = mv.inputString("Digite a nova senha do funcionario: ");
+
+                                            try {
+                                                gestor.alterarProfessor(idProfessor, nome, email, senha);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Professor alterado com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 4:
-                                        System.out.println("Removeu Funcionario");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer remover"));
+
+                                            try {
+                                                gestor.removerProfessor(idProfessor, usuario.getIdUsuario());
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Professor removido com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 9:
                                         menuSecundario = false;
                                         break;
+                                    case 0:
+                                        menuPrincipal = false;
+                                        menuSecundario = false;
+                                        break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Op��o Inv�lida");
+                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
                             break;
-                        case 3:
-                            while(menuSecundario) {
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                           Chat                              |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 1 - Inserir Chat                                            |");
-                                System.out.println("| 2 - Consultar Chat                                          |");
-                                System.out.println("| 3 - Alterar Chat                                            |");
-                                System.out.println("| 4 - Remover Chat                                            |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 9 - Voltar                                                  |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
-                                opcaoSecundaria = scanner.nextInt();
-                                System.out.println("+-------------------------------------------------------------+\n");
+                        case 3: // Menu Secundario de gestor
+                        	while(menuSecundario) {
+                                mv.header();
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.border();
+                                mv.text("1 - Inserir Gertor");
+                                mv.text("2 - Consultar Gertor");
+                                mv.text("3 - Alterar Gertor");
+                                mv.text("4 - Remover Gertor");
+                                mv.text("9 - Voltar");
+                                mv.textBox("0 - Encerrar Programa");
+                                opcaoSecundaria = mv.inputOpcao();
+                                mv.borderln();
+
                                 switch(opcaoSecundaria) {
                                     case 1:
-                                        System.out.println("Inseriu Chat");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            nome = mv.inputString("Digite o nome do gestor: ");
+                                            email = mv.inputString("Digite o email do gestor: ");
+                                            senha = mv.inputString("Digite a senha do gestor: ");
+
+                                            try {
+                                                gestor.inserirGestor(nome, email, senha);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Gestor cadastrado com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 2:
-                                        System.out.println("Consultou Chat");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer consultar"));
+
+                                            try {
+                                                Gestor consultaGestor= gestor.consultarGestor(idGestor);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("ID do Gestor: " + consultaGestor.getIdUsuario());
+                                                mv.text("Nome do Gestor: " + consultaGestor.getNomeUsuario());
+                                                mv.text("E-mail do Gestor: " + consultaGestor.getEmailUsuario());
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserNotFoundException e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 3:
-                                        System.out.println("Alterou Chat");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer alterar"));
+                                            mv.border();
+                                            mv.text("Dica: Preencha apenas os campos que deseja alterar deixando os outros vazios");
+
+                                            nome = mv.inputString("Digite o novo nome do gestor: ");
+                                            email = mv.inputString("Digite o novo email do gestor: ");
+                                            senha = mv.inputString("Digite a nova senha do gestor: ");
+
+                                            try {
+                                                gestor.alterarGestor(idGestor, nome, email, senha);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Gestor alterado com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 4:
-                                        System.out.println("Removeu Chat");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer remover"));
+
+                                            try {
+                                                gestor.removerGestor(idGestor);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Gestor removido com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 9:
                                         menuSecundario = false;
                                         break;
+                                    case 0:
+                                        menuPrincipal = false;
+                                        menuSecundario = false;
+                                        break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Op��o Inv�lida");
+                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
                             break;
-                        case 4:
-                            while(menuSecundario) {
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                         Gestor                              |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 1 - Inserir Gestor                                          |");
-                                System.out.println("| 2 - Consultar Gestor                                        |");
-                                System.out.println("| 3 - Alterar Gestor                                          |");
-                                System.out.println("| 4 - Remover Gestor                                          |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 9 - Voltar                                                  |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
-                                opcaoSecundaria = scanner.nextInt();
-                                System.out.println("+-------------------------------------------------------------+\n");
+                        case 4: // Menu Secundario de turma
+                        	while(menuSecundario) {
+                                mv.header();
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.border();
+                                mv.text("1 - Inserir Turma");
+                                mv.text("2 - Consultar Turma");
+                                mv.text("3 - Alterar Turma");
+                                mv.text("4 - Remover Turma");
+                                mv.text("9 - Voltar");
+                                mv.textBox("0 - Encerrar Programa");
+                                opcaoSecundaria = mv.inputOpcao();
+                                mv.borderln();
+
                                 switch(opcaoSecundaria) {
                                     case 1:
-                                        System.out.println("Inseriu Gestor");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            nome = mv.inputString("Digite o nome da turma: ");
+                                            capacidade = Integer.parseInt(mv.inputString("Digite a capacidade da turma: "));
+
+                                            try {
+                                                gestor.inserirTurma(usuario.getIdUsuario(), nome, capacidade);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Turma cadastrado com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 2:
-                                        System.out.println("Consultou Gestor");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idTurma = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer consultar"));
+
+                                            try {
+                                                Turma consultaTurma= gestor.consultarTurma(idTurma);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("ID da Turma: " + consultaTurma.getIdTurma());
+                                                mv.text("Nome da Turma: " + consultaTurma.getNomeDisciplina());
+                                                mv.text("Capacidade de alunos da Turma: " + consultaTurma.getCapacidadeAlunos());
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserNotFoundException e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 3:
-                                        System.out.println("Alterou Gestor");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idTurma = Integer.parseInt(mv.inputString("Digite o ID do turma que quer alterar"));
+                                            mv.border();
+                                            mv.text("Dica: Preencha apenas os campos que deseja alterar deixando os outros vazios");
+
+                                            nome = mv.inputString("Digite o novo nome da turma: ");
+                                            capacidade = Integer.parseInt(mv.inputString("Digite a nova capacidade da turma: "));
+
+                                            try {
+                                                gestor.alterarTurma(idTurma, nome, capacidade);
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Turma alterada com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserNotFoundException | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 4:
-                                        System.out.println("Removeu Gestor");
+                                        while (opcao == 1) {
+                                            mv.header();
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.border();
+                                            int idTurma = Integer.parseInt(mv.inputString("Digite o ID da turma que quer remover"));
+
+                                            try {
+                                                gestor.removerTurma(idTurma, usuario.getIdUsuario());
+
+                                                mv.header();
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.border();
+                                                mv.text("Turma removido com sucesso");
+                                                mv.borderln();
+                                            } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
+                                                do {
+                                                    mv.header();
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.border();
+                                                    mv.text(e.getMessage());
+                                                    mv.text("1 - Tentar Novamente");
+                                                    mv.text("2 - Cancelar");
+                                                    opcao = mv.inputOpcao();
+                                                    mv.borderln();
+                                                } while (opcao != 2 && opcao != 1);
+                                            }
+                                        }
                                         break;
                                     case 9:
                                         menuSecundario = false;
                                         break;
+                                    case 0:
+                                        menuPrincipal = false;
+                                        menuSecundario = false;
+                                        break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Op��o Inv�lida");
+                                        opcaoSecundaria = mv.inputOpcao();
                                 }
                             }
                             menuSecundario = true;
                             break;
-                        case 5:
+                        case 5: // Menu Secundario de mensagem
                             while(menuSecundario) {
                                 System.out.println("+-------------------------------------------------------------+");
                                 System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
@@ -626,7 +987,7 @@ public class Main {
                                 System.out.println("+-------------------------------------------------------------+");
                                 System.out.println("| 9 - Voltar                                                  |");
                                 System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
+                                System.out.print("| Sua op��o: ");
                                 opcaoSecundaria = scanner.nextInt();
                                 System.out.println("+-------------------------------------------------------------+\n");
                                 switch(opcaoSecundaria) {
@@ -646,14 +1007,14 @@ public class Main {
                                         menuSecundario = false;
                                         break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
+                                        System.out.println("| Valor inv�lido                                              |");
+                                        System.out.print("| Sua op��o: ");
                                         opcaoSecundaria = scanner.nextInt();
                                 }
                             }
                             menuSecundario = true;
                             break;
-                        case 6:
+                        case 6: // Menu Secundario de chat
                             while(menuSecundario) {
                                 System.out.println("+-------------------------------------------------------------+");
                                 System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
@@ -667,7 +1028,7 @@ public class Main {
                                 System.out.println("+-------------------------------------------------------------+");
                                 System.out.println("| 9 - Voltar                                                  |");
                                 System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
+                                System.out.print("| Sua op��o: ");
                                 opcaoSecundaria = scanner.nextInt();
                                 System.out.println("+-------------------------------------------------------------+\n");
                                 switch(opcaoSecundaria) {
@@ -687,8 +1048,8 @@ public class Main {
                                         menuSecundario = false;
                                         break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
+                                        System.out.println("| Valor inv�lido                                              |");
+                                        System.out.print("| Sua op��o: ");
                                         opcaoSecundaria = scanner.nextInt();
                                 }
                             }
@@ -699,33 +1060,33 @@ public class Main {
                                 System.out.println("+-------------------------------------------------------------+");
                                 System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
                                 System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                         Presença                            |");
+                                System.out.println("|                         Presen�a                            |");
                                 System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 1 - Inserir Presença                                        |");
-                                System.out.println("| 2 - Consultar Presença                                      |");
-                                System.out.println("| 3 - Alterar Presença                                        |");
+                                System.out.println("| 1 - Inserir Presen�a                                        |");
+                                System.out.println("| 2 - Consultar Presen�a                                      |");
+                                System.out.println("| 3 - Alterar Presen�a                                        |");
                                 System.out.println("+-------------------------------------------------------------+");
                                 System.out.println("| 9 - Voltar                                                  |");
                                 System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
+                                System.out.print("| Sua op��o: ");
                                 opcaoSecundaria = scanner.nextInt();
                                 System.out.println("+-------------------------------------------------------------+\n");
                                 switch(opcaoSecundaria) {
                                     case 1:
-                                        System.out.println("Inseriu Presença");
+                                        System.out.println("Inseriu Presen�a");
                                         break;
                                     case 2:
-                                        System.out.println("Consultou Presença");
+                                        System.out.println("Consultou Presen�a");
                                         break;
                                     case 3:
-                                        System.out.println("Alterou Presença");
+                                        System.out.println("Alterou Presen�a");
                                         break;
                                     case 9:
                                         menuSecundario = false;
                                         break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
+                                        System.out.println("| Valor inv�lido                                              |");
+                                        System.out.print("| Sua op��o: ");
                                         opcaoSecundaria = scanner.nextInt();
                                 }
                             }
@@ -735,8 +1096,8 @@ public class Main {
                             menuPrincipal = false;
                             break;
                         default:
-                            System.out.println("| Valor inválido                                              |");
-                            System.out.print("| Sua opção: ");
+                            System.out.println("| Valor inv�lido                                              |");
+                            System.out.print("| Sua op��o: ");
                             opcaoPrincipal = scanner.nextInt();
                     }
                 }

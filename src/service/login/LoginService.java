@@ -17,9 +17,9 @@ public class LoginService implements LoginServiceInterface{
     @Override
     public Usuario checarLogin(String email, String senha) throws UserNotFoundException, DBUnavailable, InvalidData {
         if(email.length() < 11) {
-            throw new InvalidData("O e-mail inserido Ã© muito curto");
+            throw new InvalidData("O e-mail inserido é muito curto");
         } else if(senha.length() < 6) {
-            throw new InvalidData("A senha precisa ter um tamanho mÃ­nimo de 8 caracteres");
+            throw new InvalidData("A senha precisa ter um tamanho mínimo de 8 caracteres");
         }
 
         return usuarioBD.consultarUsuario(email, senha);

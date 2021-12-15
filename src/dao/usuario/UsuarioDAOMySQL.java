@@ -24,12 +24,12 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
             int resultado = comandos.executeUpdate(sqlComando);
 
             if(resultado != 1) {
-                throw new ChangeNotMade("Não foi possível concluir a inserção no banco de dados");
+                throw new ChangeNotMade("N�o foi poss�vel concluir a inser��o no banco de dados");
             }
 
             encerrarConexao();
         } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+            throw new DBUnavailable("Houve um erro de comunica��o com o banco de dados");
         }
     }
 
@@ -44,9 +44,9 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
             if(resultadoConsulta.next()) {
                 return retornarUsuarioConsulta(resultadoConsulta);
             }
-            throw new UserNotFoundException("Os dados inseridos não pertencem a um usuário válido");
+            throw new UserNotFoundException("Os dados inseridos n�o pertencem a um usuário válido");
         } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+            throw new DBUnavailable("Houve um erro de comunica��o com o banco de dados");
         }
     }
 
@@ -65,9 +65,9 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
             if(resultadoConsulta.next()) {
                 return retornarUsuarioConsulta(resultadoConsulta);
             }
-            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
+            throw new UserNotFoundException("Os dados inseridos n�o pertence a um usuario válido");
         } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+            throw new DBUnavailable("Houve um erro de comunica��o com o banco de dados");
         }
     }
 
@@ -99,10 +99,10 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
             int resultado = comandos.executeUpdate(sqlComando);
 
             if(resultado != 1) {
-                throw new ChangeNotMade("Não foi possível concluir a remoção no banco de dados");
+                throw new ChangeNotMade("N�o foi poss�vel concluir a remo��o no banco de dados");
             }
         } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+            throw new DBUnavailable("Houve um erro de comunica��o com o banco de dados");
         }
     }
 
@@ -117,10 +117,10 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
             int resultado = comandos.executeUpdate(sqlComando);
 
             if(resultado != 1) {
-                throw new ChangeNotMade("Não foi possível concluir a alteração no banco de dados");
+                throw new ChangeNotMade("N�o foi poss�vel concluir a altera��o no banco de dados");
             }
         } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+            throw new DBUnavailable("Houve um erro de comunica��o com o banco de dados");
         }
     }
 }

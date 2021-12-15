@@ -30,7 +30,7 @@ public class GestorService implements GestorServiceInterface{
     public void inserirEstudante(String nome, String email, String senha) throws DBUnavailable, EmailAlreadyInUse, ChangeNotMade {
         try {
             estudanteBD.consultarUsuario(email, "");
-            throw new EmailAlreadyInUse("Esse email j√° pertence a um usu√°rio cadastrado");
+            throw new EmailAlreadyInUse("Esse email j· pertence a um usu·rio cadastrado");
         } catch (UserNotFoundException e) {
             estudanteBD.inserirUsuario(nome, email, senha);
         }
@@ -48,7 +48,7 @@ public class GestorService implements GestorServiceInterface{
 
             estudanteBD.removerUsuario(idEstudante);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
     }
 
@@ -73,7 +73,7 @@ public class GestorService implements GestorServiceInterface{
     public void inserirProfessor(String nome, String email, String senha) throws DBUnavailable, EmailAlreadyInUse, ChangeNotMade {
         try {
             professorBD.consultarUsuario(email, "");
-            throw new EmailAlreadyInUse("Esse email j√° pertence a um usu√°rio cadastrado");
+            throw new EmailAlreadyInUse("Esse email j· pertence a um usu·rio cadastrado");
         } catch (UserNotFoundException e) {
             professorBD.inserirUsuario(nome, email, senha);
         }
@@ -91,7 +91,7 @@ public class GestorService implements GestorServiceInterface{
 
             professorBD.removerUsuario(idProfessor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
     }
 
@@ -100,7 +100,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
 
         professorBD.consultarUsuario(professorAlterado.getIdUsuario());
@@ -111,7 +111,7 @@ public class GestorService implements GestorServiceInterface{
     public void inserirGestor(String nome, String email, String senha) throws EmailAlreadyInUse, ChangeNotMade, DBUnavailable {
         try {
             gestorBD.consultarUsuario(email, "");
-            throw new EmailAlreadyInUse("Esse email j√° pertence a um usu√°rio cadastrado");
+            throw new EmailAlreadyInUse("Esse email j· pertence a um usu·rio cadastrado");
         } catch (UserNotFoundException e) {
             gestorBD.inserirUsuario(nome, email, senha);
         }
@@ -129,7 +129,7 @@ public class GestorService implements GestorServiceInterface{
 
             gestorBD.removerUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
     }
 
@@ -138,7 +138,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
 
         gestorBD.consultarUsuario(gestorAlterado.getIdUsuario());
@@ -150,7 +150,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
         turmaBD.inserirTurma(nomeDisciplina, capacidadeAlunos);
     }
@@ -165,7 +165,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
         turmaBD.removerTurma(idTurma);
     }
@@ -175,7 +175,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
 
         turmaBD.consultarTurma(turmaAlterada.getIdTurma());
@@ -188,7 +188,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
         presencaBD.inserirPresenca(idTurma, idProfessor, idAluno, dataPresenca, estavaPresente);
     }
@@ -203,7 +203,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n√£o pertence a um gestor v√°lido");
+            throw new UserWithoutPermission("O ID informado n„o pertence a um gestor v·lido");
         }
 
         presencaBD.consultarPresenca(presencaAlterada.getIdTurma());

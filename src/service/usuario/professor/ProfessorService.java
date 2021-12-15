@@ -37,12 +37,12 @@ public class ProfessorService implements ProfessorServiceInterface{
 
     @Override
     public void inserirPresenca(Presenca novaPresenca) throws ChangeNotMade, UserWithoutPermission, DBUnavailable {
-        //Checar se o professor realmente d√° aula nessa turma.
+        //Checar se o professor realmente d· aula nessa turma.
         if(checarPermissao(novaPresenca.getIdProfessor(), novaPresenca.getIdTurma())) {
             presencaBD.inserirPresenca(novaPresenca.getIdTurma(), novaPresenca.getIdProfessor(),
                     novaPresenca.getIdAluno(), novaPresenca.getData(), novaPresenca.isPresente());
         } else {
-            throw new UserWithoutPermission("Este professor n√£o possui permiss√£o para inserir essa presen√ßa.");
+            throw new UserWithoutPermission("Este professor n„o possui permiss„o para inserir essa presenÁa.");
         }
     }
 
@@ -53,21 +53,21 @@ public class ProfessorService implements ProfessorServiceInterface{
 
     @Override
     public void removerPresenca(int idPresenca, int idProfessor) throws ChangeNotMade, UserWithoutPermission, DBUnavailable {
-        //Checar se o professor realmente d√° aula nessa turma.
+        //Checar se o professor realmente d· aula nessa turma.
         if(checarPermissao(idProfessor, presencaBD.consultarPresenca(idPresenca).getIdTurma())) {
             presencaBD.removerPresenca(idPresenca);
         } else {
-            throw new UserWithoutPermission("Este professor n√£o possui permiss√£o para excluir essa presen√ßa.");
+            throw new UserWithoutPermission("Este professor n„o possui permiss„o para excluir essa presenÁa.");
         }
     }
 
     @Override
     public void alterarPresenca(Presenca presencaAlterada) throws UserWithoutPermission, ChangeNotMade, DBUnavailable {
-        //Checar se o professor realmente d√° aula nessa turma.
+        //Checar se o professor realmente d· aula nessa turma.
         if(checarPermissao(presencaAlterada.getIdProfessor(), presencaAlterada.getIdTurma())) {
             presencaBD.alterarPresenca(presencaAlterada);
         } else {
-            throw new UserWithoutPermission("Este professor n√£o possui permiss√£o para alterar essa presen√ßa.");
+            throw new UserWithoutPermission("Este professor n„o possui permiss„o para alterar essa presenÁa.");
         }
     }
 

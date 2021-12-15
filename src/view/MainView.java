@@ -3,7 +3,7 @@ package view;
 import java.util.Scanner;
 
 public class MainView {
-	final int size = 70; // Digite um n√∫mero par
+	final int size = 70; // Digite um numero par
 	final int mid = size/2;
 	Scanner scanner = new Scanner(System.in);
 	
@@ -33,7 +33,7 @@ public class MainView {
 	
 	public int inputOpcao() {
 		int input;
-		String opcao = "Sua op√ß√£o: ";
+		String opcao = "Sua opÁ„o: ";
 		System.out.print(opcao);
 		input = scanner.nextInt();
 		return input;

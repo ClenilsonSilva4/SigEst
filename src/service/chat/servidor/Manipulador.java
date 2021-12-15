@@ -22,14 +22,14 @@ public class Manipulador {
     private Map<Socket, String> connectedSockets = new HashMap <> ();
 
     public void AcceptConnection(ServerSocket serverSocket) throws IOException {
-        //La√ßo infinito para aceitar as conex√µes ao servidor e inicia uma thread com o cliente
+        //LaÁo infinito para aceitar as conexıes ao servidor e inicia uma thread com o cliente
         while(true){
             final Socket activeSocket = serverSocket.accept();
-            System.out.println("Conex√£o recebida de " + activeSocket);
+            System.out.println("Conex„o recebida de " + activeSocket);
 
             socketReader = new BufferedReader(new InputStreamReader(activeSocket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(activeSocket.getOutputStream()));
-            socketWriter.write("Conex√£o aceita");
+            socketWriter.write("Conex„o aceita");
 
             Runnable runnable = () -> handleClientRequest(activeSocket);
             new Thread(runnable).start();
@@ -37,17 +37,17 @@ public class Manipulador {
         }
     }
 
-    //TODO Criar fun√ß√£o para checar no BD os IDs dos receptores, caso seja um grupo,
-    // para enviar isso para a fun√ß√£o que mandar√° as mensagens para eles.
+    //TODO Criar funÁ„o para checar no BD os IDs dos receptores, caso seja um grupo,
+    // para enviar isso para a funÁ„o que mandar· as mensagens para eles.
 
-    //TODO Criar fun√ß√£o para checar mensagens recebidas pelo cliente quando estava offline
+    //TODO Criar funÁ„o para checar mensagens recebidas pelo cliente quando estava offline
 
-    //Fun√ß√£o para lidar com a conex√£o do cliente
+    //FunÁ„o para lidar com a conex„o do cliente
     private void handleClientRequest(Socket clientSocket){
         String inMsg, outMsg, identifier = clientSocket.getInetAddress().toString();
 
         try{
-            //Inicializa√ß√£o dos buffers de leitura e escrita para se comunicar com o cliente
+            //InicializaÁ„o dos buffers de leitura e escrita para se comunicar com o cliente
             socketReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
@@ -66,7 +66,7 @@ public class Manipulador {
             connectedSockets.put(clientSocket, identifier);
             System.out.println(identifier + " se conectou.");
 
-            //La√ßo para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
+            //LaÁo para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
             while(true){
                 inMsg = socketReader.readLine();
                 tempoLocal = new Date();
@@ -80,9 +80,9 @@ public class Manipulador {
                     socketWriter.write("\n");
                     socketWriter.flush();
 
-                    //Adicionar fun√ß√£o para poder encerrar a conex√£o com o cliente.
+                    //Adicionar funÁ„o para poder encerrar a conex„o com o cliente.
                     if(inMsg.equalsIgnoreCase("sair")){
-                        System.out.println("Conex√£o encerrada pelo cliente");
+                        System.out.println("Conex„o encerrada pelo cliente");
                         break;
                     }
 
@@ -98,7 +98,7 @@ public class Manipulador {
                         }
                     }
 
-                    //Salvar a mensagem no BD para os usu√°rios receberem
+                    //Salvar a mensagem no BD para os usu·rios receberem
                     //Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente, idDestinario);
                 }
             }
