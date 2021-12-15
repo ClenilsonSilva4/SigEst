@@ -7,7 +7,7 @@ public interface GestorServiceInterface {
     void inserirEstudante(String nome, String email, String senha) throws DBUnavailable, EmailAlreadyInUse, ChangeNotMade;
     Estudante consultarEstudante(int idEstudante) throws UserNotFoundException, DBUnavailable;
     void removerEstudante(int idEstudante, int idGestor) throws DBUnavailable, UserWithoutPermission, ChangeNotMade;
-    void alterarEstudante(Estudante estudanteAlterado) throws UserNotFoundException, DBUnavailable, ChangeNotMade;
+    void alterarEstudante(int id, String nome, String email, String senha) throws UserNotFoundException, DBUnavailable, ChangeNotMade;
 
     void inserirProfessor(String nome, String email, String senha) throws DBUnavailable, EmailAlreadyInUse, ChangeNotMade;
     Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable;

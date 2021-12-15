@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="SiGest-PDS:war">
+    <output-path>$PROJECT_DIR$/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>SiGest-PDS</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="SiGest-PDS.war">
+      <element id="artifact" artifact-name="SiGest-PDS:war exploded" />
+    </root>
+  </artifact>
+</component>

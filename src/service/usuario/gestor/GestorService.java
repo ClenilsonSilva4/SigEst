@@ -53,10 +53,20 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public void alterarEstudante(Estudante estudanteAlterado) throws UserNotFoundException, DBUnavailable, ChangeNotMade {
-        estudanteBD.consultarUsuario(estudanteAlterado.getIdUsuario());
+    public void alterarEstudante(int id, String nome, String email, String senha) throws UserNotFoundException, DBUnavailable, ChangeNotMade {
+        Estudante alteracaoEstudante = (Estudante) estudanteBD.consultarUsuario(id);
 
-        estudanteBD.alterarUsuario(estudanteAlterado);
+        if(!nome.equals(alteracaoEstudante.getNomeUsuario())){
+            alteracaoEstudante.setNomeUsuario(nome);
+        }
+        if(!email.equals(alteracaoEstudante.getEmailUsuario())) {
+            alteracaoEstudante.setEmailUsuario(email);
+        }
+        if(!senha.equals(alteracaoEstudante.getSenhaUsuario())) {
+            alteracaoEstudante.setSenhaUsuario(senha);
+        }
+
+        estudanteBD.alterarUsuario(alteracaoEstudante);
     }
 
     @Override
