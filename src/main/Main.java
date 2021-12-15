@@ -3,7 +3,9 @@ package main;
 import java.util.Scanner;
 
 import entities.Estudante;
+import entities.Presenca;
 import entities.Professor;
+import entities.Turma;
 import entities.Usuario;
 import exception.DBUnavailable;
 import exception.InvalidData;
@@ -14,10 +16,13 @@ import service.usuario.estudante.EstudanteService;
 import service.usuario.estudante.EstudanteServiceInterface;
 import service.usuario.professor.ProfessorService;
 import service.usuario.professor.ProfessorServiceInterface;
+import view.MainView;
 
 public class Main {
     public static void main(String[] args) {
         LoginServiceInterface login = new LoginService();
+        
+        MainView mv = new MainView();
 
         boolean menuPrincipal = true, menuSecundario = true;
         String email, senha;
@@ -28,15 +33,11 @@ public class Main {
 
         // Login do usuário
         while(true) {
-            System.out.println("+-------------------------------------------------------------+");
-            System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-            System.out.println("+-------------------------------------------------------------+");
-            System.out.println("|                          LOGIN                              |");
-            System.out.println("+-------------------------------------------------------------+");
-            System.out.print("Digite seu e-mail: ");
-            email = scanner.nextLine();
-            System.out.print("Digite sua senha: ");
-            senha = scanner.nextLine();
+        	mv.header();
+        	mv.textCenter("LOGIN");
+        	mv.border();
+        	email = mv.inputString("Digite seu e-mail: ");
+        	senha = mv.inputString("Digite sua senha: ");
 
             try {
                 usuario = login.checarLogin(email, senha);
@@ -44,7 +45,8 @@ public class Main {
                     break;
                 }
             } catch (UserNotFoundException | DBUnavailable | InvalidData e) {
-                System.out.println(e.getMessage());
+                mv.textBox(e.getMessage());
+                System.out.println("");
             }
         }
 
@@ -60,52 +62,68 @@ public class Main {
         switch(tipoUsuario) {
             case 1:
                 while(menuPrincipal) {
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("|                 Bem-Vindo | " + usuario.getNomeUsuario() + "                       |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("| 1 - Consultar Estudante                                     |");
-                    System.out.println("| 2 - Consultar Turma                                         |");
-                    System.out.println("| 3 - Consultar Presença                                      |");
-                    System.out.println("| 4 - Consultar Chat                                          |");
-                    System.out.println("| 5 - Enviar Mensagem                                         |");
-                    System.out.println("| 6 - Consultar Mensagem                                      |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("| 0 - Encerrar Programa                                       |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.print("| Sua opção: ");
-                    opcaoPrincipal = scanner.nextInt();
-                    System.out.println("+-------------------------------------------------------------+\n");
+                	mv.header();
+                	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                	mv.border();
+                	mv.text("1 - Consultar Estudante");
+                	mv.text("2 - Consultar Turma");
+                	mv.text("3 - Consultar Presença");
+                	mv.text("4 - Consultar Chat");
+                	mv.text("5 - Enviar Mensagem");
+                	mv.text("6 - Consultar Mensagem");
+                	mv.text("9 - Voltar");
+                	mv.textBox("0 - Encerrar Programa");
+                	opcaoPrincipal = mv.inputOpcao();
+                	mv.borderln();
 
                     EstudanteServiceInterface estudante = new EstudanteService();
                     switch(opcaoPrincipal) {
                         case 1:
-                            System.out.println("Consultou Estudante");
                             try {
                                 Estudante consultaEstudante = estudante.consultarEstudante(usuario.getIdUsuario());
 
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                 Bem-Vindo | Estudante                       |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| Nome do Estudante: " + consultaEstudante.getNomeUsuario() + "                                |");
-                                System.out.println("| E-mail do Estudante: " + consultaEstudante.getEmailUsuario() + "                    |");
-                                System.out.println("+-------------------------------------------------------------+");
+                                mv.header();
+                                mv.textCenter("Bem-Vindo | Estudante");
+                                mv.border();
+                                mv.text("Nome do Estudante: " + consultaEstudante.getNomeUsuario());
+                                mv.text("E-mail do Estudante: " + consultaEstudante.getEmailUsuario());
+                                mv.borderln();
 
                             } catch (DBUnavailable e) {
-                                System.out.println(e.getMessage());
+                                mv.textBox(e.getMessage());
                             }
                             break;
                         case 2:
-                            System.out.println("Consultou Turma");
-//					estudante.consultarTurma();
+                            try {
+                            	Turma consultaTurma = estudante.consultarTurma(1);
+                            	
+                            	mv.header();
+                                mv.textCenter("Bem-Vindo | Estudante");
+                                mv.border();
+                                mv.text("ID: " + consultaTurma.getIdTurma());
+                                mv.text("Nome da Turma:" + consultaTurma.getNomeDisciplina());
+                                mv.text("Capacidade de Estudantes: " + consultaTurma.getCapacidadeAlunos());
+                                mv.borderln();
+                            } catch(UserNotFoundException | DBUnavailable e) {
+                            	mv.textBox(e.getMessage());
+                            }
                             break;
                         case 3:
-                            System.out.println("Consultou Presença");
-//					estudante.consultarPresenca();
-                            break;
+                        	try {
+	                            Presenca consultaPresenca = estudante.consultarPresenca(usuario.getIdUsuario());
+	                            
+	                            mv.header();
+	                            mv.textCenter("Bem-Vindo | Estudante");
+	                            mv.border();
+	                            mv.text("Data: " + consultaPresenca.getData());
+	                            mv.text("ID do Estudante: " + consultaPresenca.getIdAluno());
+	                            mv.text("ID da Turma: " + consultaPresenca.getIdTurma());
+	                            mv.text("ID do Professor: " + consultaPresenca.getIdProfessor());
+	                            mv.borderln();
+                        	} catch (NullPointerException e) {
+                        		mv.textBox(e.getMessage());
+                        	}
+	                        break;
                         case 4:
                             System.out.println("Consultou Chat");
                             break;
@@ -119,9 +137,7 @@ public class Main {
                             menuPrincipal = false;
                             break;
                         default:
-                            System.out.println("| Valor inválido                                              |");
-                            System.out.print("| Sua opção: ");
-                            opcaoPrincipal = scanner.nextInt();
+                            mv.text("Valor inválido");
                     }
 
                 }
@@ -129,23 +145,20 @@ public class Main {
                 break;
             case 2:
                 while(menuPrincipal) {
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("|                 Bem-Vindo | Professor                       |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("| 1 - Consultar Funcionario                                   |");
-                    System.out.println("| 2 - Consultar Turma                                         |");
-                    System.out.println("| 3 - Presença                                                |");
-                    System.out.println("| 4 - Chat                                                    |");
-                    System.out.println("| 5 - Enviar Mensagem                                         |");
-                    System.out.println("| 6 - Consultar Mensagem                                      |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.println("| 0 - Encerrar Programa                                       |");
-                    System.out.println("+-------------------------------------------------------------+");
-                    System.out.print("| Sua opção: ");
-                    opcaoPrincipal = scanner.nextInt();
-                    System.out.println("+-------------------------------------------------------------+\n");
+                	mv.header();
+                	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                	mv.border();
+                	mv.text("1 - Consultar Funcionario");
+                	mv.text("2 - Consultar Turma");
+                	mv.text("3 - Presença");
+                	mv.text("4 - Chat");
+                	mv.text("5 - Enviar Mensagem");
+                	mv.text("6 - Consultar Mensagem");
+                	mv.text("9 - Voltar");
+                	mv.textBox("0 - Encerrar Programa");
+                	opcaoPrincipal = mv.inputOpcao();
+                	mv.borderln();
+                	                 
                     switch(opcaoPrincipal) {
                         case 1:
                             System.out.println("Consultou Estudante");
@@ -157,20 +170,17 @@ public class Main {
                             break;
                         case 3:
                             while(menuSecundario) {
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                         Presença                            |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 1 - Inserir Presença                                        |");
-                                System.out.println("| 2 - Consultar Presença                                      |");
-                                System.out.println("| 3 - Alterar Presença                                        |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 9 - Voltar                                                  |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
-                                opcaoSecundaria = scanner.nextInt();
-                                System.out.println("+-------------------------------------------------------------+\n");
+                            	mv.header();
+                            	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                            	mv.border();
+                            	mv.text("1 - Inserir Presença");
+                            	mv.text("2 - Consultar Presença");
+                            	mv.text("3 - Alterar Presença");
+                            	mv.text("9 - Voltar");
+                            	mv.textBox("0 - Encerrar Programa");
+                            	opcaoSecundaria = mv.inputOpcao();
+                            	mv.borderln();
+                            	
                                 switch(opcaoSecundaria) {
                                     case 1:
                                         System.out.println("Inseriu Presença");
@@ -184,31 +194,31 @@ public class Main {
                                     case 9:
                                         menuSecundario = false;
                                         break;
+                                    case 0: 
+                                    	menuPrincipal = false;
+                                    	menuSecundario = false;
+                                    	break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Valor inválido");
+                                        mv.borderln();
                                 }
                             }
                             menuSecundario = true;
                             break;
                         case 4:
                             while(menuSecundario) {
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|        SiGest - Sistema de Gerenciamento Estudantil         |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("|                           Chat                              |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 1 - Criar Chat                                              |");
-                                System.out.println("| 2 - Consultar Chat                                          |");
-                                System.out.println("| 3 - Alterar Chat                                            |");
-                                System.out.println("| 4 - Remover Chat                                            |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.println("| 9 - Voltar                                                  |");
-                                System.out.println("+-------------------------------------------------------------+");
-                                System.out.print("| Sua opção: ");
-                                opcaoSecundaria = scanner.nextInt();
-                                System.out.println("+-------------------------------------------------------------+\n");
+                            	mv.header();
+                            	mv.textCenter("Bem-vindo | " + usuario.getNomeUsuario());
+                            	mv.border();
+                            	mv.text("1 - Criar Chat");
+                            	mv.text("2 - Consultar Chat");
+                            	mv.text("3 - Alterar Chat");
+                            	mv.text("4 - Remover Chat");
+                            	mv.text("9 - Voltar");
+                            	mv.textBox("0 - Encerrar Programa");
+                            	opcaoSecundaria = mv.inputOpcao();
+                            	mv.borderln();                            	
+                      
                                 switch(opcaoSecundaria) {
                                     case 1:
                                         System.out.println("Criou Chat");
@@ -225,29 +235,31 @@ public class Main {
                                     case 9:
                                         menuSecundario = false;
                                         break;
+                                    case 0: 
+                                    	menuPrincipal = false;
+                                    	menuSecundario = false;
+                                    	break;
                                     default:
-                                        System.out.println("| Valor inválido                                              |");
-                                        System.out.print("| Sua opção: ");
-                                        opcaoSecundaria = scanner.nextInt();
+                                        mv.text("Valor inválido");
+                                        mv.borderln();
                                 }
                             }
                             menuSecundario = true;
                             break;
                         case 5:
-                            System.out.println("| Funcionalidade nço implementada                             |");
-                            System.out.println("+-------------------------------------------------------------+\n");
+                        	mv.text("Funcionalidade não implementada");
+                        	mv.borderln();                          
                             break;
                         case 6:
-                            System.out.println("| Funcionalidade nço implementada                             |");
-                            System.out.println("+-------------------------------------------------------------+\n");
+                        	mv.text("Funcionalidade não implementada");
+                        	mv.borderln();
                             break;
                         case 0:
                             menuPrincipal = false;
                             break;
                         default:
-                            System.out.println("| Valor inválido                                              |");
-                            System.out.print("| Sua opção: ");
-                            opcaoPrincipal = scanner.nextInt();
+                        	mv.text("Valor inválido");
+                            mv.borderln();
                     }
                 }
                 break;
