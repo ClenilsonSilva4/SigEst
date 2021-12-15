@@ -1,3 +1,3 @@
-# VRaptor Produtos
+# SigEst
 
-Projeto do curso online de VRaptor 4
+Projeto de Sistema Integrado para Gerenciamento de Estudantes
