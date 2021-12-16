@@ -936,7 +936,7 @@ public class Main {
                                             mv.header();
                                             mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                             mv.border();
-                                            int idTurma = Integer.parseInt(mv.inputString("Digite o ID da turma que quer remover"));
+                                            int idTurma = Integer.parseInt(mv.inputString("Digite o ID da turma que quer remover: "));
 
                                             try {
                                                 gestor.removerTurma(idTurma, usuario.getIdUsuario());
