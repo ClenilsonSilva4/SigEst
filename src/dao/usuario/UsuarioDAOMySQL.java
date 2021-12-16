@@ -65,7 +65,7 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
             if(resultadoConsulta.next()) {
                 return retornarUsuarioConsulta(resultadoConsulta);
             }
-            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario vÃ¡lido");
+            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }

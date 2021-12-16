@@ -35,7 +35,7 @@ public class MainView {
 	public int inputOpcao() {
 		int input;
 		scanner = new Scanner(System.in);
-		String opcao = "Sua opÃ§Ã£o: ";
+		String opcao = "Sua opção: ";
 		System.out.print(opcao);
 		input = scanner.nextInt();
 		return input;

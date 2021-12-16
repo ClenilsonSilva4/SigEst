@@ -464,7 +464,7 @@ public class Main {
                                             mv.header();
                                             mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                             mv.border();
-                                            int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer remover"));
+                                            int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer remover: "));
 
                                             try {
                                                 gestor.removerEstudante(idEstudante, usuario.getIdUsuario());
@@ -665,10 +665,10 @@ public class Main {
                                 mv.header();
                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                 mv.border();
-                                mv.text("1 - Inserir Gertor");
-                                mv.text("2 - Consultar Gertor");
-                                mv.text("3 - Alterar Gertor");
-                                mv.text("4 - Remover Gertor");
+                                mv.text("1 - Inserir Gestor");
+                                mv.text("2 - Consultar Gestor");
+                                mv.text("3 - Alterar Gestor");
+                                mv.text("4 - Remover Gestor");
                                 mv.text("9 - Voltar");
                                 mv.textBox("0 - Encerrar Programa");
                                 opcaoSecundaria = mv.inputOpcao();

@@ -11,5 +11,6 @@
     <file url="file://$PROJECT_DIR$/src/service/login/LoginService.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/service/usuario/gestor/GestorService.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/service/usuario/professor/ProfessorService.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/view/MainView.java" charset="ISO-8859-1" />
   </component>
 </project>

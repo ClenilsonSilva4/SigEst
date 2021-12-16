@@ -1,12 +1,13 @@
 package dao.usuario;
 
 import exception.ChangeNotMade;
+import exception.DBUnavailable;
 
 import java.sql.SQLException;
 
 public class EstudanteDAOMySQL extends UsuarioDAOMySQL {
     @Override
-    public void inserirUsuario(String nome, String email, String senha) throws ChangeNotMade {
+    public void inserirUsuario(String nome, String email, String senha) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
 
@@ -21,7 +22,7 @@ public class EstudanteDAOMySQL extends UsuarioDAOMySQL {
 
             encerrarConexao();
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 }
