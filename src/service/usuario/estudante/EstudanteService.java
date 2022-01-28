@@ -8,9 +8,9 @@ import dao.usuario.UsuarioDAO;
 import dao.usuario.EstudanteDAOMySQL;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import entities.Estudante;
-import entities.Presenca;
-import entities.Turma;
+import entities.Recurso;
+import entities.AcompanhamentoRecurso;
+import entities.ConjuntoRecurso;
 
 public class EstudanteService implements EstudanteServiceInterface{
     private final UsuarioDAO estudanteBD;
@@ -23,20 +23,20 @@ public class EstudanteService implements EstudanteServiceInterface{
         this.presencaBD = new PresencaDAOMySQL();
     }
 
-    public Estudante consultarEstudante(int idEstudante) throws DBUnavailable {
+    public Recurso consultarEstudante(int idEstudante) throws DBUnavailable {
         try {
-            return new Estudante(estudanteBD.consultarUsuario(idEstudante));
+            return new Recurso(estudanteBD.consultarUsuario(idEstudante));
         } catch (UserNotFoundException e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    public Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
+    public ConjuntoRecurso consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
         return turmaBD.consultarTurma(idTurma);
     }
 
-    public Presenca consultarPresenca(int idPresenca) {
+    public AcompanhamentoRecurso consultarPresenca(int idPresenca) {
         return presencaBD.consultarPresenca(idPresenca);
     }
 }

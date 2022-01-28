@@ -1,12 +1,11 @@
 package main;
 
 import java.util.Scanner;
-import entities.Estudante;
+import entities.Recurso;
 import entities.Gestor;
-import entities.Presenca;
-import entities.Professor;
-import entities.Turma;
-import entities.Usuario;
+import entities.AcompanhamentoRecurso;
+import entities.Avaliador;
+import entities.ConjuntoRecurso;
 import exception.*;
 import service.login.LoginService;
 import service.login.LoginServiceInterface;
@@ -48,9 +47,9 @@ public class Main {
             }
         }
 
-        if(usuario instanceof Estudante) {
+        if(usuario instanceof Recurso) {
             tipoUsuario = 1;
-        } else if (usuario instanceof Professor) {
+        } else if (usuario instanceof Avaliador) {
             tipoUsuario = 2;
         } else {
             tipoUsuario = 3;
@@ -80,14 +79,14 @@ public class Main {
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                Estudante consultaEstudante = estudante.consultarEstudante(usuario.getIdUsuario());
+                                Recurso consultaRecurso = estudante.consultarEstudante(usuario.getIdUsuario());
 
                                 mv.header();
                                 mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
                                 mv.border();
-                                mv.text("ID do Estudante: " + consultaEstudante.getIdUsuario());
-                                mv.text("Nome do Estudante: " + consultaEstudante.getNomeUsuario());
-                                mv.text("E-mail do Estudante: " + consultaEstudante.getEmailUsuario());
+                                mv.text("ID do Estudante: " + consultaRecurso.getIdUsuario());
+                                mv.text("Nome do Estudante: " + consultaRecurso.getNomeUsuario());
+                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmailUsuario());
                                 mv.borderln();
                             } catch (DBUnavailable e) {
                                 do {
@@ -104,14 +103,14 @@ public class Main {
                             break;
                         case 2:
                             try {
-                            	Turma consultaTurma = estudante.consultarTurma(1);
+                            	ConjuntoRecurso consultaConjuntoRecurso = estudante.consultarTurma(1);
                             	
                             	mv.header();
                                 mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
                                 mv.border();
-                                mv.text("ID: " + consultaTurma.getIdTurma());
-                                mv.text("Nome da Turma:" + consultaTurma.getNomeDisciplina());
-                                mv.text("Capacidade de Estudantes: " + consultaTurma.getCapacidadeAlunos());
+                                mv.text("ID: " + consultaConjuntoRecurso.getIdTurma());
+                                mv.text("Nome da Turma:" + consultaConjuntoRecurso.getNomeDisciplina());
+                                mv.text("Capacidade de Estudantes: " + consultaConjuntoRecurso.getCapacidadeAlunos());
                                 mv.borderln();
                             } catch(UserNotFoundException | DBUnavailable e) {
                                 do {
@@ -128,15 +127,15 @@ public class Main {
                             break;
                         case 3:
                         	try {
-	                            Presenca consultaPresenca = estudante.consultarPresenca(usuario.getIdUsuario());
+	                            AcompanhamentoRecurso consultaAcompanhamentoRecurso = estudante.consultarPresenca(usuario.getIdUsuario());
 	                            
 	                            mv.header();
                                 mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
 	                            mv.border();
-	                            mv.text("Data: " + consultaPresenca.getData());
-	                            mv.text("ID do Estudante: " + consultaPresenca.getIdAluno());
-	                            mv.text("ID da Turma: " + consultaPresenca.getIdTurma());
-	                            mv.text("ID do Professor: " + consultaPresenca.getIdProfessor());
+	                            mv.text("Data: " + consultaAcompanhamentoRecurso.getData());
+	                            mv.text("ID do Estudante: " + consultaAcompanhamentoRecurso.getIdAluno());
+	                            mv.text("ID da Turma: " + consultaAcompanhamentoRecurso.getIdTurma());
+	                            mv.text("ID do Professor: " + consultaAcompanhamentoRecurso.getIdProfessor());
 	                            mv.borderln();
                         	} catch (NullPointerException e) {
                                 do {
@@ -191,14 +190,14 @@ public class Main {
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                Professor consultaProfessor = professor.consultarProfessor(usuario.getIdUsuario());
+                                Avaliador consultaAvaliador = professor.consultarProfessor(usuario.getIdUsuario());
 
                                 mv.header();
                                 mv.textCenter("Bem-Vindo(a) Professor | " + usuario.getNomeUsuario());
                                 mv.border();
-                                mv.text("ID do Professor: " + consultaProfessor.getIdUsuario());
-                                mv.text("Nome do Professor: " + consultaProfessor.getNomeUsuario());
-                                mv.text("E-mail do Professor: " + consultaProfessor.getEmailUsuario());
+                                mv.text("ID do Professor: " + consultaAvaliador.getIdUsuario());
+                                mv.text("Nome do Professor: " + consultaAvaliador.getNomeUsuario());
+                                mv.text("E-mail do Professor: " + consultaAvaliador.getEmailUsuario());
                                 mv.borderln();
                             } catch (DBUnavailable e) {
                             	do {
@@ -218,14 +217,14 @@ public class Main {
                             break;
                         case 2:
                             try {
-                                Turma consultaTurma = professor.consultarTurma(1);
+                                ConjuntoRecurso consultaConjuntoRecurso = professor.consultarTurma(1);
 
                                 mv.header();
                                 mv.textCenter("Bem-Vindo(a) | Estudante");
                                 mv.border();
-                                mv.text("ID: " + consultaTurma.getIdTurma());
-                                mv.text("Nome da Turma:" + consultaTurma.getNomeDisciplina());
-                                mv.text("Capacidade de Estudantes: " + consultaTurma.getCapacidadeAlunos());
+                                mv.text("ID: " + consultaConjuntoRecurso.getIdTurma());
+                                mv.text("Nome da Turma:" + consultaConjuntoRecurso.getNomeDisciplina());
+                                mv.text("Capacidade de Estudantes: " + consultaConjuntoRecurso.getCapacidadeAlunos());
                                 mv.borderln();
                             } catch(UserNotFoundException | DBUnavailable e) {
                                 mv.textBox(e.getMessage());
@@ -399,14 +398,14 @@ public class Main {
                                             int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer consultar: "));
 
                                             try {
-                                                Estudante consultaEstudante = gestor.consultarEstudante(idEstudante);
+                                                Recurso consultaRecurso = gestor.consultarEstudante(idEstudante);
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
-                                                mv.text("ID do Estudante: " + consultaEstudante.getIdUsuario());
-                                                mv.text("Nome do Estudante: " + consultaEstudante.getNomeUsuario());
-                                                mv.text("E-mail do Estudante: " + consultaEstudante.getEmailUsuario());
+                                                mv.text("ID do Estudante: " + consultaRecurso.getIdUsuario());
+                                                mv.text("Nome do Estudante: " + consultaRecurso.getNomeUsuario());
+                                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmailUsuario());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
@@ -557,14 +556,14 @@ public class Main {
                                             int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer consultar"));
 
                                             try {
-                                                Professor consultaProfessor= gestor.consultarProfessor(idProfessor);
+                                                Avaliador consultaAvaliador = gestor.consultarProfessor(idProfessor);
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
-                                                mv.text("ID do Professor: " + consultaProfessor.getIdUsuario());
-                                                mv.text("Nome do Professor: " + consultaProfessor.getNomeUsuario());
-                                                mv.text("E-mail do Professor: " + consultaProfessor.getEmailUsuario());
+                                                mv.text("ID do Professor: " + consultaAvaliador.getIdUsuario());
+                                                mv.text("Nome do Professor: " + consultaAvaliador.getNomeUsuario());
+                                                mv.text("E-mail do Professor: " + consultaAvaliador.getEmailUsuario());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
@@ -872,14 +871,14 @@ public class Main {
                                             int idTurma = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer consultar"));
 
                                             try {
-                                                Turma consultaTurma= gestor.consultarTurma(idTurma);
+                                                ConjuntoRecurso consultaConjuntoRecurso = gestor.consultarTurma(idTurma);
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
                                                 mv.border();
-                                                mv.text("ID da Turma: " + consultaTurma.getIdTurma());
-                                                mv.text("Nome da Turma: " + consultaTurma.getNomeDisciplina());
-                                                mv.text("Capacidade de alunos da Turma: " + consultaTurma.getCapacidadeAlunos());
+                                                mv.text("ID da Turma: " + consultaConjuntoRecurso.getIdTurma());
+                                                mv.text("Nome da Turma: " + consultaConjuntoRecurso.getNomeDisciplina());
+                                                mv.text("Capacidade de alunos da Turma: " + consultaConjuntoRecurso.getCapacidadeAlunos());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {

@@ -1,6 +1,5 @@
 package dao.usuario;
 
-import entities.Usuario;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;

@@ -2,7 +2,7 @@ package dao.presenca;
 
 import dao.conexao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
-import entities.Presenca;
+import entities.AcompanhamentoRecurso;
 import exception.DBUnavailable;
 
 import java.sql.SQLException;
@@ -28,7 +28,7 @@ public class PresencaDAOMySQL extends ConexaoSistemaDAO implements PresencaDAO{
     }
 
     @Override
-    public Presenca consultarPresenca(int idPresenca) {
+    public AcompanhamentoRecurso consultarPresenca(int idPresenca) {
         return null;
     }
 
@@ -50,13 +50,13 @@ public class PresencaDAOMySQL extends ConexaoSistemaDAO implements PresencaDAO{
     }
 
     @Override
-    public void alterarPresenca(Presenca presencaAlterada) throws ChangeNotMade, DBUnavailable {
+    public void alterarPresenca(AcompanhamentoRecurso acompanhamentoRecursoAlterada) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "UPDATE presenca SET idTurma = " + presencaAlterada.getIdTurma() + ", idProfessor = "
-                    + presencaAlterada.getIdProfessor() + ", idAluno = " + presencaAlterada.getIdAluno() +
-                    ", dataPresenca = " + stringBD(presencaAlterada.getData()) + ", estavaPresente = " +
-                    presencaAlterada.isPresente() + " WHERE idPresenca = " + presencaAlterada.getId() + ";";
+            String sqlComando = "UPDATE presenca SET idTurma = " + acompanhamentoRecursoAlterada.getIdTurma() + ", idProfessor = "
+                    + acompanhamentoRecursoAlterada.getIdProfessor() + ", idAluno = " + acompanhamentoRecursoAlterada.getIdAluno() +
+                    ", dataPresenca = " + stringBD(acompanhamentoRecursoAlterada.getData()) + ", estavaPresente = " +
+                    acompanhamentoRecursoAlterada.isPresente() + " WHERE idPresenca = " + acompanhamentoRecursoAlterada.getId() + ";";
 
             int resultado = comandos.executeUpdate(sqlComando);
 

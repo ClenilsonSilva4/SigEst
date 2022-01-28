@@ -1,6 +1,5 @@
 package service.login;
 
-import entities.Usuario;
 import exception.DBUnavailable;
 import exception.InvalidData;
 import exception.UserNotFoundException;

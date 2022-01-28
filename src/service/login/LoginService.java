@@ -2,7 +2,6 @@ package service.login;
 
 import dao.usuario.UsuarioDAO;
 import dao.usuario.UsuarioDAOMySQL;
-import entities.Usuario;
 import exception.DBUnavailable;
 import exception.InvalidData;
 import exception.UserNotFoundException;

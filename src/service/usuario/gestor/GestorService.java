@@ -37,8 +37,8 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public Estudante consultarEstudante(int idEstudante) throws UserNotFoundException, DBUnavailable {
-        return new Estudante(estudanteBD.consultarUsuario(idEstudante));
+    public Recurso consultarEstudante(int idEstudante) throws UserNotFoundException, DBUnavailable {
+        return new Recurso(estudanteBD.consultarUsuario(idEstudante));
     }
 
     @Override
@@ -57,19 +57,19 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
 
-            Estudante alteracaoEstudante = (Estudante) estudanteBD.consultarUsuario(id);
+            Recurso alteracaoRecurso = (Recurso) estudanteBD.consultarUsuario(id);
 
-            if(!nome.equals(alteracaoEstudante.getNomeUsuario())){
-                alteracaoEstudante.setNomeUsuario(nome);
+            if(!nome.equals(alteracaoRecurso.getNomeUsuario())){
+                alteracaoRecurso.setNomeUsuario(nome);
             }
-            if(!email.equals(alteracaoEstudante.getEmailUsuario())) {
-                alteracaoEstudante.setEmailUsuario(email);
+            if(!email.equals(alteracaoRecurso.getEmailUsuario())) {
+                alteracaoRecurso.setEmailUsuario(email);
             }
-            if(!senha.equals(alteracaoEstudante.getSenhaUsuario())) {
-                alteracaoEstudante.setSenhaUsuario(senha);
+            if(!senha.equals(alteracaoRecurso.getSenhaUsuario())) {
+                alteracaoRecurso.setSenhaUsuario(senha);
             }
 
-            estudanteBD.alterarUsuario(alteracaoEstudante);
+            estudanteBD.alterarUsuario(alteracaoRecurso);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
@@ -86,8 +86,8 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
-        return new Professor(professorBD.consultarUsuario(idProfessor));
+    public Avaliador consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
+        return new Avaliador(professorBD.consultarUsuario(idProfessor));
     }
 
     @Override
@@ -106,19 +106,19 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
 
-            Professor alteracaoProfessor = (Professor) professorBD.consultarUsuario(id);
+            Avaliador alteracaoAvaliador = (Avaliador) professorBD.consultarUsuario(id);
 
-            if(!nome.equals(alteracaoProfessor.getNomeUsuario())){
-                alteracaoProfessor.setNomeUsuario(nome);
+            if(!nome.equals(alteracaoAvaliador.getNomeUsuario())){
+                alteracaoAvaliador.setNomeUsuario(nome);
             }
-            if(!email.equals(alteracaoProfessor.getEmailUsuario())) {
-                alteracaoProfessor.setEmailUsuario(email);
+            if(!email.equals(alteracaoAvaliador.getEmailUsuario())) {
+                alteracaoAvaliador.setEmailUsuario(email);
             }
-            if(!senha.equals(alteracaoProfessor.getSenhaUsuario())) {
-                alteracaoProfessor.setSenhaUsuario(senha);
+            if(!senha.equals(alteracaoAvaliador.getSenhaUsuario())) {
+                alteracaoAvaliador.setSenhaUsuario(senha);
             }
 
-            professorBD.alterarUsuario(alteracaoProfessor);
+            professorBD.alterarUsuario(alteracaoAvaliador);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
@@ -184,7 +184,7 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
+    public ConjuntoRecurso consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
         return turmaBD.consultarTurma(idTurma);
     }
 
@@ -203,16 +203,16 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
 
-            Turma alteracaoTurma = turmaBD.consultarTurma(id);
+            ConjuntoRecurso alteracaoConjuntoRecurso = turmaBD.consultarTurma(id);
 
-            if(!nomeDisciplina.equals(alteracaoTurma.getNomeDisciplina())){
-                alteracaoTurma.setNomeDisciplina(nomeDisciplina);
+            if(!nomeDisciplina.equals(alteracaoConjuntoRecurso.getNomeDisciplina())){
+                alteracaoConjuntoRecurso.setNomeDisciplina(nomeDisciplina);
             }
-            if(capacidade != alteracaoTurma.getCapacidadeAlunos()) {
-                alteracaoTurma.setCapacidadeAlunos(capacidade);
+            if(capacidade != alteracaoConjuntoRecurso.getCapacidadeAlunos()) {
+                alteracaoConjuntoRecurso.setCapacidadeAlunos(capacidade);
             }
 
-            turmaBD.alterarTurma(alteracaoTurma);
+            turmaBD.alterarTurma(alteracaoConjuntoRecurso);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
@@ -230,19 +230,19 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public Presenca consultarPresenca(int idGestor, int idPresenca) {
+    public AcompanhamentoRecurso consultarPresenca(int idGestor, int idPresenca) {
         return null;
     }
 
     @Override
-    public void alterarPresenca(int idGestor, Presenca presencaAlterada) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
+    public void alterarPresenca(int idGestor, AcompanhamentoRecurso acompanhamentoRecursoAlterada) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
         try {
             gestorBD.consultarUsuario(idGestor);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado não pertence a um gestor válido");
         }
 
-        presencaBD.consultarPresenca(presencaAlterada.getIdTurma());
-        presencaBD.alterarPresenca(presencaAlterada);
+        presencaBD.consultarPresenca(acompanhamentoRecursoAlterada.getIdTurma());
+        presencaBD.alterarPresenca(acompanhamentoRecursoAlterada);
     }
 }

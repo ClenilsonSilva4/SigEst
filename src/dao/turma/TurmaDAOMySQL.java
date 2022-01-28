@@ -1,7 +1,7 @@
 package dao.turma;
 
 import dao.conexao.ConexaoSistemaDAO;
-import entities.Turma;
+import entities.ConjuntoRecurso;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
@@ -31,7 +31,7 @@ public class TurmaDAOMySQL extends ConexaoSistemaDAO implements TurmaDAO{
         }
     }
 
-    public Turma consultarTurma(int idTurma) throws DBUnavailable, UserNotFoundException {
+    public ConjuntoRecurso consultarTurma(int idTurma) throws DBUnavailable, UserNotFoundException {
         try {
             conectar();
             String sqlComando = "SELECT * FROM turma WHERE (idTurma = " + idTurma + ");";
@@ -39,23 +39,23 @@ public class TurmaDAOMySQL extends ConexaoSistemaDAO implements TurmaDAO{
             ResultSet resultadoConsulta = comandos.executeQuery(sqlComando);
 
             if(resultadoConsulta.next()) {
-                Turma consultarTurma = new Turma(Integer.parseInt(resultadoConsulta.getString("idTurma")),
+                ConjuntoRecurso consultarConjuntoRecurso = new ConjuntoRecurso(Integer.parseInt(resultadoConsulta.getString("idTurma")),
                         resultadoConsulta.getString("nomeDisciplina"),
                         Integer.parseInt(resultadoConsulta.getString("capacidadeAlunos")));
 
                 List<Integer> idProfessores = consultarIDProfessores(idTurma);
 
                 if(!idProfessores.isEmpty()) {
-                    consultarTurma.setIdProfessores(idProfessores);
+                    consultarConjuntoRecurso.setIdProfessores(idProfessores);
                 }
 
                 List<Integer> idAlunos = consultarIDAlunos(idTurma);
 
                 if(!idAlunos.isEmpty()) {
-                    consultarTurma.setIdEstudantes(idAlunos);
+                    consultarConjuntoRecurso.setIdEstudantes(idAlunos);
                 }
 
-                return consultarTurma;
+                return consultarConjuntoRecurso;
             }
             throw new UserNotFoundException("O ID não pertence a um usuário válido");
         } catch (SQLException e) {
@@ -80,12 +80,12 @@ public class TurmaDAOMySQL extends ConexaoSistemaDAO implements TurmaDAO{
     }
 
     @Override
-    public void alterarTurma(Turma turmaAlterada) throws ChangeNotMade, DBUnavailable {
+    public void alterarTurma(ConjuntoRecurso conjuntoRecursoAlterada) throws ChangeNotMade, DBUnavailable {
         try {
             conectar();
-            String sqlComando = "UPDATE turma SET nomeDisciplina = " + stringBD(turmaAlterada.getNomeDisciplina()) +
-                    ", capacidadeAlunos = " + turmaAlterada.getCapacidadeAlunos() + " WHERE idTurma = " +
-                    turmaAlterada.getIdTurma() + ";";
+            String sqlComando = "UPDATE turma SET nomeDisciplina = " + stringBD(conjuntoRecursoAlterada.getNomeDisciplina()) +
+                    ", capacidadeAlunos = " + conjuntoRecursoAlterada.getCapacidadeAlunos() + " WHERE idTurma = " +
+                    conjuntoRecursoAlterada.getIdTurma() + ";";
 
             int resultado = comandos.executeUpdate(sqlComando);
 

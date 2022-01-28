@@ -9,9 +9,9 @@ import dao.turma.TurmaDAOMySQL;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import entities.Presenca;
-import entities.Professor;
-import entities.Turma;
+import entities.AcompanhamentoRecurso;
+import entities.Avaliador;
+import entities.ConjuntoRecurso;
 import exception.UserWithoutPermission;
 
 public class ProfessorService implements ProfessorServiceInterface{
@@ -26,28 +26,28 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
-        return new Professor(professorBD.consultarUsuario(idProfessor));
+    public Avaliador consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
+        return new Avaliador(professorBD.consultarUsuario(idProfessor));
     }
 
     @Override
-    public Turma consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
+    public ConjuntoRecurso consultarTurma(int idTurma) throws UserNotFoundException, DBUnavailable {
         return turmaBD.consultarTurma(idTurma);
     }
 
     @Override
-    public void inserirPresenca(Presenca novaPresenca) throws ChangeNotMade, UserWithoutPermission, DBUnavailable {
+    public void inserirPresenca(AcompanhamentoRecurso novaAcompanhamentoRecurso) throws ChangeNotMade, UserWithoutPermission, DBUnavailable {
         //Checar se o professor realmente dá aula nessa turma.
-        if(checarPermissao(novaPresenca.getIdProfessor(), novaPresenca.getIdTurma())) {
-            presencaBD.inserirPresenca(novaPresenca.getIdTurma(), novaPresenca.getIdProfessor(),
-                    novaPresenca.getIdAluno(), novaPresenca.getData(), novaPresenca.isPresente());
+        if(checarPermissao(novaAcompanhamentoRecurso.getIdProfessor(), novaAcompanhamentoRecurso.getIdTurma())) {
+            presencaBD.inserirPresenca(novaAcompanhamentoRecurso.getIdTurma(), novaAcompanhamentoRecurso.getIdProfessor(),
+                    novaAcompanhamentoRecurso.getIdAluno(), novaAcompanhamentoRecurso.getData(), novaAcompanhamentoRecurso.isPresente());
         } else {
             throw new UserWithoutPermission("Este professor não possui permissão para inserir essa presença.");
         }
     }
 
     @Override
-    public Presenca consultarPresenca(int idPresenca) {
+    public AcompanhamentoRecurso consultarPresenca(int idPresenca) {
         return presencaBD.consultarPresenca(idPresenca);
     }
 
@@ -62,10 +62,10 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public void alterarPresenca(Presenca presencaAlterada) throws UserWithoutPermission, ChangeNotMade, DBUnavailable {
+    public void alterarPresenca(AcompanhamentoRecurso acompanhamentoRecursoAlterada) throws UserWithoutPermission, ChangeNotMade, DBUnavailable {
         //Checar se o professor realmente dá aula nessa turma.
-        if(checarPermissao(presencaAlterada.getIdProfessor(), presencaAlterada.getIdTurma())) {
-            presencaBD.alterarPresenca(presencaAlterada);
+        if(checarPermissao(acompanhamentoRecursoAlterada.getIdProfessor(), acompanhamentoRecursoAlterada.getIdTurma())) {
+            presencaBD.alterarPresenca(acompanhamentoRecursoAlterada);
         } else {
             throw new UserWithoutPermission("Este professor não possui permissão para alterar essa presença.");
         }
@@ -75,8 +75,8 @@ public class ProfessorService implements ProfessorServiceInterface{
         try {
             consultarProfessor(idFuncionario);
 
-            Turma checarTurma = consultarTurma(idTurma);
-            return checarTurma.containsProfessor(idFuncionario);
+            ConjuntoRecurso checarConjuntoRecurso = consultarTurma(idTurma);
+            return checarConjuntoRecurso.containsProfessor(idFuncionario);
         } catch (UserNotFoundException e) {
             return false;
         }

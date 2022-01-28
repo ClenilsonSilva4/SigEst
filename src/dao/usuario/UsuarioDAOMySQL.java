@@ -1,10 +1,9 @@
 package dao.usuario;
 
 import dao.conexao.ConexaoSistemaDAO;
-import entities.Estudante;
+import entities.Recurso;
 import entities.Gestor;
-import entities.Professor;
-import entities.Usuario;
+import entities.Avaliador;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
@@ -74,11 +73,11 @@ public class UsuarioDAOMySQL extends ConexaoSistemaDAO implements UsuarioDAO {
     private Usuario retornarUsuarioConsulta(ResultSet resultadoConsulta) throws SQLException{
         switch (resultadoConsulta.getString("tipoUsuario")) {
             case "1":
-                return new Estudante(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Recurso(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             case "2":
-                return new Professor(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
+                return new Avaliador(Integer.parseInt(resultadoConsulta.getString("idUsuario")),
                         resultadoConsulta.getString("nomeUsuario"), resultadoConsulta.getString("emailUsuario"),
                         resultadoConsulta.getString("senhaUsuario"));
             case "3":
