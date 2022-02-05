@@ -4,18 +4,15 @@ import framework.Domain.Chat;
 import java.util.List;
 
 public class GerenciadorChat {
-
-	private ChatDAO chatDAO;
-
 	public void novoChat(Chat novoChat) {
 
 	}
 
-	public void removerChat(Chat chatExcluído) {
+	public void removerChat(Chat chatExcluido) {
 
 	}
 
-	public List listarChat() {
+	public List<Chat> listarChat() {
 		return null;
 	}
 
