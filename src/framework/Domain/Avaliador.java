@@ -1,4 +1,4 @@
-package Domain;
+package framework.Domain;
 
 public abstract class Avaliador {
 
@@ -18,4 +18,19 @@ public abstract class Avaliador {
 		return false;
 	}
 
+	public long getId() {
+		return id;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
 }

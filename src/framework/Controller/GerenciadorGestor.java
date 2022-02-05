@@ -1,7 +1,7 @@
-package Controller;
+package framework.Controller;
 
-import Domain.Gestor;
-import DAO.GestorDAO;
+import framework.Domain.Gestor;
+import framework.DAO.GestorDAO;
 import java.util.List;
 
 public class GerenciadorGestor {

@@ -1,9 +1,9 @@
-package Controller;
+package framework.Controller;
 
-import DAO.AvaliaçãoDAO;
-import Domain.Avaliação;
-import Domain.AcompanhamentoRecurso;
-import Domain.RegraAvaliação;
+import framework.DAO.AvaliaçãoDAO;
+import framework.Domain.Avaliação;
+import framework.Domain.AcompanhamentoRecurso;
+import framework.Domain.RegraAvaliação;
 import java.util.List;
 
 public class GerenciadorAvaliação {

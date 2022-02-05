@@ -1,4 +1,4 @@
-package Domain;
+package framework.Domain;
 
 public class AcompanhamentoRecurso extends ConjuntoRecurso {
 

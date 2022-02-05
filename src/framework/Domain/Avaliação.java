@@ -1,4 +1,4 @@
-package Domain;
+package framework.Domain;
 
 public class Avaliação {
 
@@ -12,9 +12,7 @@ public class Avaliação {
 
 	private Avaliador avaliador;
 
-	private Recurso recurso;
-
-	public Avaliação Avaliação(String data, String resultado) {
+	public Avaliação realizarAvaliacao(String data, String resultado) {
 		return null;
 	}
 

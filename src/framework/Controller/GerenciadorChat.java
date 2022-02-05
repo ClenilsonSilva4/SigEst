@@ -1,7 +1,7 @@
-package Controller;
+package framework.Controller;
 
-import DAO.ChatDAO;
-import Domain.Chat;
+import framework.DAO.ChatDAO;
+import framework.Domain.Chat;
 import java.util.List;
 
 public class GerenciadorChat {

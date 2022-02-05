@@ -1,8 +1,8 @@
-package Controller;
+package framework.Controller;
 
-import Domain.Gestor;
-import DAO.AvaliadorDAO;
-import Domain.Avaliador;
+import framework.Domain.Gestor;
+import framework.DAO.AvaliadorDAO;
+import framework.Domain.Avaliador;
 import java.util.List;
 
 public class GerenciadorAvaliador {

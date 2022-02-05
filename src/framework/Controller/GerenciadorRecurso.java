@@ -1,9 +1,9 @@
-package Controller;
+package framework.Controller;
 
-import Domain.Gestor;
-import Domain.Recurso;
+import framework.Domain.Gestor;
+import framework.Domain.Recurso;
 import View.RecursoView;
-import DAO.RecursoDAO;
+import framework.DAO.RecursoDAO;
 import java.util.List;
 
 public class GerenciadorRecurso extends Gestor {
