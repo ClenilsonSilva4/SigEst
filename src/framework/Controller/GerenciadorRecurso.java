@@ -3,7 +3,7 @@ package framework.Controller;
 import framework.Domain.Gestor;
 import framework.Domain.Recurso;
 import View.RecursoView;
-import framework.DAO.RecursoDAO;
+
 import java.util.List;
 
 public class GerenciadorRecurso extends Gestor {

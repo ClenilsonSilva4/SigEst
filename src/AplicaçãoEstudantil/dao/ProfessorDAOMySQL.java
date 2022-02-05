@@ -1,30 +1,34 @@
 package AplicaçãoEstudantil.dao;
 
+import AplicaçãoEstudantil.entities.Professor;
 import AplicaçãoEstudantil.exception.ChangeNotMade;
 import AplicaçãoEstudantil.exception.DBUnavailable;
 import AplicaçãoEstudantil.exception.UserNotFoundException;
-import Domain.Avaliador;
+import framework.DAO.AvaliadorDAOMySQL;
+import framework.Domain.Avaliador;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AvaliadorDAOMySQL implements framework.DAO.AvaliadorDAOMySQL {
-    private ConexaoSistemaDAO conexaoBD;
+public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
+    private final ConexaoSistemaDAO conexaoBD;
 
-    public AvaliadorDAOMySQL() {
+    public ProfessorDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();
     }
 
     @Override
     public void adicionarAvaliador(Avaliador novoAvaliador) throws DBUnavailable, ChangeNotMade {
+        Professor titularidade = (Professor) novoAvaliador;
         try {
             conexaoBD.conectar();
 
-            String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario) VALUES (" +
+            String sqlComando = "INSERT INTO avaliador (emailUsuario, nomeUsuario, senhaUsuario, titularidade) VALUES (" +
                     conexaoBD.stringBD(novoAvaliador.getEmail()) + ", " + conexaoBD.stringBD(novoAvaliador.getNome()) +
-                    ", " + conexaoBD.stringBD(novoAvaliador.getSenha()) + ";";
+                    ", " + conexaoBD.stringBD(novoAvaliador.getSenha()) +
+                    ", " + conexaoBD.stringBD(titularidade.getTitularidade()) + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -42,7 +46,7 @@ public class AvaliadorDAOMySQL implements framework.DAO.AvaliadorDAOMySQL {
     public void removerAvaliador(Avaliador avaliadorRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + avaliadorRemovido.getId() + ");";
+            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + avaliadorRemovido.getId() + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -56,11 +60,13 @@ public class AvaliadorDAOMySQL implements framework.DAO.AvaliadorDAOMySQL {
 
     @Override
     public void alterarAvaliador(Avaliador avaliadorAlterado) throws ChangeNotMade, DBUnavailable {
+        Professor titularidade = (Professor) avaliadorAlterado;
         try {
             conexaoBD.conectar();
-            String sqlComando = "UPDATE usuario SET nomeUsuario = " + conexaoBD.stringBD(avaliadorAlterado.getNome()) +
+            String sqlComando = "UPDATE avaliador SET nomeUsuario = " + conexaoBD.stringBD(avaliadorAlterado.getNome()) +
                     ", emailUsuario = " + conexaoBD.stringBD(avaliadorAlterado.getEmail()) + ", senhaUsuario = " +
-                    conexaoBD.stringBD(avaliadorAlterado.getSenha()) + " WHERE idUsuario = " + avaliadorAlterado.getId() + ";";
+                    conexaoBD.stringBD(avaliadorAlterado.getSenha()) + ", titularidade = " + conexaoBD.stringBD(titularidade.getTitularidade())
+                    + " WHERE idUsuario = " + avaliadorAlterado.getId() + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -73,12 +79,26 @@ public class AvaliadorDAOMySQL implements framework.DAO.AvaliadorDAOMySQL {
     }
 
     @Override
-    public Avaliador buscarAvaliadorPorID() {
-        return null;
+    public Professor buscarAvaliadorPorID(long idAvaliador) throws UserNotFoundException, DBUnavailable {
+        try {
+            conexaoBD.conectar();
+            String sqlComando = "SELECT * FROM avaliador WHERE id = " + idAvaliador + ";";
+
+            ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
+
+            if (resultadoConsulta.next()) {
+                return new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                        resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
+                        resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade"));
+            }
+            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
+        } catch (SQLException e) {
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+        }
     }
 
     @Override
-    public List listarAvaliadores() throws DBUnavailable, UserNotFoundException {
+    public List<Avaliador> listarAvaliadores() throws DBUnavailable, UserNotFoundException {
         try {
             conexaoBD.conectar();
             String sqlComando = "SELECT * FROM avaliador";
@@ -87,9 +107,11 @@ public class AvaliadorDAOMySQL implements framework.DAO.AvaliadorDAOMySQL {
             List<Avaliador> todosAvaliadores = new ArrayList<>();
 
             while (resultadoConsulta.next()) {
-                todosAvaliadores.add(new Avaliador(resultadoConsulta.getString("id"), resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"), resultadoConsulta.getString("senha")));
+                todosAvaliadores.add(new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                        resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
+                        resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade")));
             }
-            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
+            return todosAvaliadores;
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }

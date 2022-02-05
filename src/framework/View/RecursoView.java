@@ -1,10 +1,6 @@
-package View;
-
-import Controller.GerenciadorRecurso;
+package framework.View;
 
 public interface RecursoView {
-
-	private GerenciadorRecurso gerenciadorRecurso;
 
 	public abstract void inserirRecurso();
 

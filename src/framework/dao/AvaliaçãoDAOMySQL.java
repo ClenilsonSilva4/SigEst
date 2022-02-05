@@ -1,6 +1,7 @@
-package DAO;
+package framework.DAO;
 
-import Domain.Avaliação;
+import framework.Domain.Avaliação;
+
 import java.util.List;
 
 public interface AvaliaçãoDAOMySQL {

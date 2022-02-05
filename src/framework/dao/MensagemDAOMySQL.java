@@ -1,4 +1,4 @@
-package DAO;
+package framework.DAO;
 
 public interface MensagemDAOMySQL {
 

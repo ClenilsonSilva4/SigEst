@@ -1,6 +1,6 @@
-package DAO;
+package framework.DAO;
+import framework.Domain.AcompanhamentoRecurso;
 
-import Domain.AcompanhamentoRecurso;
 import java.util.List;
 
 public interface AcompanhamentoRecursoDAOMySQL {

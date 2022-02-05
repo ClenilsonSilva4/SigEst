@@ -1,6 +1,5 @@
 package framework.Controller;
 
-import framework.DAO.AvaliaçãoDAO;
 import framework.Domain.Avaliação;
 import framework.Domain.AcompanhamentoRecurso;
 import framework.Domain.RegraAvaliação;

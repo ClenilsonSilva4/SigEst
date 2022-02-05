@@ -78,8 +78,8 @@ public class GestorService implements GestorServiceInterface{
     }
 
     @Override
-    public Avaliador consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
-        return new Avaliador(professorBD.consultarUsuario(idProfessor));
+    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
+        return new Professor(professorBD.consultarUsuario(idProfessor));
     }
 
     @Override
@@ -98,7 +98,7 @@ public class GestorService implements GestorServiceInterface{
         try {
             gestorBD.consultarUsuario(idGestor);
 
-            Avaliador alteracaoAvaliador = (Avaliador) professorBD.consultarUsuario(id);
+            Professor alteracaoAvaliador = (Professor) professorBD.consultarUsuario(id);
 
             if(!nome.equals(alteracaoAvaliador.getNomeUsuario())){
                 alteracaoAvaliador.setNomeUsuario(nome);
@@ -111,32 +111,6 @@ public class GestorService implements GestorServiceInterface{
             }
 
             professorBD.alterarUsuario(alteracaoAvaliador);
-        } catch (UserNotFoundException e) {
-            throw new UserWithoutPermission("O ID informado n�o pertence a um gestor v�lido");
-        }
-    }
-
-    @Override
-    public void inserirGestor(String nome, String email, String senha) throws EmailAlreadyInUse, ChangeNotMade, DBUnavailable {
-        try {
-            gestorBD.consultarUsuario(email, "");
-            throw new EmailAlreadyInUse("Esse email j� pertence a um usu�rio cadastrado");
-        } catch (UserNotFoundException e) {
-            gestorBD.inserirUsuario(nome, email, senha);
-        }
-    }
-
-    @Override
-    public Gestor consultarGestor(int idGestor) throws UserNotFoundException, DBUnavailable {
-        return new Gestor(gestorBD.consultarUsuario(idGestor));
-    }
-
-    @Override
-    public void removerGestor(int idGestor) throws DBUnavailable, ChangeNotMade, UserWithoutPermission {
-        try {
-            gestorBD.consultarUsuario(idGestor);
-
-            gestorBD.removerUsuario(idGestor);
         } catch (UserNotFoundException e) {
             throw new UserWithoutPermission("O ID informado n�o pertence a um gestor v�lido");
         }

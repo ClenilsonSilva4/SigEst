@@ -1,20 +1,20 @@
 package framework.Domain;
 
 public abstract class Avaliador {
-
 	private long id;
-
 	private String nome;
-
 	private String email;
-
 	private String senha;
 
-	public void Avaliador(String nome, String email, String senha) {
-
+	public Avaliador(long id, String nome, String email, String senha) {
+		this.id = id;
+		this.nome = nome;
+		this.email = email;
+		this.senha = senha;
 	}
 
 	public boolean validar() {
+		//TODO
 		return false;
 	}
 
@@ -32,5 +32,9 @@ public abstract class Avaliador {
 
 	public String getSenha() {
 		return senha;
+	}
+
+	protected void setId(long id) {
+		this.id = id;
 	}
 }

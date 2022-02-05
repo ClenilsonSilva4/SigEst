@@ -1,6 +1,5 @@
 package framework.Controller;
 
-import framework.DAO.ChatDAO;
 import framework.Domain.Chat;
 import java.util.List;
 

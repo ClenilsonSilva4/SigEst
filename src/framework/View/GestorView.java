@@ -1,10 +1,6 @@
-package View;
-
-import Controller.GerenciadorGestor;
+package framework.View;
 
 public interface GestorView {
-
-	private GerenciadorGestor gerenciadorGestor;
 
 	public abstract void inserirGestor();
 

@@ -1,6 +1,6 @@
 package AplicaçãoEstudantil.service.login;
 
-import AplicaçãoEstudantil.dao.RecursoDAOMySQL;
+import AplicaçãoEstudantil.dao.AlunoDAOMySQL;
 import AplicaçãoEstudantil.exception.DBUnavailable;
 import AplicaçãoEstudantil.exception.InvalidData;
 import AplicaçãoEstudantil.exception.UserNotFoundException;
@@ -9,7 +9,7 @@ public class LoginService implements LoginServiceInterface{
     private final  usuarioBD;
 
     public LoginService() {
-        this.usuarioBD = new RecursoDAOMySQL();
+        this.usuarioBD = new AlunoDAOMySQL();
     }
 
     @Override

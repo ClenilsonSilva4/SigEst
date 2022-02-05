@@ -1,12 +1,6 @@
-package View;
-
-import Controller.GerenciadorAvaliador;
+package framework.View;
 
 public interface AvaliadorView {
-
-	private GerenciadorAvaliador gerenciadorAvaliador;
-
-	private GerenciadorAvaliador gerenciadorAvaliador;
 
 	public abstract void inserirAvaliador();
 

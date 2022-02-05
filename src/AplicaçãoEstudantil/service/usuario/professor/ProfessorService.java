@@ -20,8 +20,8 @@ public class ProfessorService implements ProfessorServiceInterface{
     }
 
     @Override
-    public Avaliador consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
-        return new Avaliador(professorBD.consultarUsuario(idProfessor));
+    public Professor consultarProfessor(int idProfessor) throws UserNotFoundException, DBUnavailable {
+        return new Professor(professorBD.consultarUsuario(idProfessor));
     }
 
     @Override

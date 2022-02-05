@@ -1,7 +1,6 @@
 package framework.Controller;
 
 import framework.Domain.Gestor;
-import framework.DAO.AvaliadorDAO;
 import framework.Domain.Avaliador;
 import java.util.List;
 

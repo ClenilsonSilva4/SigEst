@@ -1,6 +1,6 @@
-package DAO;
+package framework.DAO;
 
-import Domain.ConjuntoRecurso;
+import framework.Domain.ConjuntoRecurso;
 import java.util.List;
 
 public interface ConjuntoRecursoDAOMySQL {
