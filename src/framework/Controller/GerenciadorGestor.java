@@ -7,16 +7,11 @@ import framework.Domain.Gestor;
 import java.util.List;
 
 public class GerenciadorGestor {
-	private GestorDAOMySQL gestorDAO;
-	private GerenciadorAvaliador gerenciadorAvaliador;
-	private GerenciadorRecurso gerenciadorRecurso;
+	private final GestorDAOMySQL gestorDAO;
 
-	public GerenciadorGestor(GestorDAOMySQL gestorDAO, GerenciadorAvaliador gerenciadorAvaliador,
-							 GerenciadorRecurso gerenciadorRecurso) {
+	public GerenciadorGestor(GestorDAOMySQL gestorDAO) {
 
 		this.gestorDAO = gestorDAO;
-		this.gerenciadorAvaliador = gerenciadorAvaliador;
-		this.gerenciadorRecurso = gerenciadorRecurso;
 	}
 
 	public void adicionarGestor(Gestor autorAcao, Gestor novoGestor) throws EmailAlreadyInUse, ChangeNotMade,

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AlunoDAOMySQL implements RecursoDAOMySQL {
-    private ConexaoSistemaDAO conexaoBD;
+    private final ConexaoSistemaDAO conexaoBD;
 
     public AlunoDAOMySQL(ConexaoSistemaDAO conexaoBD) {
         this.conexaoBD = conexaoBD;
@@ -57,7 +57,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
     }
 
     @Override
-    public List<Recurso> listarRecursos() throws UserNotFoundException, DBUnavailable {
+    public List<Recurso> listarRecursos() throws DBUnavailable {
         try {
             conexaoBD.conectar();
             String sqlComando = "SELECT * FROM recurso";
@@ -68,7 +68,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
             while (resultadoConsulta.next()) {
                 todosAlunos.add(new Aluno(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
-                        resultadoConsulta.getString("curso")));
+                        resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade"))));
             }
             return todosAlunos;
         } catch (SQLException e) {
@@ -82,8 +82,8 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
         try {
             conexaoBD.conectar();
             String sqlComando = "UPDATE recurso SET nomeUsuario = " + conexaoBD.stringBD(recursoAlterado.getNome()) +
-                    ", curso = " + conexaoBD.stringBD(curso.getCurso()) + ", aprovacao = " +
-                    recursoAlterado.isEstaAprovado() + " WHERE idUsuario = " + recursoAlterado.getId() + ";";
+                    ", curso = " + conexaoBD.stringBD(curso.getCurso()) + ", idade = " + curso.getIdade()
+                    + ", aprovacao = " +   recursoAlterado.isEstaAprovado() + " WHERE idUsuario = " + recursoAlterado.getId() + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -106,7 +106,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
             if (resultadoConsulta.next()) {
                 return new Aluno(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
-                        resultadoConsulta.getString("curso"));
+                        resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")));
             }
             throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {

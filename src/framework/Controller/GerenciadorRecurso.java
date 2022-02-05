@@ -1,37 +1,49 @@
 package framework.Controller;
 
+import AplicaçãoEstudantil.exception.ChangeNotMade;
+import AplicaçãoEstudantil.exception.DBUnavailable;
+import AplicaçãoEstudantil.exception.UserNotFoundException;
+import AplicaçãoEstudantil.exception.UserWithoutPermission;
+import framework.DAO.RecursoDAOMySQL;
 import framework.Domain.Gestor;
 import framework.Domain.Recurso;
-import View.RecursoView;
+import framework.Domain.RegraRecurso;
 
 import java.util.List;
 
-public class GerenciadorRecurso extends Gestor {
+public class GerenciadorRecurso {
+	private final RecursoDAOMySQL recursoDAO;
+	private final RegraRecurso adicaoRecurso;
+	private final GerenciadorGestor gestorService;
 
-	private RecursoView recursoView;
-
-	private Recurso recurso;
-
-	private RecursoDAO recursoDAO;
-
-	public void adicionarRecurso(Recurso novoRecurso) {
-
+	public GerenciadorRecurso(RecursoDAOMySQL recursoDAO, RegraRecurso adicaoRecurso, GerenciadorGestor gestorService) {
+		this.recursoDAO = recursoDAO;
+		this.adicaoRecurso = adicaoRecurso;
+		this.gestorService = gestorService;
 	}
 
-	public void removerRecurso(Recurso recursoRemovido) {
-
+	public void adicionarRecurso(Gestor autor, Recurso novoRecurso) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
+		gestorService.validarGestor(autor);
+		if(adicaoRecurso.verificarRecurso(novoRecurso)) {
+			recursoDAO.adicionarRecurso(novoRecurso);
+		}
 	}
 
-	public List listarRecursos() {
-		return null;
+	public void removerRecurso(Gestor autor, Recurso recursoRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+		gestorService.validarGestor(autor);
+		recursoDAO.removerRecurso(recursoRemovido);
 	}
 
-	public void alterarRecurso(Recurso recursoAlterado) {
-
+	public List<Recurso> listarRecursos() throws UserNotFoundException, DBUnavailable {
+		return recursoDAO.listarRecursos();
 	}
 
-	public Recurso buscarRecursoPorId(long idRecurso) {
-		return null;
+	public void alterarRecurso(Gestor autor, Recurso recursoAlterado) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+		gestorService.validarGestor(autor);
+		recursoDAO.alterarRecurso(recursoAlterado);
 	}
 
+	public Recurso buscarRecursoPorId(long idRecurso) throws UserNotFoundException, DBUnavailable {
+		return recursoDAO.buscarRecursoPorID(idRecurso);
+	}
 }
