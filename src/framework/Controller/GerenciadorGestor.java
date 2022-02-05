@@ -1,6 +1,6 @@
 package framework.Controller;
 
-import AplicaçãoEstudantil.exception.*;
+import AplicacaoEstudantil.exception.*;
 import framework.DAO.GestorDAOMySQL;
 import framework.Domain.Gestor;
 

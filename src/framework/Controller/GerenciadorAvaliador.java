@@ -1,37 +1,47 @@
 package framework.Controller;
 
+import AplicacaoEstudantil.exception.ChangeNotMade;
+import AplicacaoEstudantil.exception.DBUnavailable;
+import AplicacaoEstudantil.exception.UserNotFoundException;
+import AplicacaoEstudantil.exception.UserWithoutPermission;
+import framework.DAO.AvaliadorDAOMySQL;
 import framework.Domain.Gestor;
 import framework.Domain.Avaliador;
 import java.util.List;
 
 public class GerenciadorAvaliador {
+	private final AvaliadorDAOMySQL avaliadorDAO;
+	private final GerenciadorGestor gerenciadorGestor;
 
-	private AvaliadorDAO avaliadorDAO;
-
-	private Gestor gestor;
-
-	public void adicionarAvaliador(Avaliador novoAvaliador) {
-
+	public GerenciadorAvaliador(AvaliadorDAOMySQL avaliadorDAO, GerenciadorGestor gerenciadorGestor) {
+		this.avaliadorDAO = avaliadorDAO;
+		this.gerenciadorGestor = gerenciadorGestor;
 	}
 
-	public void removerAvaliador(Avaliador avaliadorRemovido) {
-
+	public void adicionarAvaliador(Gestor autor, Avaliador novoAvaliador) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+		gerenciadorGestor.validarGestor(autor);
+		avaliadorDAO.adicionarAvaliador(novoAvaliador);
 	}
 
-	public void alterarAvaliador(Avaliador avaliadorAlterado) {
+	public void removerAvaliador(Gestor autor, Avaliador avaliadorRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+		gerenciadorGestor.validarGestor(autor);
+		avaliadorDAO.removerAvaliador(avaliadorRemovido);
+	}
 
+	public void alterarAvaliador(Gestor autor, Avaliador avaliadorAlterado) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+		gerenciadorGestor.validarGestor(autor);
+		avaliadorDAO.alterarAvaliador(avaliadorAlterado);
 	}
 
 	public Avaliador buscarAvaliadorPorId(long idAvaliador) {
 		return null;
 	}
 
-	public List listarAvaliadores() {
-		return null;
+	public List<Avaliador> listarAvaliadores() throws UserNotFoundException, DBUnavailable {
+		return avaliadorDAO.listarAvaliadores();
 	}
 
 	public boolean validarAvaliador(Avaliador usuario) {
-		return false;
+		return usuario.validar();
 	}
-
 }

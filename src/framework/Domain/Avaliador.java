@@ -13,10 +13,7 @@ public abstract class Avaliador {
 		this.senha = senha;
 	}
 
-	public boolean validar() {
-		//TODO
-		return false;
-	}
+	public abstract boolean validar();
 
 	public long getId() {
 		return id;
@@ -32,9 +29,5 @@ public abstract class Avaliador {
 
 	public String getSenha() {
 		return senha;
-	}
-
-	protected void setId(long id) {
-		this.id = id;
 	}
 }

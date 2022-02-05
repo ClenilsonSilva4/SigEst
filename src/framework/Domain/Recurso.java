@@ -5,15 +5,13 @@ public abstract class Recurso {
 	private String nome;
 	private boolean estaAprovado;
 
-	public boolean validar() {
-		return false;
-	}
-
 	public Recurso(long id, String nome, boolean estaAprovado) {
 		this.id = id;
 		this.nome = nome;
 		this.estaAprovado = estaAprovado;
 	}
+
+	public abstract boolean validarRecurso();
 
 	public long getId() {
 		return id;

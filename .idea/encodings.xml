@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="Encoding">
-    <file url="file://$PROJECT_DIR$/src/AplicaçãoEstudantil/dao/AlunoDAOMySQL.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/src/AplicaçãoEstudantil/main/Main.java" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/src/AplicaçãoEstudantil/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/AplicaçãoEstudantil/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/src/AplicaçãoEstudantil/view/MainView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/dao/AlunoDAOMySQL.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/main/Main.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/view/MainView.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/framework/service/chat/cliente/Cliente.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/framework/service/chat/servidor/Manipulador.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/framework/service/chat/servidor/Servidor.java" charset="windows-1252" />
