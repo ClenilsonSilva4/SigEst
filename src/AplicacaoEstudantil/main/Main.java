@@ -33,12 +33,12 @@ public class Main {
 
         // Login do usuário
         while(true) {
-        	mv.header();
-        	mv.textCenter("LOGIN");
-        	mv.border();
+            mv.header();
+            mv.textCenter("LOGIN");
+            mv.border();
 
-        	email = mv.inputString("Digite seu e-mail: ");
-        	senha = mv.inputString("Digite sua senha: ");
+            email = mv.inputString("Digite seu e-mail: ");
+            senha = mv.inputString("Digite sua senha: ");
 
             try {
                 usuario = login.checarLogin(email, senha);
@@ -327,7 +327,7 @@ public class Main {
                 break;
             // Visao do usuario Gestor
             case 3:
-                Gestor gestor = (Gestor) usuario;
+                Gestor gestor = (Gestor) usuario;//new Gestor(445, "João", "teste", "123456");
 
                 while(menuPrincipal) {
                     mv.header();
@@ -369,8 +369,8 @@ public class Main {
                                             nome = mv.inputString("Digite o nome do estudante: ");
                                             email = mv.inputString("Digite o email do estudante: ");
                                             senha = mv.inputString("Digite a senha do estudante: ");
-                                            curso = mv.inputString("Digite a senha do estudante: ");
-                                            idade = Integer.parseInt(mv.inputString("Digite a senha do estudante: "));
+                                            curso = mv.inputString("Digite o curso do estudante: ");
+                                            idade = Integer.parseInt(mv.inputString("Digite a idade do estudante: "));
 
                                             try {
                                                 Aluno novoEstudante = new Aluno(214321, nome, curso, idade, email, senha);

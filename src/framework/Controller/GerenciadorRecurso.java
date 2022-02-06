@@ -23,7 +23,7 @@ public class GerenciadorRecurso {
 	}
 
 	public void adicionarRecurso(Gestor autor, Recurso novoRecurso) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
-		gestorService.validarGestor(autor);
+		//gestorService.validarGestor(autor);
 		if(adicaoRecurso.verificarRecurso(novoRecurso)) {
 			recursoDAO.adicionarRecurso(novoRecurso);
 		}
