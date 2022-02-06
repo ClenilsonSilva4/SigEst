@@ -5,11 +5,15 @@ import framework.Domain.Recurso;
 public class Aluno extends Recurso {
     private String curso;
     private int idade;
+    private String email;
+    private String senha;
 
-    public Aluno(long id, String nome, boolean estaAprovado, String curso, int idade) {
+    public Aluno(long id, String nome, boolean estaAprovado, String curso, int idade, String email, String senha) {
         super(id, nome, estaAprovado);
         this.curso = curso;
         this.idade = idade;
+        this.email = email;
+        this.senha = senha;
     }
 
     public String getCurso() {
@@ -31,5 +35,13 @@ public class Aluno extends Recurso {
     @Override
     public boolean validarRecurso() {
         return false;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getSenha() {
+        return senha;
     }
 }

@@ -1,27 +1,37 @@
 package AplicacaoEstudantil.main;
 
 import java.util.Scanner;
-import AplicacaoEstudantil.entities.Recurso;
+
+import AplicacaoEstudantil.dao.AlunoDAOMySQL;
+import AplicacaoEstudantil.dao.GestorDAOMySQL;
+import AplicacaoEstudantil.dao.ProfessorDAOMySQL;
+import AplicacaoEstudantil.domain.RegraAdicaoAluno;
+import AplicacaoEstudantil.entities.Aluno;
 import AplicacaoEstudantil.exception.*;
 import AplicacaoEstudantil.service.login.LoginService;
 import AplicacaoEstudantil.service.login.LoginServiceInterface;
-import AplicacaoEstudantil.service.usuario.estudante.EstudanteService;
-import AplicacaoEstudantil.service.usuario.estudante.EstudanteServiceInterface;
-import AplicacaoEstudantil.service.usuario.gestor.GestorService;
-import AplicacaoEstudantil.service.usuario.gestor.GestorServiceInterface;
-import AplicacaoEstudantil.service.usuario.professor.ProfessorService;
-import AplicacaoEstudantil.service.usuario.professor.ProfessorServiceInterface;
 import AplicacaoEstudantil.view.MainView;
+import framework.Controller.GerenciadorAvaliador;
+import framework.Controller.GerenciadorGestor;
+import framework.Controller.GerenciadorRecurso;
+import framework.Domain.AcompanhamentoRecurso;
+import framework.Domain.Avaliador;
+import framework.Domain.ConjuntoRecurso;
+import framework.Domain.Recurso;
 
 public class Main {
     public static void main(String[] args) {
         LoginServiceInterface login = new LoginService();
         MainView mv = new MainView();
+        GerenciadorGestor gerenciamentoGestor = new GerenciadorGestor(new GestorDAOMySQL());
+        GerenciadorRecurso gerenciamentoAluno = new GerenciadorRecurso(new AlunoDAOMySQL(), new RegraAdicaoAluno(), gerenciamentoGestor);
+        GerenciadorAvaliador gerenciamentoProfessor = new GerenciadorAvaliador(new ProfessorDAOMySQL(), gerenciamentoGestor);
+
         Scanner scanner = new Scanner(System.in);
-        Usuario usuario;
         String nome, email, senha;
         boolean menuPrincipal = true, menuSecundario = true;
         int tipoUsuario, opcaoPrincipal, opcaoSecundaria, capacidade;
+        Object usuario;
 
         // Login do usuário
         while(true) {
@@ -43,7 +53,7 @@ public class Main {
             }
         }
 
-        if(usuario instanceof Recurso) {
+        if(usuario instanceof Aluno) {
             tipoUsuario = 1;
         } else if (usuario instanceof Avaliador) {
             tipoUsuario = 2;
@@ -52,13 +62,12 @@ public class Main {
         }
         
         switch(tipoUsuario) {
+            Aluno estudante;
         	// Visao do usuario estudante
             case 1:
-            	EstudanteServiceInterface estudante = new EstudanteService();
-            	
                 while(menuPrincipal) {
                 	mv.header();
-                	mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
+                	mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
                 	mv.border();
                 	mv.text("1 - Consultar Estudante");
                 	mv.text("2 - Consultar Turma");
@@ -75,19 +84,20 @@ public class Main {
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                Recurso consultaRecurso = estudante.consultarEstudante(usuario.getIdUsuario());
+                                Aluno consultaRecurso = (Aluno) gerenciamentoAluno.buscarRecursoPorId(estudante.getId());
 
                                 mv.header();
-                                mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
                                 mv.border();
-                                mv.text("ID do Estudante: " + consultaRecurso.getIdUsuario());
-                                mv.text("Nome do Estudante: " + consultaRecurso.getNomeUsuario());
-                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmailUsuario());
+                                mv.text("ID do Estudante: " + consultaRecurso.getId());
+                                mv.text("Nome do Estudante: " + consultaRecurso.getNome());
+                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmail());
+                                mv.text("Curso do Estudante: " + consultaRecurso.getCurso());
                                 mv.borderln();
-                            } catch (DBUnavailable e) {
+                            } catch (DBUnavailable | UserNotFoundException e) {
                                 do {
                                     mv.header();
-                                    mv.textCenter("Bem-vindo(a) Estudante(a) | " + usuario.getNomeUsuario());
+                                    mv.textCenter("Bem-vindo(a) Estudante(a) | " + estudante.getNome());
                                     mv.border();
                                     mv.text(e.getMessage());
                                     mv.text("1 - Tentar Novamente");
@@ -111,7 +121,7 @@ public class Main {
                             } catch(UserNotFoundException | DBUnavailable e) {
                                 do {
                                     mv.header();
-                                    mv.textCenter("Bem-vindo(a) Estudante(a) | " + usuario.getNomeUsuario());
+                                    mv.textCenter("Bem-vindo(a) Estudante(a) | " + estudante.getNome());
                                     mv.border();
                                     mv.text(e.getMessage());
                                     mv.text("1 - Tentar Novamente");
@@ -136,7 +146,7 @@ public class Main {
                         	} catch (NullPointerException e) {
                                 do {
                                     mv.header();
-                                    mv.textCenter("Bem-vindo(a) Estudante(a) | " + usuario.getNomeUsuario());
+                                    mv.textCenter("Bem-vindo(a) Estudante(a) | " + estudante.getNome());
                                     mv.border();
                                     mv.text(e.getMessage());
                                     mv.text("1 - Tentar Novamente");

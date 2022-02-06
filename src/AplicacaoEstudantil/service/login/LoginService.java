@@ -1,27 +1,39 @@
 package AplicacaoEstudantil.service.login;
 
 import AplicacaoEstudantil.dao.AlunoDAOMySQL;
+import AplicacaoEstudantil.dao.GestorDAOMySQL;
+import AplicacaoEstudantil.dao.ProfessorDAOMySQL;
 import AplicacaoEstudantil.exception.DBUnavailable;
 import AplicacaoEstudantil.exception.InvalidData;
 import AplicacaoEstudantil.exception.UserNotFoundException;
-import framework.Domain.Gestor;
 
 public class LoginService implements LoginServiceInterface{
-    private final AlunoDAOMySQL usuarioBD;
+    private final GestorDAOMySQL gestorBD;
+    private final ProfessorDAOMySQL avaliadorBD;
+    private final AlunoDAOMySQL recursoBD;
 
     public LoginService() {
-        this.usuarioBD = new AlunoDAOMySQL();
+        gestorBD = new GestorDAOMySQL();
+        avaliadorBD = new ProfessorDAOMySQL();
+        recursoBD = new AlunoDAOMySQL();
     }
 
     @Override
-    public Gestor checarLogin(String email, String senha) throws UserNotFoundException, DBUnavailable, InvalidData {
-        /*if(email.length() < 11) {
-            throw new InvalidData("O e-mail inserido � muito curto");
+    public Object checarLogin(String email, String senha) throws DBUnavailable, InvalidData, UserNotFoundException {
+        if(email.length() < 11) {
+            throw new InvalidData("O e-mail inserido é muito curto");
         } else if(senha.length() < 6) {
-            throw new InvalidData("A senha precisa ter um tamanho m�nimo de 6 caracteres");
+            throw new InvalidData("A senha precisa ter um tamanho mínimo de 6 caracteres");
         }
 
-        return usuarioBD.consultarUsuario(email, senha);*/
-        return null;
+        try {
+            return recursoBD.checarAcesso(email, senha);
+        } catch (UserNotFoundException e) {
+            try {
+                return avaliadorBD.checarAcesso(email, senha);
+            } catch (UserNotFoundException ex) {
+                return gestorBD.checarAcesso(email, senha);
+            }
+        }
     }
 }

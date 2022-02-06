@@ -1,5 +1,6 @@
 package AplicacaoEstudantil.dao;
 
+import AplicacaoEstudantil.entities.Professor;
 import AplicacaoEstudantil.exception.ChangeNotMade;
 import AplicacaoEstudantil.exception.DBUnavailable;
 import AplicacaoEstudantil.exception.EmailAlreadyInUse;
@@ -122,6 +123,24 @@ public class GestorDAOMySQL implements framework.DAO.GestorDAOMySQL {
 
             if (resultadoConsulta.next()) {
                 throw new EmailAlreadyInUse("Esse email já pertence a um usuário cadastrado");
+            }
+            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
+        } catch (SQLException e) {
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+        }
+    }
+
+    public Gestor checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
+        try {
+            conexaoBD.conectar();
+            String sqlComando = "SELECT * FROM gestor WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
+                    " AND senhaUsuario = " + conexaoBD.stringBD(senha) + ");";
+
+            ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
+            if(resultadoConsulta.next()) {
+                return new Gestor(Long.getLong(resultadoConsulta.getString("id")),
+                        resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
+                        resultadoConsulta.getString("senha"));
             }
             throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {

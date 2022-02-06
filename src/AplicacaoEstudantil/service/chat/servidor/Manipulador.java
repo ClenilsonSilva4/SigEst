@@ -1,4 +1,4 @@
-package framework.service.chat.servidor;
+package AplicacaoEstudantil.service.chat.servidor;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import framework.service.chat.mensagem.Mensagem;
-import AplicaçãoEstudantil.main.dao.chat.MensagemDAOMySQL;
+import AplicacaoEstudantil.dao.chat.MensagemDAOMySQL;
 
 public class Manipulador {
     private int idRemetente;
@@ -22,14 +22,14 @@ public class Manipulador {
     private Map<Socket, String> connectedSockets = new HashMap <> ();
 
     public void AcceptConnection(ServerSocket serverSocket) throws IOException {
-        //Laço infinito para aceitar as conexões ao servidor e inicia uma thread com o cliente
+        //Laï¿½o infinito para aceitar as conexï¿½es ao servidor e inicia uma thread com o cliente
         while(true){
             final Socket activeSocket = serverSocket.accept();
-            System.out.println("Conexão recebida de " + activeSocket);
+            System.out.println("ConexÃ£o recebida de " + activeSocket);
 
             socketReader = new BufferedReader(new InputStreamReader(activeSocket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(activeSocket.getOutputStream()));
-            socketWriter.write("Conexão aceita");
+            socketWriter.write("ConexÃ£o aceita");
 
             Runnable runnable = () -> handleClientRequest(activeSocket);
             new Thread(runnable).start();
@@ -37,17 +37,17 @@ public class Manipulador {
         }
     }
 
-    //TODO Criar função para checar no BD os IDs dos receptores, caso seja um grupo,
-    // para enviar isso para a função que mandará as mensagens para eles.
+    //TODO Criar funï¿½ï¿½o para checar no BD os IDs dos receptores, caso seja um grupo,
+    // para enviar isso para a funï¿½ï¿½o que mandarï¿½ as mensagens para eles.
 
-    //TODO Criar função para checar mensagens recebidas pelo cliente quando estava offline
+    //TODO Criar funï¿½ï¿½o para checar mensagens recebidas pelo cliente quando estava offline
 
-    //Função para lidar com a conexão do cliente
+    //Funï¿½ï¿½o para lidar com a conexï¿½o do cliente
     private void handleClientRequest(Socket clientSocket){
         String inMsg, outMsg, identifier = clientSocket.getInetAddress().toString();
 
         try{
-            //Inicialização dos buffers de leitura e escrita para se comunicar com o cliente
+            //Inicializaï¿½ï¿½o dos buffers de leitura e escrita para se comunicar com o cliente
             socketReader = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
             socketWriter = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 
@@ -66,7 +66,7 @@ public class Manipulador {
             connectedSockets.put(clientSocket, identifier);
             System.out.println(identifier + " se conectou.");
 
-            //Laço para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
+            //Laï¿½o para ficar lendo as mensagens do cliente da thread e transmitir para os demais clientes conectados
             while(true){
                 inMsg = socketReader.readLine();
                 tempoLocal = new Date();
@@ -80,9 +80,9 @@ public class Manipulador {
                     socketWriter.write("\n");
                     socketWriter.flush();
 
-                    //Adicionar função para poder encerrar a conexão com o cliente.
+                    //Adicionar funï¿½ï¿½o para poder encerrar a conexï¿½o com o cliente.
                     if(inMsg.equalsIgnoreCase("sair")){
-                        System.out.println("Conexão encerrada pelo cliente");
+                        System.out.println("ConexÃ£o encerrada pelo cliente");
                         break;
                     }
 
@@ -98,7 +98,7 @@ public class Manipulador {
                         }
                     }
 
-                    //Salvar a mensagem no BD para os usuários receberem
+                    //Salvar a mensagem no BD para os usuï¿½rios receberem
                     //Message forwardMessage = new Message(idRemetente, inMsg, ft.format(tempoLocal), emailRemetente, idDestinario);
                 }
             }

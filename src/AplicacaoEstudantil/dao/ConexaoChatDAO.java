@@ -1,4 +1,4 @@
-package AplicacaoEstudantil.dao.conexao;
+package AplicacaoEstudantil.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

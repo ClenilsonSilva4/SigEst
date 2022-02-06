@@ -1,6 +1,6 @@
 package AplicacaoEstudantil.dao.chat;
 
-import AplicacaoEstudantil.dao.conexao.ConexaoChatDAO;
+import AplicacaoEstudantil.dao.ConexaoChatDAO;
 import framework.service.chat.mensagem.Mensagem;
 
 import java.sql.*;
