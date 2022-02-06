@@ -6,17 +6,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class ConexaoSistemaDAO {
-    protected Connection conexaoBD;
+    protected Connection conexao;
     protected Statement comandos;
 
     public void conectar() throws SQLException {
-        this.conexaoBD = DriverManager.getConnection(
+        this.conexao = DriverManager.getConnection(
                 "jdbc:mysql://localhost/sigest?useTimezone=true&serverTimezone=America/Fortaleza", "root", "root");
-        this.comandos = conexaoBD.createStatement();
+        this.comandos = conexao.createStatement();
     }
 
     protected void encerrarConexao() throws SQLException {
-        conexaoBD.close();
+        conexao.close();
         comandos.close();
     }
 

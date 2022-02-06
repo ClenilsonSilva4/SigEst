@@ -9,16 +9,16 @@ import java.util.List;
 
 public interface GestorDAOMySQL {
 
-	public void adicionarGestor(Gestor novoGestor) throws DBUnavailable, ChangeNotMade;
+	void adicionarGestor(Gestor novoGestor) throws DBUnavailable, ChangeNotMade;
 
-	public void removerGestor(Gestor gestorRemovido) throws ChangeNotMade, DBUnavailable;
+	void removerGestor(long gestorRemovido) throws ChangeNotMade, DBUnavailable;
 
-	public void alterarGestor(Gestor gestorAlterado) throws ChangeNotMade, DBUnavailable;
+	void alterarGestor(Gestor gestorAlterado) throws ChangeNotMade, DBUnavailable;
 
-	public Gestor buscarGestorPorID(long gestorID) throws UserNotFoundException, DBUnavailable;
+	Gestor buscarGestorPorID(long gestorID) throws UserNotFoundException, DBUnavailable;
 
-	public List<Gestor> listarGestores() throws DBUnavailable;
+	List<Gestor> listarGestores() throws DBUnavailable;
 
-	public void checarEmail(String emailGestor) throws EmailAlreadyInUse, UserNotFoundException, DBUnavailable;
+	void checarEmail(String emailGestor) throws EmailAlreadyInUse, UserNotFoundException, DBUnavailable;
 
 }

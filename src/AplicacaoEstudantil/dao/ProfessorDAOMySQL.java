@@ -44,10 +44,10 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public void removerAvaliador(Avaliador avaliadorRemovido) throws ChangeNotMade, DBUnavailable {
+    public void removerAvaliador(long avaliadorRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + avaliadorRemovido.getId() + ");";
+            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + avaliadorRemovido + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -99,7 +99,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public List<Avaliador> listarAvaliadores() throws DBUnavailable, UserNotFoundException {
+    public List<Avaliador> listarAvaliadores() throws DBUnavailable {
         try {
             conexaoBD.conectar();
             String sqlComando = "SELECT * FROM avaliador";

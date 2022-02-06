@@ -29,7 +29,7 @@ public class GerenciadorRecurso {
 		}
 	}
 
-	public void removerRecurso(Gestor autor, Recurso recursoRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+	public void removerRecurso(Gestor autor, long recursoRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
 		gestorService.validarGestor(autor);
 		recursoDAO.removerRecurso(recursoRemovido);
 	}

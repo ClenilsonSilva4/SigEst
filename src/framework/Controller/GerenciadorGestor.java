@@ -24,7 +24,16 @@ public class GerenciadorGestor {
 		}
 	}
 
-	public void removerGestor(Gestor autor, Gestor excluirGestor) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+	public void alterarGestor(Gestor autor, Gestor alterarGestor) throws UserWithoutPermission, DBUnavailable, ChangeNotMade, EmailAlreadyInUse {
+		validarGestor(autor);
+		try {
+			gestorDAO.checarEmail(alterarGestor.getEmail());
+		} catch (UserNotFoundException e) {
+			gestorDAO.alterarGestor(alterarGestor);
+		}
+	}
+
+	public void removerGestor(Gestor autor, long excluirGestor) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
 		validarGestor(autor);
 		gestorDAO.removerGestor(excluirGestor);
 	}
