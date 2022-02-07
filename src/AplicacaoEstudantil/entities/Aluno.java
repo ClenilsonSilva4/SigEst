@@ -5,8 +5,16 @@ import framework.Domain.Recurso;
 public class Aluno extends Recurso {
     private String curso;
     private int idade;
-    private String email;
-    private String senha;
+    private final String email;
+    private final String senha;
+
+    public Aluno(long id, String nome, String curso, int idade, String email, String senha) {
+        super(id, nome);
+        this.curso = curso;
+        this.idade = idade;
+        this.email = email;
+        this.senha = senha;
+    }
 
     public Aluno(long id, String nome, boolean estaAprovado, String curso, int idade, String email, String senha) {
         super(id, nome, estaAprovado);

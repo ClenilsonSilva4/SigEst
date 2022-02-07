@@ -41,10 +41,10 @@ public class GestorDAOMySQL implements framework.DAO.GestorDAOMySQL {
     }
 
     @Override
-    public void removerGestor(Gestor gestorRemovido) throws ChangeNotMade, DBUnavailable {
+    public void removerGestor(long gestorRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + gestorRemovido.getId() + ");";
+            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + gestorRemovido + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 

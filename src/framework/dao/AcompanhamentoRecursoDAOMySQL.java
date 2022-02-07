@@ -1,16 +1,18 @@
 package framework.DAO;
+import AplicacaoEstudantil.exception.ChangeNotMade;
+import AplicacaoEstudantil.exception.DBUnavailable;
 import framework.Domain.AcompanhamentoRecurso;
 
 import java.util.List;
 
 public interface AcompanhamentoRecursoDAOMySQL {
 
-	public void inserirAcompanhamentoRecurso(AcompanhamentoRecurso novoAcompanhamento);
+	void inserirAcompanhamentoRecurso(AcompanhamentoRecurso novoAcompanhamento) throws ChangeNotMade, DBUnavailable;
 
-	public void alterarAcompanhamentoRecurso(AcompanhamentoRecurso acompanhamentoAlterado);
+	void alterarAcompanhamentoRecurso(AcompanhamentoRecurso acompanhamentoAlterado) throws ChangeNotMade, DBUnavailable;
 
-	public void removerAcompanhamentoRecurso(AcompanhamentoRecurso acompanhamentoRemovido);
+	void removerAcompanhamentoRecurso(long acompanhamentoRemovido) throws ChangeNotMade, DBUnavailable;
 
-	public List consultarAcompanhamentosRecurso(long idRecurso);
+	List<AcompanhamentoRecurso> consultarAcompanhamentosRecurso(long idRecurso);
 
 }

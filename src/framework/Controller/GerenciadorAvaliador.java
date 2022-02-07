@@ -23,7 +23,7 @@ public class GerenciadorAvaliador {
 		avaliadorDAO.adicionarAvaliador(novoAvaliador);
 	}
 
-	public void removerAvaliador(Gestor autor, Avaliador avaliadorRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+	public void removerAvaliador(Gestor autor, long avaliadorRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
 		gerenciadorGestor.validarGestor(autor);
 		avaliadorDAO.removerAvaliador(avaliadorRemovido);
 	}
@@ -33,8 +33,8 @@ public class GerenciadorAvaliador {
 		avaliadorDAO.alterarAvaliador(avaliadorAlterado);
 	}
 
-	public Avaliador buscarAvaliadorPorId(long idAvaliador) {
-		return null;
+	public Avaliador buscarAvaliadorPorId(long idAvaliador) throws UserNotFoundException, DBUnavailable {
+		return avaliadorDAO.buscarAvaliadorPorID(idAvaliador);
 	}
 
 	public List<Avaliador> listarAvaliadores() throws UserNotFoundException, DBUnavailable {

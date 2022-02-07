@@ -7,6 +7,7 @@ import AplicacaoEstudantil.dao.GestorDAOMySQL;
 import AplicacaoEstudantil.dao.ProfessorDAOMySQL;
 import AplicacaoEstudantil.domain.RegraAdicaoAluno;
 import AplicacaoEstudantil.entities.Aluno;
+import AplicacaoEstudantil.entities.Professor;
 import AplicacaoEstudantil.exception.*;
 import AplicacaoEstudantil.service.login.LoginService;
 import AplicacaoEstudantil.service.login.LoginServiceInterface;
@@ -14,10 +15,7 @@ import AplicacaoEstudantil.view.MainView;
 import framework.Controller.GerenciadorAvaliador;
 import framework.Controller.GerenciadorGestor;
 import framework.Controller.GerenciadorRecurso;
-import framework.Domain.AcompanhamentoRecurso;
-import framework.Domain.Avaliador;
-import framework.Domain.ConjuntoRecurso;
-import framework.Domain.Recurso;
+import framework.Domain.*;
 
 public class Main {
     public static void main(String[] args) {
@@ -28,19 +26,19 @@ public class Main {
         GerenciadorAvaliador gerenciamentoProfessor = new GerenciadorAvaliador(new ProfessorDAOMySQL(), gerenciamentoGestor);
 
         Scanner scanner = new Scanner(System.in);
-        String nome, email, senha;
+        String nome, email, senha, curso, titularidade;
         boolean menuPrincipal = true, menuSecundario = true;
-        int tipoUsuario, opcaoPrincipal, opcaoSecundaria, capacidade;
+        int tipoUsuario, opcaoPrincipal, opcaoSecundaria, capacidade, idade;
         Object usuario;
 
         // Login do usuário
         while(true) {
-        	mv.header();
-        	mv.textCenter("LOGIN");
-        	mv.border();
+            mv.header();
+            mv.textCenter("LOGIN");
+            mv.border();
 
-        	email = mv.inputString("Digite seu e-mail: ");
-        	senha = mv.inputString("Digite sua senha: ");
+            email = mv.inputString("Digite seu e-mail: ");
+            senha = mv.inputString("Digite sua senha: ");
 
             try {
                 usuario = login.checarLogin(email, senha);
@@ -62,9 +60,9 @@ public class Main {
         }
         
         switch(tipoUsuario) {
-            Aluno estudante;
         	// Visao do usuario estudante
             case 1:
+                Aluno estudante = (Aluno) usuario;
                 while(menuPrincipal) {
                 	mv.header();
                 	mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
@@ -108,15 +106,15 @@ public class Main {
                             }
                             break;
                         case 2:
-                            try {
+                            /*try {
                             	ConjuntoRecurso consultaConjuntoRecurso = estudante.consultarTurma(1);
                             	
                             	mv.header();
-                                mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
                                 mv.border();
-                                mv.text("ID: " + consultaConjuntoRecurso.getIdTurma());
-                                mv.text("Nome da Turma:" + consultaConjuntoRecurso.getNomeDisciplina());
-                                mv.text("Capacidade de Estudantes: " + consultaConjuntoRecurso.getCapacidadeAlunos());
+                                mv.text("ID: " + consultaConjuntoRecurso.getIdConjunto());
+                                mv.text("Nome da Turma:" + consultaConjuntoRecurso.getNomeConjunto());
+                                mv.text("Capacidade de Estudantes: " + consultaConjuntoRecurso.getCapacidadeMaxima());
                                 mv.borderln();
                             } catch(UserNotFoundException | DBUnavailable e) {
                                 do {
@@ -129,11 +127,11 @@ public class Main {
                                     opcao = mv.inputOpcao();
                                     mv.borderln();
                                 } while (opcao != 2 && opcao != 1);
-                            }
+                            }*/
                             break;
                         case 3:
                         	try {
-	                            AcompanhamentoRecurso consultaAcompanhamentoRecurso = estudante.consultarPresenca(usuario.getIdUsuario());
+	                            /*AcompanhamentoRecurso consultaAcompanhamentoRecurso = estudante.consultarPresenca(usuario.getIdUsuario());
 	                            
 	                            mv.header();
                                 mv.textCenter("Bem-vindo(a) Estudante | " + usuario.getNomeUsuario());
@@ -141,7 +139,7 @@ public class Main {
 	                            mv.text("Data: " + consultaAcompanhamentoRecurso.getData());
 	                            mv.text("ID do Estudante: " + consultaAcompanhamentoRecurso.getIdAluno());
 	                            mv.text("ID da Turma: " + consultaAcompanhamentoRecurso.getIdTurma());
-	                            mv.text("ID do Professor: " + consultaAcompanhamentoRecurso.getIdProfessor());
+	                            mv.text("ID do Professor: " + consultaAcompanhamentoRecurso.getIdProfessor());*/
 	                            mv.borderln();
                         	} catch (NullPointerException e) {
                                 do {
@@ -175,11 +173,10 @@ public class Main {
                 break;
             // Visao do usuario Professor
             case 2:
-            	ProfessorServiceInterface professor = new ProfessorService();
-            	
+            	Professor professor = (Professor) usuario;
                 while(menuPrincipal) {
                 	mv.header();
-                	mv.textCenter("Bem-vindo(a) Professor | " + usuario.getNomeUsuario());
+                	mv.textCenter("Bem-vindo(a) Professor | " + professor.getNome());
                 	mv.border();
                 	mv.text("1 - Consultar Funcionario");
                 	mv.text("2 - Consultar Turma");
@@ -196,19 +193,19 @@ public class Main {
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                Avaliador consultaAvaliador = professor.consultarProfessor(usuario.getIdUsuario());
+                                Avaliador consultaAvaliador = gerenciamentoProfessor.buscarAvaliadorPorId(professor.getId());
 
                                 mv.header();
-                                mv.textCenter("Bem-Vindo(a) Professor | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-Vindo(a) Professor | " + professor.getNome());
                                 mv.border();
-                                mv.text("ID do Professor: " + consultaAvaliador.getIdUsuario());
-                                mv.text("Nome do Professor: " + consultaAvaliador.getNomeUsuario());
-                                mv.text("E-mail do Professor: " + consultaAvaliador.getEmailUsuario());
+                                mv.text("ID do Professor: " + consultaAvaliador.getId());
+                                mv.text("Nome do Professor: " + consultaAvaliador.getNome());
+                                mv.text("E-mail do Professor: " + consultaAvaliador.getEmail());
                                 mv.borderln();
                             } catch (DBUnavailable e) {
                             	do {
                                     mv.header();
-                                    mv.textCenter("Bem-vindo(a) Professor(a) | " + usuario.getNomeUsuario());
+                                    mv.textCenter("Bem-vindo(a) Professor(a) | " + professor.getNome());
                                     mv.border();
                                     mv.text(e.getMessage());
                                     mv.text("1 - Tentar Novamente");
@@ -222,7 +219,7 @@ public class Main {
                             }
                             break;
                         case 2:
-                            try {
+                            /*try {
                                 ConjuntoRecurso consultaConjuntoRecurso = professor.consultarTurma(1);
 
                                 mv.header();
@@ -234,12 +231,12 @@ public class Main {
                                 mv.borderln();
                             } catch(UserNotFoundException | DBUnavailable e) {
                                 mv.textBox(e.getMessage());
-                            }
+                            }*/
                             break;
                         case 3:
                             while(menuSecundario) {
                             	mv.header();
-                            	mv.textCenter("Bem-vindo(a) | " + usuario.getNomeUsuario());
+                            	mv.textCenter("Bem-vindo(a) | " + professor.getNome());
                             	mv.border();
                             	mv.text("1 - Inserir Presença");
                             	mv.text("2 - Consultar Presença");
@@ -276,7 +273,7 @@ public class Main {
                         case 4:
                             while(menuSecundario) {
                             	mv.header();
-                            	mv.textCenter("Bem-vindo(a) | " + usuario.getNomeUsuario());
+                            	mv.textCenter("Bem-vindo(a) | " + professor.getNome());
                             	mv.border();
                             	mv.text("1 - Criar Chat");
                             	mv.text("2 - Consultar Chat");
@@ -330,11 +327,11 @@ public class Main {
                 break;
             // Visao do usuario Gestor
             case 3:
-                GestorServiceInterface gestor = new GestorService();
+                Gestor gestor = (Gestor) usuario;//new Gestor(445, "João", "teste", "123456");
 
                 while(menuPrincipal) {
                     mv.header();
-                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                     mv.border();
                     mv.text("1 - Estudante");
                     mv.text("2 - Professor");
@@ -352,7 +349,7 @@ public class Main {
                         case 1: // Menu Secundario de estudante
                             while(menuSecundario) {
                                 mv.header();
-                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                 mv.border();
                                 mv.text("1 - Inserir Estudante");
                                 mv.text("2 - Consultar Estudante");
@@ -367,25 +364,29 @@ public class Main {
                                     case 1:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             nome = mv.inputString("Digite o nome do estudante: ");
                                             email = mv.inputString("Digite o email do estudante: ");
                                             senha = mv.inputString("Digite a senha do estudante: ");
+                                            curso = mv.inputString("Digite o curso do estudante: ");
+                                            idade = Integer.parseInt(mv.inputString("Digite a idade do estudante: "));
 
                                             try {
-                                                gestor.inserirEstudante(nome, email, senha);
+                                                Aluno novoEstudante = new Aluno(214321, nome, curso, idade, email, senha);
+
+                                                gerenciamentoAluno.adicionarRecurso(gestor, novoEstudante);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Estudante cadastrado com sucesso");
                                                 mv.borderln();
                                                 opcao = 2;
-                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -399,25 +400,25 @@ public class Main {
                                     case 2:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer consultar: "));
 
                                             try {
-                                                Recurso consultaRecurso = gestor.consultarEstudante(idEstudante);
+                                                Aluno consultaRecurso = (Aluno) gerenciamentoAluno.buscarRecursoPorId(idEstudante);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
-                                                mv.text("ID do Estudante: " + consultaRecurso.getIdUsuario());
-                                                mv.text("Nome do Estudante: " + consultaRecurso.getNomeUsuario());
-                                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmailUsuario());
+                                                mv.text("ID do Estudante: " + consultaRecurso.getId());
+                                                mv.text("Nome do Estudante: " + consultaRecurso.getNome());
+                                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmail());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -431,7 +432,7 @@ public class Main {
                                     case 3:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer alterar"));
                                             mv.border();
@@ -440,12 +441,16 @@ public class Main {
                                             nome = mv.inputString("Digite o novo nome do estudante: ");
                                             email = mv.inputString("Digite o novo email do estudante: ");
                                             senha = mv.inputString("Digite a nova senha do estudante: ");
+                                            curso = mv.inputString("Digite a senha do estudante: ");
+                                            idade = Integer.parseInt(mv.inputString("Digite a senha do estudante: "));
 
                                             try {
-                                                gestor.alterarEstudante(idEstudante, nome, email, senha, usuario.getIdUsuario());
+                                                Aluno novoEstudante = new Aluno(idEstudante, nome, curso, idade, email, senha);
+
+                                                gerenciamentoAluno.alterarRecurso(gestor, novoEstudante);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Estudante alterado com sucesso");
                                                 mv.borderln();
@@ -453,7 +458,7 @@ public class Main {
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -467,15 +472,15 @@ public class Main {
                                     case 4:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer remover: "));
 
                                             try {
-                                                gestor.removerEstudante(idEstudante, usuario.getIdUsuario());
+                                                gerenciamentoAluno.removerRecurso(gestor, idEstudante);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Estudante removido com sucesso");
                                                 mv.borderln();
@@ -483,7 +488,7 @@ public class Main {
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -510,7 +515,7 @@ public class Main {
                         case 2: // Menu Secundario de funcionario
                         	while(menuSecundario) {
                                 mv.header();
-                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                 mv.border();
                                 mv.text("1 - Inserir Funcionario");
                                 mv.text("2 - Consultar Funcionario");
@@ -525,25 +530,27 @@ public class Main {
                                     case 1:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             nome = mv.inputString("Digite o nome do funcionario: ");
                                             email = mv.inputString("Digite o email do funcionario: ");
                                             senha = mv.inputString("Digite a senha do funcionario: ");
+                                            titularidade = mv.inputString("Digite a titularidade do funcionario: ");
 
                                             try {
-                                                gestor.inserirProfessor(nome, email, senha);
+                                                Professor novoProfessor = new Professor(5166, nome, email, senha, titularidade);
+                                                gerenciamentoProfessor.adicionarAvaliador(gestor, novoProfessor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Professor cadastrado com sucesso");
                                                 mv.borderln();
                                                 opcao = 2;
-                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -557,25 +564,26 @@ public class Main {
                                     case 2:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer consultar"));
 
                                             try {
-                                                Avaliador consultaAvaliador = gestor.consultarProfessor(idProfessor);
+                                                Professor consultaAvaliador = (Professor) gerenciamentoProfessor.buscarAvaliadorPorId(idProfessor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
-                                                mv.text("ID do Professor: " + consultaAvaliador.getIdUsuario());
-                                                mv.text("Nome do Professor: " + consultaAvaliador.getNomeUsuario());
-                                                mv.text("E-mail do Professor: " + consultaAvaliador.getEmailUsuario());
+                                                mv.text("ID do Professor: " + consultaAvaliador.getId());
+                                                mv.text("Nome do Professor: " + consultaAvaliador.getNome());
+                                                mv.text("E-mail do Professor: " + consultaAvaliador.getEmail());
+                                                mv.text("Titularidade do Professor: " + consultaAvaliador.getTitularidade());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -589,7 +597,7 @@ public class Main {
                                     case 3:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer alterar"));
                                             mv.border();
@@ -598,12 +606,14 @@ public class Main {
                                             nome = mv.inputString("Digite o novo nome do funcionario: ");
                                             email = mv.inputString("Digite o novo email do funcionario: ");
                                             senha = mv.inputString("Digite a nova senha do funcionario: ");
+                                            titularidade = mv.inputString("Digite a titularidade do funcionario: ");
 
                                             try {
-                                                gestor.alterarProfessor(idProfessor, nome, email, senha, usuario.getIdUsuario());
+                                                Professor alterarProfessor = new Professor(idProfessor, nome, email, senha, titularidade);
+                                                gerenciamentoProfessor.alterarAvaliador(gestor, alterarProfessor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Professor alterado com sucesso");
                                                 mv.borderln();
@@ -611,7 +621,7 @@ public class Main {
                                             } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -625,15 +635,15 @@ public class Main {
                                     case 4:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer remover"));
 
                                             try {
-                                                gestor.removerProfessor(idProfessor, usuario.getIdUsuario());
+                                                gerenciamentoProfessor.removerAvaliador(gestor, idProfessor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Professor removido com sucesso");
                                                 mv.borderln();
@@ -641,7 +651,7 @@ public class Main {
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -668,7 +678,7 @@ public class Main {
                         case 3: // Menu Secundario de gestor
                         	while(menuSecundario) {
                                 mv.header();
-                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                 mv.border();
                                 mv.text("1 - Inserir Gestor");
                                 mv.text("2 - Consultar Gestor");
@@ -683,25 +693,26 @@ public class Main {
                                     case 1:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             nome = mv.inputString("Digite o nome do gestor: ");
                                             email = mv.inputString("Digite o email do gestor: ");
                                             senha = mv.inputString("Digite a senha do gestor: ");
 
                                             try {
-                                                gestor.inserirGestor(nome, email, senha);
+                                                Gestor novoGestor = new Gestor(4551, nome, email, senha);
+                                                gerenciamentoGestor.adicionarGestor(gestor, novoGestor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Gestor cadastrado com sucesso");
                                                 mv.borderln();
                                                 opcao = 2;
-                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade e) {
+                                            } catch (DBUnavailable | EmailAlreadyInUse | ChangeNotMade | UserWithoutPermission e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -715,25 +726,25 @@ public class Main {
                                     case 2:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer consultar"));
 
                                             try {
-                                                Gestor consultaGestor= gestor.consultarGestor(idGestor);
+                                                Gestor consultaGestor = gerenciamentoGestor.buscarGestorPorId(idGestor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
-                                                mv.text("ID do Gestor: " + consultaGestor.getIdUsuario());
-                                                mv.text("Nome do Gestor: " + consultaGestor.getNomeUsuario());
-                                                mv.text("E-mail do Gestor: " + consultaGestor.getEmailUsuario());
+                                                mv.text("ID do Gestor: " + consultaGestor.getId());
+                                                mv.text("Nome do Gestor: " + consultaGestor.getNome());
+                                                mv.text("E-mail do Gestor: " + consultaGestor.getEmail());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -747,7 +758,7 @@ public class Main {
                                     case 3:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer alterar"));
                                             mv.border();
@@ -758,18 +769,19 @@ public class Main {
                                             senha = mv.inputString("Digite a nova senha do gestor: ");
 
                                             try {
-                                                gestor.alterarGestor(idGestor, nome, email, senha, usuario.getIdUsuario());
+                                                Gestor alterarGestor = new Gestor(idGestor, nome, email, senha);
+                                                gerenciamentoGestor.alterarGestor(gestor, alterarGestor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Gestor alterado com sucesso");
                                                 mv.borderln();
                                                 opcao = 2;
-                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission e) {
+                                            } catch (DBUnavailable | ChangeNotMade | UserWithoutPermission | EmailAlreadyInUse e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -783,15 +795,15 @@ public class Main {
                                     case 4:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
-                                            int idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer remover"));
+                                            long idGestor = Integer.parseInt(mv.inputString("Digite o ID do gestor que quer remover"));
 
                                             try {
-                                                gestor.removerGestor(idGestor);
+                                                gerenciamentoGestor.removerGestor(gestor, idGestor);
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Gestor removido com sucesso");
                                                 mv.borderln();
@@ -799,7 +811,7 @@ public class Main {
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -824,9 +836,9 @@ public class Main {
                             menuSecundario = true;
                             break;
                         case 4: // Menu Secundario de turma
-                        	while(menuSecundario) {
+                        	/*while(menuSecundario) {
                                 mv.header();
-                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                 mv.border();
                                 mv.text("1 - Inserir Turma");
                                 mv.text("2 - Consultar Turma");
@@ -841,7 +853,7 @@ public class Main {
                                     case 1:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             nome = mv.inputString("Digite o nome da turma: ");
                                             capacidade = Integer.parseInt(mv.inputString("Digite a capacidade da turma: "));
@@ -939,7 +951,7 @@ public class Main {
                                     case 4:
                                         while (opcao == 1) {
                                             mv.header();
-                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                            mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                             mv.border();
                                             int idTurma = Integer.parseInt(mv.inputString("Digite o ID da turma que quer remover: "));
 
@@ -947,7 +959,7 @@ public class Main {
                                                 gestor.removerTurma(idTurma, usuario.getIdUsuario());
 
                                                 mv.header();
-                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                 mv.border();
                                                 mv.text("Turma removido com sucesso");
                                                 mv.borderln();
@@ -955,7 +967,7 @@ public class Main {
                                             } catch (DBUnavailable | UserWithoutPermission | ChangeNotMade e) {
                                                 do {
                                                     mv.header();
-                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + usuario.getNomeUsuario());
+                                                    mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
                                                     mv.border();
                                                     mv.text(e.getMessage());
                                                     mv.text("1 - Tentar Novamente");
@@ -977,7 +989,7 @@ public class Main {
                                         mv.text("Opção Inválida");
                                 }
                             }
-                            menuSecundario = true;
+                            menuSecundario = true;*/
                             break;
                         case 5: // Menu Secundario de mensagem
                             while(menuSecundario) {

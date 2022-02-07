@@ -42,10 +42,10 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
     }
 
     @Override
-    public void removerRecurso(Recurso recursoRemovido) throws ChangeNotMade, DBUnavailable {
+    public void removerRecurso(long recursoRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + recursoRemovido.getId() + ");";
+            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + recursoRemovido + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 

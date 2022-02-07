@@ -11,7 +11,7 @@ public interface AvaliadorDAOMySQL {
 
 	void adicionarAvaliador(Avaliador novoAvaliador) throws DBUnavailable, ChangeNotMade;
 
-	void removerAvaliador(Avaliador avaliadorRemovido) throws ChangeNotMade, DBUnavailable;
+	void removerAvaliador(long avaliadorRemovido) throws ChangeNotMade, DBUnavailable;
 
 	void alterarAvaliador(Avaliador avaliadorAlterado) throws ChangeNotMade, DBUnavailable;
 

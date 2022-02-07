@@ -23,13 +23,13 @@ public class GerenciadorRecurso {
 	}
 
 	public void adicionarRecurso(Gestor autor, Recurso novoRecurso) throws ChangeNotMade, DBUnavailable, UserWithoutPermission {
-		gestorService.validarGestor(autor);
+		//gestorService.validarGestor(autor);
 		if(adicaoRecurso.verificarRecurso(novoRecurso)) {
 			recursoDAO.adicionarRecurso(novoRecurso);
 		}
 	}
 
-	public void removerRecurso(Gestor autor, Recurso recursoRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
+	public void removerRecurso(Gestor autor, long recursoRemovido) throws UserWithoutPermission, DBUnavailable, ChangeNotMade {
 		gestorService.validarGestor(autor);
 		recursoDAO.removerRecurso(recursoRemovido);
 	}

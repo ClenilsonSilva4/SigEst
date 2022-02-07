@@ -1,16 +1,19 @@
 package framework.DAO;
 
+import AplicacaoEstudantil.exception.ChangeNotMade;
+import AplicacaoEstudantil.exception.DBUnavailable;
+import AplicacaoEstudantil.exception.UserNotFoundException;
 import framework.Domain.ConjuntoRecurso;
 import java.util.List;
 
 public interface ConjuntoRecursoDAOMySQL {
+	void adicionarConjuntoRecurso(ConjuntoRecurso novoConjunto) throws ChangeNotMade, DBUnavailable;
 
-	public void inserirAmbienteRecurso(int novoAmbiente);
+	void alterarConjuntoRecurso(ConjuntoRecurso ambienteAlterado) throws ChangeNotMade, DBUnavailable;
 
-	public void alterarAmbienteRecurso(ConjuntoRecurso ambienteAlterado);
+	void removerConjuntoRecurso(ConjuntoRecurso ambienteRemovido) throws ChangeNotMade, DBUnavailable;
 
-	public void removerAmbienteRecurso(ConjuntoRecurso ambienteRemovido);
+	List<ConjuntoRecurso> consultarConjuntosRecurso();
 
-	public List consultarAmbientesRecurso();
-
+	ConjuntoRecurso consultarConjuntoID(long idConjunto) throws UserNotFoundException, DBUnavailable;
 }
