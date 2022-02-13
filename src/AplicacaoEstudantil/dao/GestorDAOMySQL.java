@@ -1,10 +1,9 @@
 package AplicacaoEstudantil.dao;
 
-import AplicacaoEstudantil.entities.Professor;
-import AplicacaoEstudantil.exception.ChangeNotMade;
-import AplicacaoEstudantil.exception.DBUnavailable;
-import AplicacaoEstudantil.exception.EmailAlreadyInUse;
-import AplicacaoEstudantil.exception.UserNotFoundException;
+import exception.ChangeNotMade;
+import exception.DBUnavailable;
+import exception.EmailAlreadyInUse;
+import exception.UserNotFoundException;
 import framework.Domain.Gestor;
 
 import java.sql.ResultSet;

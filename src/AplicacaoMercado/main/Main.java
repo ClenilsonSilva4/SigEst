@@ -1,4 +1,4 @@
-package AplicacaoEstudantil.main;
+package AplicacaoMercado.main;
 
 import java.util.Scanner;
 

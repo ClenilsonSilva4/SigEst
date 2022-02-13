@@ -1,4 +1,4 @@
-package AplicacaoEstudantil.exception;
+package exception;
 
 public class UserNotFoundException extends Exception {
 

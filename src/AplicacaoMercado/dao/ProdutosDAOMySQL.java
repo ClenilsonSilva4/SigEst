@@ -1,6 +1,6 @@
-package AplicacaoEstudantil.dao;
+package AplicacaoMercado.dao;
 
-import AplicacaoEstudantil.entities.Aluno;
+import AplicacaoMercado.entities.Produtos;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
@@ -12,22 +12,22 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlunoDAOMySQL implements RecursoDAOMySQL {
+public class ProdutosDAOMySQL implements RecursoDAOMySQL {
     private final ConexaoSistemaDAO conexaoBD;
 
-    public AlunoDAOMySQL() {
+    public ProdutosDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();
     }
 
     @Override
     public void adicionarRecurso(Recurso novoRecurso) throws ChangeNotMade, DBUnavailable {
-        Aluno curso = (Aluno) novoRecurso;
+        Produtos novoProduto = (Produtos) novoRecurso;
         try {
             conexaoBD.conectar();
 
-            String sqlComando = "INSERT INTO usuario (nomeUsuario, curso, aprovacao, email, senha) VALUES (" +
-                    conexaoBD.stringBD(novoRecurso.getNome()) + ", " + conexaoBD.stringBD(curso.getCurso()) + ", "
-                    + novoRecurso.isEstaAprovado() + conexaoBD.stringBD(curso.getEmail()) + conexaoBD.stringBD(curso.getSenha()) + ");";
+            String sqlComando = "INSERT INTO produto (nomeUsuario, validade, aprovacao) VALUES (" +
+                    conexaoBD.stringBD(novoRecurso.getNome()) + ", " + conexaoBD.stringBD(novoProduto.getValidade()) + ", "
+                    + novoRecurso.isEstaAprovado() + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -45,7 +45,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
     public void removerRecurso(long recursoRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM usuario WHERE (idUsuario = " + recursoRemovido + ");";
+            String sqlComando = "DELETE FROM produto WHERE (idUsuario = " + recursoRemovido + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -61,16 +61,15 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
     public List<Recurso> listarRecursos() throws DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM recurso";
+            String sqlComando = "SELECT * FROM produto";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
             List<Recurso> todosAlunos = new ArrayList<>();
 
             while (resultadoConsulta.next()) {
-                todosAlunos.add(new Aluno(Long.getLong(resultadoConsulta.getString("id")),
+                todosAlunos.add(new Produtos(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
-                        resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")),
-                        resultadoConsulta.getString("email"), resultadoConsulta.getString("senha")));
+                        resultadoConsulta.getString("validade")));
             }
             return todosAlunos;
         } catch (SQLException e) {
@@ -80,13 +79,12 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
 
     @Override
     public void alterarRecurso(Recurso recursoAlterado) throws ChangeNotMade, DBUnavailable {
-        Aluno curso = (Aluno) recursoAlterado;
+        Produtos curso = (Produtos) recursoAlterado;
         try {
             conexaoBD.conectar();
-            String sqlComando = "UPDATE recurso SET nomeUsuario = " + conexaoBD.stringBD(recursoAlterado.getNome()) +
-                    ", curso = " + conexaoBD.stringBD(curso.getCurso()) + ", idade = " + curso.getIdade() +
-                    ", email = " + conexaoBD.stringBD(curso.getEmail()) + ", senha = " + conexaoBD.stringBD(curso.getSenha())
-                    + ", aprovacao = " +   recursoAlterado.isEstaAprovado() + " WHERE idUsuario = " + recursoAlterado.getId() + ";";
+            String sqlComando = "UPDATE produto SET nomeUsuario = " + conexaoBD.stringBD(recursoAlterado.getNome()) +
+                    ", curso = " + conexaoBD.stringBD(curso.getValidade()) +   recursoAlterado.isEstaAprovado() +
+                    " WHERE idUsuario = " + recursoAlterado.getId() + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -102,34 +100,14 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
     public Recurso buscarRecursoPorID(long recursoID) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM recurso WHERE id = " + recursoID + ";";
+            String sqlComando = "SELECT * FROM produto WHERE id = " + recursoID + ";";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
 
             if (resultadoConsulta.next()) {
-                return new Aluno(Long.getLong(resultadoConsulta.getString("id")),
+                return new Produtos(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
-                        resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")),
-                        resultadoConsulta.getString("email"), resultadoConsulta.getString("senha"));
-            }
-            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
-        } catch (SQLException e) {
-            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
-        }
-    }
-
-    public Aluno checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
-        try {
-            conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM recurso WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
-                    " AND senhaUsuario = " + conexaoBD.stringBD(senha) + ");";
-
-            ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
-            if(resultadoConsulta.next()) {
-                return new Aluno(Long.getLong(resultadoConsulta.getString("id")),
-                        resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
-                        resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")),
-                        resultadoConsulta.getString("email"), resultadoConsulta.getString("senha"));
+                        resultadoConsulta.getString("validade"));
             }
             throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {

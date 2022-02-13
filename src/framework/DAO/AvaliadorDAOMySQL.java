@@ -1,8 +1,8 @@
 package framework.DAO;
 
-import AplicacaoEstudantil.exception.ChangeNotMade;
-import AplicacaoEstudantil.exception.DBUnavailable;
-import AplicacaoEstudantil.exception.UserNotFoundException;
+import exception.ChangeNotMade;
+import exception.DBUnavailable;
+import exception.UserNotFoundException;
 import framework.Domain.Avaliador;
 
 import java.util.List;

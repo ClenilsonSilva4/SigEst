@@ -1,9 +1,9 @@
 package framework.DAO;
 
-import AplicacaoEstudantil.exception.ChangeNotMade;
-import AplicacaoEstudantil.exception.DBUnavailable;
-import AplicacaoEstudantil.exception.EmailAlreadyInUse;
-import AplicacaoEstudantil.exception.UserNotFoundException;
+import exception.ChangeNotMade;
+import exception.DBUnavailable;
+import exception.EmailAlreadyInUse;
+import exception.UserNotFoundException;
 import framework.Domain.Gestor;
 import java.util.List;
 

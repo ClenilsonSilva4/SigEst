@@ -1,5 +1,6 @@
-package AplicacaoEstudantil.dao;
+package AplicacaoMercado.dao;
 
+import AplicacaoEstudantil.dao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import framework.DAO.AcompanhamentoRecursoDAOMySQL;
@@ -9,7 +10,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class PresencaDAOMySQL implements AcompanhamentoRecursoDAOMySQL {
-    private final ConexaoSistemaDAO conexaoBD;
+    private final AplicacaoEstudantil.dao.ConexaoSistemaDAO conexaoBD;
 
     public PresencaDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();

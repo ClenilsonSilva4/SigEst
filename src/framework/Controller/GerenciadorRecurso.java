@@ -1,9 +1,9 @@
 package framework.Controller;
 
-import AplicacaoEstudantil.exception.ChangeNotMade;
-import AplicacaoEstudantil.exception.DBUnavailable;
-import AplicacaoEstudantil.exception.UserNotFoundException;
-import AplicacaoEstudantil.exception.UserWithoutPermission;
+import exception.ChangeNotMade;
+import exception.DBUnavailable;
+import exception.UserNotFoundException;
+import exception.UserWithoutPermission;
 import framework.DAO.RecursoDAOMySQL;
 import framework.Domain.Gestor;
 import framework.Domain.Recurso;

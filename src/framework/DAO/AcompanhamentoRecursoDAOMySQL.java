@@ -1,6 +1,6 @@
 package framework.DAO;
-import AplicacaoEstudantil.exception.ChangeNotMade;
-import AplicacaoEstudantil.exception.DBUnavailable;
+import exception.ChangeNotMade;
+import exception.DBUnavailable;
 import framework.Domain.AcompanhamentoRecurso;
 
 import java.util.List;

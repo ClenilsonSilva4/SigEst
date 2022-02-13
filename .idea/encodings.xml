@@ -6,6 +6,9 @@
     <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/AplicacaoEstudantil/view/MainView.java" charset="ISO-8859-1" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoMercado/dao/ProdutosDAOMySQL.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoMercado/main/Main.java" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/AplicacaoMercado/view/MainView.java" charset="ISO-8859-1" />
     <file url="file://$PROJECT_DIR$/src/framework/service/chat/cliente/Cliente.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/framework/service/chat/servidor/Manipulador.java" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/framework/service/chat/servidor/Servidor.java" charset="windows-1252" />

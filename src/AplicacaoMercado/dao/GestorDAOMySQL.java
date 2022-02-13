@@ -1,34 +1,32 @@
-package AplicacaoEstudantil.dao;
+package AplicacaoMercado.dao;
 
-import AplicacaoEstudantil.entities.Professor;
+import AplicacaoEstudantil.dao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
+import exception.EmailAlreadyInUse;
 import exception.UserNotFoundException;
-import framework.DAO.AvaliadorDAOMySQL;
-import framework.Domain.Avaliador;
+import framework.Domain.Gestor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
-    private final ConexaoSistemaDAO conexaoBD;
+public class GestorDAOMySQL implements framework.DAO.GestorDAOMySQL {
+    private final AplicacaoEstudantil.dao.ConexaoSistemaDAO conexaoBD;
 
-    public ProfessorDAOMySQL() {
+    public GestorDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();
     }
 
     @Override
-    public void adicionarAvaliador(Avaliador novoAvaliador) throws DBUnavailable, ChangeNotMade {
-        Professor titularidade = (Professor) novoAvaliador;
+    public void adicionarGestor(Gestor novoGestor) throws DBUnavailable, ChangeNotMade {
         try {
             conexaoBD.conectar();
 
-            String sqlComando = "INSERT INTO avaliador (emailUsuario, nomeUsuario, senhaUsuario, titularidade) VALUES (" +
-                    conexaoBD.stringBD(novoAvaliador.getEmail()) + ", " + conexaoBD.stringBD(novoAvaliador.getNome()) +
-                    ", " + conexaoBD.stringBD(novoAvaliador.getSenha()) +
-                    ", " + conexaoBD.stringBD(titularidade.getTitularidade()) + ";";
+            String sqlComando = "INSERT INTO usuario (emailUsuario, nomeUsuario, senhaUsuario) VALUES (" +
+                    conexaoBD.stringBD(novoGestor.getEmail()) + ", " + conexaoBD.stringBD(novoGestor.getEmail()) +
+                    ", " + conexaoBD.stringBD(novoGestor.getSenha()) + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -43,10 +41,10 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public void removerAvaliador(long avaliadorRemovido) throws ChangeNotMade, DBUnavailable {
+    public void removerGestor(long gestorRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + avaliadorRemovido + ");";
+            String sqlComando = "DELETE FROM avaliador WHERE (idUsuario = " + gestorRemovido + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -59,14 +57,12 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public void alterarAvaliador(Avaliador avaliadorAlterado) throws ChangeNotMade, DBUnavailable {
-        Professor titularidade = (Professor) avaliadorAlterado;
+    public void alterarGestor(Gestor gestorAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "UPDATE avaliador SET nomeUsuario = " + conexaoBD.stringBD(avaliadorAlterado.getNome()) +
-                    ", emailUsuario = " + conexaoBD.stringBD(avaliadorAlterado.getEmail()) + ", senhaUsuario = " +
-                    conexaoBD.stringBD(avaliadorAlterado.getSenha()) + ", titularidade = " + conexaoBD.stringBD(titularidade.getTitularidade())
-                    + " WHERE idUsuario = " + avaliadorAlterado.getId() + ";";
+            String sqlComando = "UPDATE gestor SET nomeUsuario = " + conexaoBD.stringBD(gestorAlterado.getNome()) +
+                    ", emailUsuario = " + conexaoBD.stringBD(gestorAlterado.getEmail()) + ", senhaUsuario = " +
+                    conexaoBD.stringBD(gestorAlterado.getSenha()) + " WHERE idUsuario = " + gestorAlterado.getId() + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -79,17 +75,17 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public Professor buscarAvaliadorPorID(long idAvaliador) throws UserNotFoundException, DBUnavailable {
+    public Gestor buscarGestorPorID(long gestorID) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM avaliador WHERE id = " + idAvaliador + ";";
+            String sqlComando = "SELECT * FROM gestor WHERE id = " + gestorID + ";";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
 
             if (resultadoConsulta.next()) {
-                return new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                return new Gestor(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
-                        resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade"));
+                        resultadoConsulta.getString("senha"));
             }
             throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {
@@ -98,36 +94,53 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public List<Avaliador> listarAvaliadores() throws DBUnavailable {
+    public List<Gestor> listarGestores() throws DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM avaliador";
+            String sqlComando = "SELECT * FROM gestor";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
-            List<Avaliador> todosAvaliadores = new ArrayList<>();
+            List<Gestor> todosGestores = new ArrayList<>();
 
             while (resultadoConsulta.next()) {
-                todosAvaliadores.add(new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                todosGestores.add(new Gestor(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
-                        resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade")));
+                        resultadoConsulta.getString("senha")));
             }
-            return todosAvaliadores;
+
+            return todosGestores;
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
     }
 
-    public Professor checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
+    public void checarEmail(String emailGestor) throws EmailAlreadyInUse, UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM avaliador WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
+            String sqlComando = "SELECT * FROM gestor WHERE email = " + emailGestor + ";";
+
+            ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
+
+            if (resultadoConsulta.next()) {
+                throw new EmailAlreadyInUse("Esse email já pertence a um usuário cadastrado");
+            }
+            throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
+        } catch (SQLException e) {
+            throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
+        }
+    }
+
+    public Gestor checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
+        try {
+            conexaoBD.conectar();
+            String sqlComando = "SELECT * FROM gestor WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
                     " AND senhaUsuario = " + conexaoBD.stringBD(senha) + ");";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
             if(resultadoConsulta.next()) {
-                return new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                return new Gestor(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
-                        resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade"));
+                        resultadoConsulta.getString("senha"));
             }
             throw new UserNotFoundException("Os dados inseridos não pertence a um usuario válido");
         } catch (SQLException e) {

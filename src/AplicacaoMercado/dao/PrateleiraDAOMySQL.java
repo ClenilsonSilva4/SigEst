@@ -1,4 +1,5 @@
-package AplicacaoEstudantil.dao;
+package AplicacaoMercado.dao;
+
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
@@ -10,26 +11,26 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
+public class PrateleiraDAOMySQL implements ConjuntoRecursoDAOMySQL {
     private final ConexaoSistemaDAO conexaoBD;
 
-    public TurmaDAOMySQL() {
+    public PrateleiraDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();
     }
 
-    private List<Long> consultarIDProfessores(long idTurma) throws DBUnavailable {
+    private List<Long> consultarIDEstocadores(long idPrateleira) throws DBUnavailable {
         try {
             if(conexaoBD.conexao.isClosed()) {
                 conexaoBD.conectar();
             }
 
-            String sqlComando = "SELECT * FROM professores WHERE (idTurma = " + idTurma + ");";
+            String sqlComando = "SELECT * FROM estocadores WHERE (idPrateleira = " + idPrateleira + ");";
 
-            ResultSet resultadoProfessores = conexaoBD.comandos.executeQuery(sqlComando);
+            ResultSet resultadoEstocadores = conexaoBD.comandos.executeQuery(sqlComando);
             List<Long> idProfessores = new ArrayList<>();
 
-            while(resultadoProfessores.next()) {
-                idProfessores.add(Long.getLong(resultadoProfessores.getString("idProfessor")));
+            while(resultadoEstocadores.next()) {
+                idProfessores.add(Long.getLong(resultadoEstocadores.getString("idEstocador")));
             }
 
             return idProfessores;
@@ -38,22 +39,22 @@ public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
         }
     }
 
-    private List<Long> consultarIDAlunos(long idTurma) throws DBUnavailable {
+    private List<Long> consultarIDProdutos(long idPrateleira) throws DBUnavailable {
         try {
             if(conexaoBD.conexao.isClosed()) {
                 conexaoBD.conectar();
             }
 
-            String sqlComando = "SELECT * FROM alunos WHERE (idTurma = " + idTurma + ");";
+            String sqlComando = "SELECT * FROM produtos WHERE (idPrateleira = " + idPrateleira + ");";
 
-            ResultSet resultadoAlunos = conexaoBD.comandos.executeQuery(sqlComando);
-            List<Long> idAlunos = new ArrayList<>();
+            ResultSet resultadoProdutos = conexaoBD.comandos.executeQuery(sqlComando);
+            List<Long> idProdutos = new ArrayList<>();
 
-            while(resultadoAlunos.next()) {
-                idAlunos.add(Long.getLong(resultadoAlunos.getString("idAluno")));
+            while(resultadoProdutos.next()) {
+                idProdutos.add(Long.getLong(resultadoProdutos.getString("idAluno")));
             }
 
-            return idAlunos;
+            return idProdutos;
         } catch (SQLException e) {
             throw new DBUnavailable("Houve um erro de comunicação com o banco de dados");
         }
@@ -64,7 +65,7 @@ public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
         try {
             conexaoBD.conectar();
 
-            String sqlComando = "INSERT INTO turma (nomeDisciplina, capacidadeAlunos) VALUES (" +
+            String sqlComando = "INSERT INTO prateleira (nome, capacidade) VALUES (" +
                     conexaoBD.stringBD(novoConjunto.getNomeConjunto()) + ", " + novoConjunto.getCapacidadeMaxima() + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
@@ -83,8 +84,8 @@ public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
     public void alterarConjuntoRecurso(ConjuntoRecurso ambienteAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "UPDATE turma SET nomeDisciplina = " + conexaoBD.stringBD(ambienteAlterado.getNomeConjunto()) +
-                    ", capacidadeAlunos = " + ambienteAlterado.getCapacidadeMaxima() + " WHERE idTurma = " +
+            String sqlComando = "UPDATE prateleira SET nome = " + conexaoBD.stringBD(ambienteAlterado.getNomeConjunto()) +
+                    ", capacidadeProdutos = " + ambienteAlterado.getCapacidadeMaxima() + " WHERE idTurma = " +
                     ambienteAlterado.getIdConjunto() + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
@@ -101,7 +102,7 @@ public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
     public void removerConjuntoRecurso(ConjuntoRecurso ambienteRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM turma WHERE (idTurma = " + ambienteRemovido.getIdConjunto() + ");";
+            String sqlComando = "DELETE FROM prateleira WHERE (idPrateleira = " + ambienteRemovido.getIdConjunto() + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -122,7 +123,7 @@ public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
     public ConjuntoRecurso consultarConjuntoID(long idConjunto) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM turma WHERE (idTurma = " + idConjunto + ");";
+            String sqlComando = "SELECT * FROM prateleira WHERE (idPrateleira = " + idConjunto + ");";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
 
@@ -131,13 +132,13 @@ public class TurmaDAOMySQL implements ConjuntoRecursoDAOMySQL {
                         resultadoConsulta.getString("nomeDisciplina"),
                         Integer.parseInt(resultadoConsulta.getString("capacidadeAlunos")));
 
-                List<Long> idProfessores = consultarIDProfessores(idConjunto);
+                List<Long> idProfessores = consultarIDEstocadores(idConjunto);
 
                 if(!idProfessores.isEmpty()) {
                     consultarConjuntoRecurso.setAvaliadoresConjunto(idProfessores);
                 }
 
-                List<Long> idAlunos = consultarIDAlunos(idConjunto);
+                List<Long> idAlunos = consultarIDProdutos(idConjunto);
 
                 while(!idAlunos.isEmpty()) {
                     consultarConjuntoRecurso.setRecursosConjunto(idAlunos);

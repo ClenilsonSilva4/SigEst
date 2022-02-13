@@ -1,4 +1,4 @@
-package AplicacaoEstudantil.service.login;
+package AplicacaoMercado.service.login;
 
 import exception.DBUnavailable;
 import exception.InvalidData;
