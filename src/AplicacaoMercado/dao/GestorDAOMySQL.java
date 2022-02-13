@@ -1,6 +1,5 @@
 package AplicacaoMercado.dao;
 
-import AplicacaoEstudantil.dao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.EmailAlreadyInUse;
@@ -13,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GestorDAOMySQL implements framework.DAO.GestorDAOMySQL {
-    private final AplicacaoEstudantil.dao.ConexaoSistemaDAO conexaoBD;
+    private final ConexaoSistemaDAO conexaoBD;
 
     public GestorDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();

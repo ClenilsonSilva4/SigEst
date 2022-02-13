@@ -1,6 +1,5 @@
 package AplicacaoMercado.dao;
 
-import AplicacaoEstudantil.dao.ConexaoSistemaDAO;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import framework.DAO.AcompanhamentoRecursoDAOMySQL;
@@ -9,10 +8,10 @@ import framework.Domain.AcompanhamentoRecurso;
 import java.sql.SQLException;
 import java.util.List;
 
-public class PresencaDAOMySQL implements AcompanhamentoRecursoDAOMySQL {
-    private final AplicacaoEstudantil.dao.ConexaoSistemaDAO conexaoBD;
+public class ChecagemDAOMySQL implements AcompanhamentoRecursoDAOMySQL {
+    private final ConexaoSistemaDAO conexaoBD;
 
-    public PresencaDAOMySQL() {
+    public ChecagemDAOMySQL() {
         this.conexaoBD = new ConexaoSistemaDAO();
     }
 
@@ -21,7 +20,7 @@ public class PresencaDAOMySQL implements AcompanhamentoRecursoDAOMySQL {
         try {
             conexaoBD.conectar();
 
-            String sqlComando = "INSERT INTO presenca (idProfessor, idAluno, dataPresenca, estavaPresente) VALUES (" +
+            String sqlComando = "INSERT INTO checagem (idEstocador, idProduto, dataPresenca, checagem) VALUES (" +
                    novoAcompanhamento.getIdAvaliador() + ", " + novoAcompanhamento.getIdRecurso() +
                     conexaoBD.stringBD(novoAcompanhamento.getDataAcompanhamento()) + ", " + novoAcompanhamento.isAcompanhamento() + ");";
 
@@ -41,10 +40,10 @@ public class PresencaDAOMySQL implements AcompanhamentoRecursoDAOMySQL {
     public void alterarAcompanhamentoRecurso(AcompanhamentoRecurso acompanhamentoAlterado) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "UPDATE presenca SET idProfessor = " + acompanhamentoAlterado.getIdAvaliador() +
-                    ", idAluno = " + acompanhamentoAlterado.getIdRecurso() + ", dataPresenca = " +
-                    conexaoBD.stringBD(acompanhamentoAlterado.getDataAcompanhamento()) + ", estavaPresente = " +
-                    acompanhamentoAlterado.isAcompanhamento() + " WHERE idPresenca = " + acompanhamentoAlterado.getId() + ";";
+            String sqlComando = "UPDATE presenca SET idEstocador = " + acompanhamentoAlterado.getIdAvaliador() +
+                    ", idProduto = " + acompanhamentoAlterado.getIdRecurso() + ", dataPresenca = " +
+                    conexaoBD.stringBD(acompanhamentoAlterado.getDataAcompanhamento()) + ", checagem = " +
+                    acompanhamentoAlterado.isAcompanhamento() + " WHERE idChecagem = " + acompanhamentoAlterado.getId() + ";";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
@@ -60,7 +59,7 @@ public class PresencaDAOMySQL implements AcompanhamentoRecursoDAOMySQL {
     public void removerAcompanhamentoRecurso(long acompanhamentoRemovido) throws ChangeNotMade, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "DELETE FROM presenca WHERE (idPresenca = " + acompanhamentoRemovido + ");";
+            String sqlComando = "DELETE FROM checagem WHERE (idChecagem = " + acompanhamentoRemovido + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
 
