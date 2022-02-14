@@ -1,6 +1,6 @@
 package AplicacaoEstudantil.entities;
 
-import framework.Domain.Avaliador;
+import framework.domain.Avaliador;
 
 public class Professor extends Avaliador {
     private String titularidade;

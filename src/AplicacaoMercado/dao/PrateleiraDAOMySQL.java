@@ -3,8 +3,8 @@ package AplicacaoMercado.dao;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import framework.DAO.ConjuntoRecursoDAOMySQL;
-import framework.Domain.ConjuntoRecurso;
+import framework.dao.ConjuntoRecursoDAOMySQL;
+import framework.domain.ConjuntoRecurso;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

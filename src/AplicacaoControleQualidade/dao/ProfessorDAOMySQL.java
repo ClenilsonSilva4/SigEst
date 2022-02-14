@@ -1,11 +1,11 @@
 package AplicacaoControleQualidade.dao;
 
-import AplicacaoControleQualidade.entities.Professor;
+import AplicacaoControleQualidade.entities.Empregado;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import framework.DAO.AvaliadorDAOMySQL;
-import framework.Domain.Avaliador;
+import framework.dao.AvaliadorDAOMySQL;
+import framework.domain.Avaliador;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
 
     @Override
     public void adicionarAvaliador(Avaliador novoAvaliador) throws DBUnavailable, ChangeNotMade {
-        Professor titularidade = (Professor) novoAvaliador;
+        Empregado titularidade = (Empregado) novoAvaliador;
         try {
             conexaoBD.conectar();
 
@@ -60,7 +60,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
 
     @Override
     public void alterarAvaliador(Avaliador avaliadorAlterado) throws ChangeNotMade, DBUnavailable {
-        Professor titularidade = (Professor) avaliadorAlterado;
+        Empregado titularidade = (Empregado) avaliadorAlterado;
         try {
             conexaoBD.conectar();
             String sqlComando = "UPDATE avaliador SET nomeUsuario = " + conexaoBD.stringBD(avaliadorAlterado.getNome()) +
@@ -79,7 +79,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     }
 
     @Override
-    public Professor buscarAvaliadorPorID(long idAvaliador) throws UserNotFoundException, DBUnavailable {
+    public Empregado buscarAvaliadorPorID(long idAvaliador) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
             String sqlComando = "SELECT * FROM avaliador WHERE id = " + idAvaliador + ";";
@@ -87,7 +87,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
 
             if (resultadoConsulta.next()) {
-                return new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                return new Empregado(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
                         resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade"));
             }
@@ -107,7 +107,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
             List<Avaliador> todosAvaliadores = new ArrayList<>();
 
             while (resultadoConsulta.next()) {
-                todosAvaliadores.add(new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                todosAvaliadores.add(new Empregado(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
                         resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade")));
             }
@@ -117,7 +117,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
         }
     }
 
-    public Professor checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
+    public Empregado checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
             String sqlComando = "SELECT * FROM avaliador WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
@@ -125,7 +125,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
             if(resultadoConsulta.next()) {
-                return new Professor(Long.getLong(resultadoConsulta.getString("id")),
+                return new Empregado(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), resultadoConsulta.getString("email"),
                         resultadoConsulta.getString("senha"), resultadoConsulta.getString("titularidade"));
             }

@@ -2,8 +2,8 @@ package AplicacaoControleQualidade.dao;
 
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
-import framework.DAO.AcompanhamentoRecursoDAOMySQL;
-import framework.Domain.AcompanhamentoRecurso;
+import framework.dao.AcompanhamentoRecursoDAOMySQL;
+import framework.domain.AcompanhamentoRecurso;
 
 import java.sql.SQLException;
 import java.util.List;

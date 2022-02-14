@@ -1,4 +1,4 @@
-package AplicacaoAplicacaoControleQualidade.view;
+package AplicacaoControleQualidade.view;
 
 import java.util.Scanner;
 

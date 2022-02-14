@@ -1,4 +1,4 @@
-package AplicacaoAplicacaoControleQualidade.service.chat.servidor;
+package AplicacaoControleQualidade.service.chat.servidor;
 
 import java.net.InetAddress;
 import java.net.NetworkInterface;

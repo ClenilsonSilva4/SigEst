@@ -5,8 +5,8 @@ import AplicacaoMercado.entities.Estocador;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import framework.DAO.AvaliadorDAOMySQL;
-import framework.Domain.Avaliador;
+import framework.dao.AvaliadorDAOMySQL;
+import framework.domain.Avaliador;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

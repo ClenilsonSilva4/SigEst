@@ -1,4 +1,4 @@
-package AplicacaoAplicacaoControleQualidade.service.chat.mensagem;
+package AplicacaoControleQualidade.service.chat.mensagem;
 
 public class Mensagem {
     private final int idDestinatario;

@@ -12,10 +12,10 @@ import AplicacaoMercado.service.login.LoginService;
 import AplicacaoMercado.service.login.LoginServiceInterface;
 import AplicacaoMercado.view.MainView;
 import exception.*;
-import framework.Controller.GerenciadorAvaliador;
-import framework.Controller.GerenciadorGestor;
-import framework.Controller.GerenciadorRecurso;
-import framework.Domain.*;
+import framework.controller.GerenciadorAvaliador;
+import framework.controller.GerenciadorGestor;
+import framework.controller.GerenciadorRecurso;
+import framework.domain.*;
 
 public class Main {
     public static void main(String[] args) {

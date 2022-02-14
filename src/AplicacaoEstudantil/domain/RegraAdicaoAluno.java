@@ -1,8 +1,8 @@
 package AplicacaoEstudantil.domain;
 
 import AplicacaoEstudantil.entities.Aluno;
-import framework.Domain.Recurso;
-import framework.Domain.RegraRecurso;
+import framework.domain.Recurso;
+import framework.domain.RegraRecurso;
 
 public class RegraAdicaoAluno implements RegraRecurso {
     private final int idadeMinima = 14;

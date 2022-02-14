@@ -1,6 +1,6 @@
 package AplicacaoMercado.entities;
 
-import framework.Domain.Avaliador;
+import framework.domain.Avaliador;
 
 public class Estocador extends Avaliador {
     private String dataAdmissao;

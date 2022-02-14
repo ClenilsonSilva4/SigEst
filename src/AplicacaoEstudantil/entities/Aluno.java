@@ -1,6 +1,6 @@
 package AplicacaoEstudantil.entities;
 
-import framework.Domain.Recurso;
+import framework.domain.Recurso;
 
 public class Aluno extends Recurso {
     private String curso;

@@ -1,6 +1,6 @@
 package AplicacaoMercado.entities;
 
-import framework.Domain.Recurso;
+import framework.domain.Recurso;
 
 public class Produto extends Recurso {
     private String validade;

@@ -12,10 +12,10 @@ import exception.*;
 import AplicacaoEstudantil.service.login.LoginService;
 import AplicacaoEstudantil.service.login.LoginServiceInterface;
 import AplicacaoEstudantil.view.MainView;
-import framework.Controller.GerenciadorAvaliador;
-import framework.Controller.GerenciadorGestor;
-import framework.Controller.GerenciadorRecurso;
-import framework.Domain.*;
+import framework.controller.GerenciadorAvaliador;
+import framework.controller.GerenciadorGestor;
+import framework.controller.GerenciadorRecurso;
+import framework.domain.*;
 
 public class Main {
     public static void main(String[] args) {

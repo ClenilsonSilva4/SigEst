@@ -1,8 +1,8 @@
 package AplicacaoMercado.domain;
 
 import AplicacaoEstudantil.entities.Aluno;
-import framework.Domain.Recurso;
-import framework.Domain.RegraRecurso;
+import framework.domain.Recurso;
+import framework.domain.RegraRecurso;
 
 public class RegraAdicaoProduto implements RegraRecurso {
     private final int validadeMinima = 30;

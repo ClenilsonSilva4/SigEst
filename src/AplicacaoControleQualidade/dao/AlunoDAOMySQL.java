@@ -1,11 +1,11 @@
 package AplicacaoControleQualidade.dao;
 
-import AplicacaoControleQualidade.entities.Aluno;
+import AplicacaoControleQualidade.entities.ItemProducao;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import framework.DAO.RecursoDAOMySQL;
-import framework.Domain.Recurso;
+import framework.dao.RecursoDAOMySQL;
+import framework.domain.Recurso;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,7 +21,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
 
     @Override
     public void adicionarRecurso(Recurso novoRecurso) throws ChangeNotMade, DBUnavailable {
-        Aluno curso = (Aluno) novoRecurso;
+        ItemProducao curso = (ItemProducao) novoRecurso;
         try {
             conexaoBD.conectar();
 
@@ -67,7 +67,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
             List<Recurso> todosAlunos = new ArrayList<>();
 
             while (resultadoConsulta.next()) {
-                todosAlunos.add(new Aluno(Long.getLong(resultadoConsulta.getString("id")),
+                todosAlunos.add(new ItemProducao(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
                         resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")),
                         resultadoConsulta.getString("email"), resultadoConsulta.getString("senha")));
@@ -80,7 +80,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
 
     @Override
     public void alterarRecurso(Recurso recursoAlterado) throws ChangeNotMade, DBUnavailable {
-        Aluno curso = (Aluno) recursoAlterado;
+        ItemProducao curso = (ItemProducao) recursoAlterado;
         try {
             conexaoBD.conectar();
             String sqlComando = "UPDATE recurso SET nomeUsuario = " + conexaoBD.stringBD(recursoAlterado.getNome()) +
@@ -107,7 +107,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
 
             if (resultadoConsulta.next()) {
-                return new Aluno(Long.getLong(resultadoConsulta.getString("id")),
+                return new ItemProducao(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
                         resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")),
                         resultadoConsulta.getString("email"), resultadoConsulta.getString("senha"));
@@ -118,7 +118,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
         }
     }
 
-    public Aluno checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
+    public ItemProducao checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
             String sqlComando = "SELECT * FROM recurso WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
@@ -126,7 +126,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
             if(resultadoConsulta.next()) {
-                return new Aluno(Long.getLong(resultadoConsulta.getString("id")),
+                return new ItemProducao(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
                         resultadoConsulta.getString("curso"), Integer.parseInt(resultadoConsulta.getString("idade")),
                         resultadoConsulta.getString("email"), resultadoConsulta.getString("senha"));

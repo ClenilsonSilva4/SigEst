@@ -3,18 +3,18 @@ package AplicacaoAplicacaoControleQualidade.main;
 import AplicacaoControleQualidade.dao.AlunoDAOMySQL;
 import AplicacaoControleQualidade.dao.GestorDAOMySQL;
 import AplicacaoControleQualidade.dao.ProfessorDAOMySQL;
-import AplicacaoControleQualidade.domain.RegraAdicaoAluno;
-import AplicacaoControleQualidade.entities.Aluno;
-import AplicacaoControleQualidade.entities.Professor;
+import AplicacaoControleQualidade.domain.RegraAdicaoItemProducao;
+import AplicacaoControleQualidade.entities.ItemProducao;
+import AplicacaoControleQualidade.entities.Empregado;
 import AplicacaoControleQualidade.service.login.LoginService;
 import AplicacaoControleQualidade.service.login.LoginServiceInterface;
 import AplicacaoControleQualidade.view.MainView;
 import exception.*;
-import framework.Controller.GerenciadorAvaliador;
-import framework.Controller.GerenciadorGestor;
-import framework.Controller.GerenciadorRecurso;
-import framework.Domain.Avaliador;
-import framework.Domain.Gestor;
+import framework.controller.GerenciadorAvaliador;
+import framework.controller.GerenciadorGestor;
+import framework.controller.GerenciadorRecurso;
+import framework.domain.Avaliador;
+import framework.domain.Gestor;
 
 import java.util.Scanner;
 
@@ -23,7 +23,7 @@ public class Main {
         LoginServiceInterface login = new LoginService();
         MainView mv = new MainView();
         GerenciadorGestor gerenciamentoGestor = new GerenciadorGestor(new GestorDAOMySQL());
-        GerenciadorRecurso gerenciamentoAluno = new GerenciadorRecurso(new AlunoDAOMySQL(), new RegraAdicaoAluno(), gerenciamentoGestor);
+        GerenciadorRecurso gerenciamentoAluno = new GerenciadorRecurso(new AlunoDAOMySQL(), new RegraAdicaoItemProducao(), gerenciamentoGestor);
         GerenciadorAvaliador gerenciamentoProfessor = new GerenciadorAvaliador(new ProfessorDAOMySQL(), gerenciamentoGestor);
 
         Scanner scanner = new Scanner(System.in);
@@ -52,7 +52,7 @@ public class Main {
             }
         }
 
-        if(usuario instanceof Aluno) {
+        if(usuario instanceof ItemProducao) {
             tipoUsuario = 1;
         } else if (usuario instanceof Avaliador) {
             tipoUsuario = 2;
@@ -63,7 +63,7 @@ public class Main {
         switch(tipoUsuario) {
         	// Visao do usuario estudante
             case 1:
-                Aluno estudante = (Aluno) usuario;
+                ItemProducao estudante = (ItemProducao) usuario;
                 while(menuPrincipal) {
                 	mv.header();
                 	mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
@@ -83,7 +83,7 @@ public class Main {
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                Aluno consultaRecurso = (Aluno) gerenciamentoAluno.buscarRecursoPorId(estudante.getId());
+                                ItemProducao consultaRecurso = (ItemProducao) gerenciamentoAluno.buscarRecursoPorId(estudante.getId());
 
                                 mv.header();
                                 mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
@@ -174,7 +174,7 @@ public class Main {
                 break;
             // Visao do usuario Professor
             case 2:
-            	Professor professor = (Professor) usuario;
+            	Empregado professor = (Empregado) usuario;
                 while(menuPrincipal) {
                 	mv.header();
                 	mv.textCenter("Bem-vindo(a) Professor | " + professor.getNome());
@@ -374,7 +374,7 @@ public class Main {
                                             idade = Integer.parseInt(mv.inputString("Digite a idade do estudante: "));
 
                                             try {
-                                                Aluno novoEstudante = new Aluno(214321, nome, curso, idade, email, senha);
+                                                ItemProducao novoEstudante = new ItemProducao(214321, nome, curso, idade, email, senha);
 
                                                 gerenciamentoAluno.adicionarRecurso(gestor, novoEstudante);
 
@@ -406,7 +406,7 @@ public class Main {
                                             int idEstudante = Integer.parseInt(mv.inputString("Digite o ID do estudante que quer consultar: "));
 
                                             try {
-                                                Aluno consultaRecurso = (Aluno) gerenciamentoAluno.buscarRecursoPorId(idEstudante);
+                                                ItemProducao consultaRecurso = (ItemProducao) gerenciamentoAluno.buscarRecursoPorId(idEstudante);
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
@@ -446,7 +446,7 @@ public class Main {
                                             idade = Integer.parseInt(mv.inputString("Digite a senha do estudante: "));
 
                                             try {
-                                                Aluno novoEstudante = new Aluno(idEstudante, nome, curso, idade, email, senha);
+                                                ItemProducao novoEstudante = new ItemProducao(idEstudante, nome, curso, idade, email, senha);
 
                                                 gerenciamentoAluno.alterarRecurso(gestor, novoEstudante);
 
@@ -539,7 +539,7 @@ public class Main {
                                             titularidade = mv.inputString("Digite a titularidade do funcionario: ");
 
                                             try {
-                                                Professor novoProfessor = new Professor(5166, nome, email, senha, titularidade);
+                                                Empregado novoProfessor = new Empregado(5166, nome, email, senha, titularidade);
                                                 gerenciamentoProfessor.adicionarAvaliador(gestor, novoProfessor);
 
                                                 mv.header();
@@ -570,7 +570,7 @@ public class Main {
                                             int idProfessor = Integer.parseInt(mv.inputString("Digite o ID do funcionario que quer consultar"));
 
                                             try {
-                                                Professor consultaAvaliador = (Professor) gerenciamentoProfessor.buscarAvaliadorPorId(idProfessor);
+                                                Empregado consultaAvaliador = (Empregado) gerenciamentoProfessor.buscarAvaliadorPorId(idProfessor);
 
                                                 mv.header();
                                                 mv.textCenter("Bem-vindo(a) Gestor(a) | " + gestor.getNome());
@@ -610,7 +610,7 @@ public class Main {
                                             titularidade = mv.inputString("Digite a titularidade do funcionario: ");
 
                                             try {
-                                                Professor alterarProfessor = new Professor(idProfessor, nome, email, senha, titularidade);
+                                                Empregado alterarProfessor = new Empregado(idProfessor, nome, email, senha, titularidade);
                                                 gerenciamentoProfessor.alterarAvaliador(gestor, alterarProfessor);
 
                                                 mv.header();

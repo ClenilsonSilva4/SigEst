@@ -4,14 +4,14 @@ import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.EmailAlreadyInUse;
 import exception.UserNotFoundException;
-import framework.Domain.Gestor;
+import framework.domain.Gestor;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GestorDAOMySQL implements framework.DAO.GestorDAOMySQL {
+public class GestorDAOMySQL implements framework.dao.GestorDAOMySQL {
     private final ConexaoSistemaDAO conexaoBD;
 
     public GestorDAOMySQL() {

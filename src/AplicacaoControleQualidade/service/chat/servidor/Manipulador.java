@@ -1,6 +1,6 @@
-package AplicacaoAplicacaoControleQualidade.service.chat.servidor;
+package AplicacaoControleQualidade.service.chat.servidor;
 
-import AplicacaoAplicacaoControleQualidade.service.chat.mensagem.Mensagem;
+import AplicacaoControleQualidade.service.chat.mensagem.Mensagem;
 import AplicacaoControleQualidade.dao.chat.MensagemDAOMySQL;
 
 import java.io.*;

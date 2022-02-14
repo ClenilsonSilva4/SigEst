@@ -4,8 +4,8 @@ import AplicacaoEstudantil.entities.Aluno;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
-import framework.DAO.RecursoDAOMySQL;
-import framework.Domain.Recurso;
+import framework.dao.RecursoDAOMySQL;
+import framework.domain.Recurso;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

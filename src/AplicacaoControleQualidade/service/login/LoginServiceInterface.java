@@ -1,4 +1,4 @@
-package AplicacaoAplicacaoControleQualidade.service.login;
+package AplicacaoControleQualidade.service.login;
 
 import exception.DBUnavailable;
 import exception.InvalidData;

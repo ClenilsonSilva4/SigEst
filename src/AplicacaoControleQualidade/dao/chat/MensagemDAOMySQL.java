@@ -1,7 +1,7 @@
 package AplicacaoControleQualidade.dao.chat;
 
 import AplicacaoControleQualidade.dao.ConexaoChatDAO;
-import framework.service.chat.mensagem.Mensagem;
+import AplicacaoControleQualidade.service.chat.mensagem.Mensagem;
 
 import java.sql.*;
 import java.util.HashMap;
