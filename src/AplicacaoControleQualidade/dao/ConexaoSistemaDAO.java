@@ -1,4 +1,4 @@
-package AplicacaoMercado.dao;
+package AplicacaoControleQualidade.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +11,7 @@ public class ConexaoSistemaDAO {
 
     public void conectar() throws SQLException {
         this.conexao = DriverManager.getConnection(
-                "jdbc:mysql://localhost:3306/sigest?useTimezone=true&serverTimezone=America/Fortaleza", "root", "admin");
+                "jdbc:mysql://localhost/sigest?useTimezone=true&serverTimezone=America/Fortaleza", "root", "root");
         this.comandos = conexao.createStatement();
     }
 
