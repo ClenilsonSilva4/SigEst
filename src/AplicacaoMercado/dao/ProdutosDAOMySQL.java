@@ -1,6 +1,6 @@
 package AplicacaoMercado.dao;
 
-import AplicacaoMercado.entities.Produtos;
+import AplicacaoMercado.entities.Produto;
 import exception.ChangeNotMade;
 import exception.DBUnavailable;
 import exception.UserNotFoundException;
@@ -21,7 +21,7 @@ public class ProdutosDAOMySQL implements RecursoDAOMySQL {
 
     @Override
     public void adicionarRecurso(Recurso novoRecurso) throws ChangeNotMade, DBUnavailable {
-        Produtos novoProduto = (Produtos) novoRecurso;
+        Produto novoProduto = (Produto) novoRecurso;
         try {
             conexaoBD.conectar();
 
@@ -67,7 +67,7 @@ public class ProdutosDAOMySQL implements RecursoDAOMySQL {
             List<Recurso> todosAlunos = new ArrayList<>();
 
             while (resultadoConsulta.next()) {
-                todosAlunos.add(new Produtos(Long.getLong(resultadoConsulta.getString("id")),
+                todosAlunos.add(new Produto(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
                         resultadoConsulta.getString("validade")));
             }
@@ -79,7 +79,7 @@ public class ProdutosDAOMySQL implements RecursoDAOMySQL {
 
     @Override
     public void alterarRecurso(Recurso recursoAlterado) throws ChangeNotMade, DBUnavailable {
-        Produtos curso = (Produtos) recursoAlterado;
+        Produto curso = (Produto) recursoAlterado;
         try {
             conexaoBD.conectar();
             String sqlComando = "UPDATE produto SET nomeUsuario = " + conexaoBD.stringBD(recursoAlterado.getNome()) +
@@ -105,7 +105,7 @@ public class ProdutosDAOMySQL implements RecursoDAOMySQL {
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);
 
             if (resultadoConsulta.next()) {
-                return new Produtos(Long.getLong(resultadoConsulta.getString("id")),
+                return new Produto(Long.getLong(resultadoConsulta.getString("id")),
                         resultadoConsulta.getString("nome"), Boolean.getBoolean(resultadoConsulta.getString("aprovacao")),
                         resultadoConsulta.getString("validade"));
             }

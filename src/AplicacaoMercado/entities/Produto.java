@@ -2,10 +2,10 @@ package AplicacaoMercado.entities;
 
 import framework.Domain.Recurso;
 
-public class Produtos extends Recurso {
+public class Produto extends Recurso {
     private String validade;
 
-    public Produtos(long id, String nome, boolean estaAprovado, String validade) {
+    public Produto(long id, String nome, boolean estaAprovado, String validade) {
         super(id, nome, estaAprovado);
         this.validade = validade;
     }
