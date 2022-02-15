@@ -26,7 +26,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
             conexaoBD.conectar();
 
             String sqlComando = "INSERT INTO usuario (nomeUsuario, curso, aprovacao, email, senha) VALUES (" +
-                    conexaoBD.stringBD(novoRecurso.getNome()) + ", " + conexaoBD.stringBD(curso.getCurso()) + ", "
+                    conexaoBD.stringBD(novoRecurso.getNome()) + ", " + conexaoBD.stringBD(curso.getProduto()) + ", "
                     + novoRecurso.isEstaAprovado() + conexaoBD.stringBD(curso.getEmail()) + conexaoBD.stringBD(curso.getSenha()) + ");";
 
             int resultado = conexaoBD.comandos.executeUpdate(sqlComando);
@@ -84,7 +84,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
         try {
             conexaoBD.conectar();
             String sqlComando = "UPDATE recurso SET nomeUsuario = " + conexaoBD.stringBD(recursoAlterado.getNome()) +
-                    ", curso = " + conexaoBD.stringBD(curso.getCurso()) + ", idade = " + curso.getIdade() +
+                    ", curso = " + conexaoBD.stringBD(curso.getProduto()) + ", idade = " + curso.getIdade() +
                     ", email = " + conexaoBD.stringBD(curso.getEmail()) + ", senha = " + conexaoBD.stringBD(curso.getSenha())
                     + ", aprovacao = " +   recursoAlterado.isEstaAprovado() + " WHERE idUsuario = " + recursoAlterado.getId() + ";";
 
@@ -121,7 +121,7 @@ public class AlunoDAOMySQL implements RecursoDAOMySQL {
     public ItemProducao checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM recurso WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
                     " AND senhaUsuario = " + conexaoBD.stringBD(senha) + ");";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);

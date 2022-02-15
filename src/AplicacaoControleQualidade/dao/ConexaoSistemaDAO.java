@@ -11,7 +11,7 @@ public class ConexaoSistemaDAO {
 
     public void conectar() throws SQLException {
         this.conexao = DriverManager.getConnection(
-                "jdbc:mysql://localhost/sigest?useTimezone=true&serverTimezone=America/Fortaleza", "root", "root");
+                "jdbc:mysql://localhost:3306/sigest", "root", "admin");
         this.comandos = conexao.createStatement();
     }
 

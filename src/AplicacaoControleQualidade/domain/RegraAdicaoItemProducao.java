@@ -4,12 +4,15 @@ import AplicacaoControleQualidade.entities.ItemProducao;
 import framework.domain.Recurso;
 import framework.domain.RegraRecurso;
 
+import java.util.Date;
+
 public class RegraAdicaoItemProducao implements RegraRecurso {
-    private final int idadeMinima = 14;
+    private final Date dataAtual = new Date();
+    private final boolean itemDanificado = true;
     @Override
     public boolean verificarRecurso(Recurso checarRecurso) {
-        ItemProducao checarAluno = (ItemProducao) checarRecurso;
+        ItemProducao checarProduto = (ItemProducao) checarRecurso;
 
-        return checarAluno.getIdade() >= idadeMinima && checarAluno.getNome().length() > 2 && checarAluno.getCurso().length() > 5;
+        return checarProduto.getDataFabricacao().before(dataAtual) && checarProduto.getItemDanificado() != itemDanificado && checarProduto.getNome().length() > 2 && checarProduto.getProduto().length() > 5;
     }
 }

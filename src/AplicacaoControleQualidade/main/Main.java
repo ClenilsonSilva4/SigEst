@@ -1,4 +1,4 @@
-package AplicacaoAplicacaoControleQualidade.main;
+package AplicacaoControleQualidade.main;
 
 import AplicacaoControleQualidade.dao.AlunoDAOMySQL;
 import AplicacaoControleQualidade.dao.GestorDAOMySQL;
@@ -16,6 +16,7 @@ import framework.controller.GerenciadorRecurso;
 import framework.domain.Avaliador;
 import framework.domain.Gestor;
 
+import java.util.Date;
 import java.util.Scanner;
 
 public class Main {
@@ -34,6 +35,7 @@ public class Main {
 
         // Login do usuário
         while(true) {
+            break;
             mv.header();
             mv.textCenter("LOGIN");
             mv.border();
@@ -60,10 +62,10 @@ public class Main {
             tipoUsuario = 3;
         }
         
-        switch(tipoUsuario) {
+        switch(3) {
         	// Visao do usuario estudante
             case 1:
-                ItemProducao estudante = (ItemProducao) usuario;
+                ItemProducao estudante = new ItemProducao(5, "produto", new Date(), true); //(ItemProducao) usuario;
                 while(menuPrincipal) {
                 	mv.header();
                 	mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
@@ -83,15 +85,15 @@ public class Main {
                     switch(opcaoPrincipal) {
                         case 1:
                             try {
-                                ItemProducao consultaRecurso = (ItemProducao) gerenciamentoAluno.buscarRecursoPorId(estudante.getId());
-
-                                mv.header();
-                                mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
-                                mv.border();
-                                mv.text("ID do Estudante: " + consultaRecurso.getId());
-                                mv.text("Nome do Estudante: " + consultaRecurso.getNome());
-                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmail());
-                                mv.text("Curso do Estudante: " + consultaRecurso.getCurso());
+//                                ItemProducao consultaRecurso = (ItemProducao) gerenciamentoAluno.buscarRecursoPorId(estudante.getId());
+//
+//                                mv.header();
+//                                mv.textCenter("Bem-vindo(a) Estudante | " + estudante.getNome());
+//                                mv.border();
+//                                mv.text("ID do Estudante: " + consultaRecurso.getId());
+//                                mv.text("Nome do Estudante: " + consultaRecurso.getNome());
+//                                mv.text("E-mail do Estudante: " + consultaRecurso.getEmail());
+//                                mv.text("Curso do Estudante: " + consultaRecurso.getProduto());
                                 mv.borderln();
                             } catch (DBUnavailable | UserNotFoundException e) {
                                 do {
@@ -174,7 +176,7 @@ public class Main {
                 break;
             // Visao do usuario Professor
             case 2:
-            	Empregado professor = (Empregado) usuario;
+            	Empregado professor = new Empregado(4, "joao", "joao@teste", "joao1234", "Doutor"); //(Empregado) usuario;
                 while(menuPrincipal) {
                 	mv.header();
                 	mv.textCenter("Bem-vindo(a) Professor | " + professor.getNome());
@@ -328,7 +330,7 @@ public class Main {
                 break;
             // Visao do usuario Gestor
             case 3:
-                Gestor gestor = (Gestor) usuario;//new Gestor(445, "João", "teste", "123456");
+                Gestor gestor = new Gestor(445, "João", "teste", "123456"); // (Gestor) usuario;
 
                 while(menuPrincipal) {
                     mv.header();
@@ -578,7 +580,7 @@ public class Main {
                                                 mv.text("ID do Professor: " + consultaAvaliador.getId());
                                                 mv.text("Nome do Professor: " + consultaAvaliador.getNome());
                                                 mv.text("E-mail do Professor: " + consultaAvaliador.getEmail());
-                                                mv.text("Titularidade do Professor: " + consultaAvaliador.getTitularidade());
+                                                mv.text("Titularidade do Professor: " + consultaAvaliador.getProfissao());
                                                 mv.borderln();
                                                 opcao = 2;
                                             } catch (DBUnavailable | UserNotFoundException e) {

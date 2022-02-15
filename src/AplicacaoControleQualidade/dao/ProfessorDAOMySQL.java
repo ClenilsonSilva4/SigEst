@@ -120,7 +120,7 @@ public class ProfessorDAOMySQL implements AvaliadorDAOMySQL {
     public Empregado checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM avaliador WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
                     " AND senhaUsuario = " + conexaoBD.stringBD(senha) + ");";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);

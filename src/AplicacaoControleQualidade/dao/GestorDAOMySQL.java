@@ -132,7 +132,7 @@ public class GestorDAOMySQL implements framework.dao.GestorDAOMySQL {
     public Gestor checarAcesso (String email, String senha) throws UserNotFoundException, DBUnavailable {
         try {
             conexaoBD.conectar();
-            String sqlComando = "SELECT * FROM gestor WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
+            String sqlComando = "SELECT * FROM usuario WHERE (emailUsuario = " + conexaoBD.stringBD(email) +
                     " AND senhaUsuario = " + conexaoBD.stringBD(senha) + ");";
 
             ResultSet resultadoConsulta = conexaoBD.comandos.executeQuery(sqlComando);

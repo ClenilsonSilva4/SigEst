@@ -3,15 +3,15 @@ package AplicacaoControleQualidade.entities;
 import framework.domain.Avaliador;
 
 public class Empregado extends Avaliador {
-    private String titularidade;
+    private String profissao;
 
-    public Empregado(long id, String nome, String email, String senha, String titularidade) {
+    public Empregado(long id, String nome, String email, String senha, String profissao) {
         super(id, nome, email, senha);
-        this.titularidade = titularidade;
+        this.profissao = profissao;
     }
 
-    public String getTitularidade() {
-        return titularidade;
+    public String getProfissao() {
+        return profissao;
     }
 
     @Override
